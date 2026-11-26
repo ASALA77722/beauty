@@ -5,8 +5,8 @@ export const euro = (value) =>
     minimumFractionDigits: value % 1 === 0 ? 0 : 2,
   }).format(value)
 
-export const FREE_SHIPPING_THRESHOLD = 60
-export const SHIPPING_COST = 4.9
+export const FREE_SHIPPING_THRESHOLD = 35
+export const SHIPPING_COST = 3.9
 
 export const CART_KEY = 'beaute-cart-v2'
 export const USER_KEY = 'beaute-user-v2'

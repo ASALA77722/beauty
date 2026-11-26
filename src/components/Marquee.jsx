@@ -1,7 +1,10 @@
+import { PRICE_STATS } from '../data/shop'
+import { FREE_SHIPPING_THRESHOLD } from '../lib/format'
+
 const ITEMS = [
   'Produits 100 % authentiques',
-  '−30 % en moyenne vs magasin',
-  'Livraison offerte dès 60 €',
+  `${PRICE_STATS.average} % moins cher qu’en magasin`,
+  `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`,
   'Paiement en 3× sans frais',
   'Échantillons offerts',
   'Conseil beauté par téléphone',

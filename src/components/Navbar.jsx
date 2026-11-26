@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { useScrolled } from '../hooks/useReveal'
+import { FREE_SHIPPING_THRESHOLD } from '../lib/format'
 import Icon from './Icon'
+import { PRICE_STATS } from '../data/shop'
 
 const LINKS = [
   { href: '#boutique', label: 'Boutique' },
@@ -24,9 +26,9 @@ export default function Navbar() {
     <>
       <div className="relative z-50 bg-forest text-cream">
         <div className="container-x flex h-9 items-center justify-center gap-2 overflow-hidden text-[10.5px] uppercase tracking-[0.2em] text-cream/85">
-          <span className="hidden sm:inline">Livraison offerte dès 60 €</span>
+          <span className="hidden sm:inline">Livraison offerte dès {FREE_SHIPPING_THRESHOLD} €</span>
           <span className="hidden text-gold sm:inline">✦</span>
-          <span>−30 % en moyenne vs prix magasin</span>
+          <span>{PRICE_STATS.average} % moins cher que le prix magasin</span>
           <span className="hidden text-gold sm:inline">✦</span>
           <span className="hidden md:inline">Paiement en 3× sans frais</span>
         </div>
@@ -198,7 +200,7 @@ export default function Navbar() {
             <p className="mt-auto pt-8 text-xs leading-relaxed text-inkSoft">
               Connexion par e-mail ou téléphone
               <br />
-              Livraison offerte dès 60 € · Retours 30 jours
+              Livraison offerte dès {FREE_SHIPPING_THRESHOLD} € · Retours 30 jours
             </p>
           </div>
         </div>

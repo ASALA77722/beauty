@@ -22,14 +22,17 @@ npm run preview  # sert le build
 
 | Produit | Marque | Prix magasin | Prix site | Remise |
 | --- | --- | --- | --- | --- |
-| Baume Intégral Anti-Âge Nuit 50 ml | Jeanne Piaubert | 219,50 € | **149 €** | −32 % |
-| Sérum Anti-Rides Performance 30 ml | Stendhal | 115,50 € | **79 €** | −32 % |
-| Sérum Anti-Taches 30 ml | Biarritz | 38,90 € | **26,90 €** | −31 % |
-| Contour des Yeux Anti-Âge 15 ml | Jeanne Piaubert | 111,50 € | **74 €** | −34 % |
+| Baume Intégral Anti-Âge Nuit 50 ml | Jeanne Piaubert | 219,50 € | **95 €** | −57 % |
+| Sérum Anti-Rides Performance 30 ml | Stendhal | 115,50 € | **52 €** | −55 % |
+| Sérum Anti-Taches 30 ml | Biarritz | 38,90 € | **19,90 €** | −49 % |
+| Contour des Yeux Anti-Âge 15 ml | Jeanne Piaubert | 111,50 € | **48 €** | −57 % |
 
 Le prix affiché en boutique inclut ensuite le **prix de lancement −5 %** (`FLASH_OFFER`),
-soit −34 à −37 % par rapport au prix magasin. Tous les montants se pilotent depuis
-`src/data/shop.js`.
+soit **−51 à −59 % par rapport au prix magasin**. Tous les montants se pilotent depuis
+`src/data/shop.js` ; les pourcentages affichés dans les textes sont dérivés du catalogue
+(`PRICE_STATS`), donc jamais incohérents.
+
+Coût d'achat des produits : 0 € — d'où la marge possible sur ces prix.
 
 ## Mécaniques commerciales
 
@@ -37,9 +40,9 @@ soit −34 à −37 % par rapport au prix magasin. Tous les montants se pilotent
   - dès 2 produits → −10 % sur le 2ᵉ article ;
   - dès 3 produits → −15 % sur le total.
 - **Codes promo cumulables** (`PROMO_CODES`) : `BIENVENUE10` (−10 %), `LUXE15`
-  (−10 % dès 150 €), `LIVRAISON` (port offert).
+  (−10 % dès 100 €), `LIVRAISON` (port offert).
 - **Remise moyen de paiement** : −5 % par virement bancaire (`PAYMENT_OFFERS`).
-- **Livraison offerte dès 60 €** (`FREE_SHIPPING_THRESHOLD`).
+- **Livraison offerte dès 35 €** (`FREE_SHIPPING_THRESHOLD`), 3,90 € en dessous.
 - Chaque récapitulatif affiche l'économie réalisée (prix magasin + remises).
 
 ## Compte client (e-mail **ou** téléphone)

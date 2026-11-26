@@ -19,7 +19,7 @@ export const PRODUCTS = [
     concern: 'Anti-âge',
     volume: '50 ml',
     marketPrice: 219.5,
-    price: 149,
+    price: 95,
     image: '/img/baume.jpg',
     rating: 4.8,
     reviews: 412,
@@ -48,7 +48,7 @@ export const PRODUCTS = [
     concern: 'Anti-âge',
     volume: '30 ml',
     marketPrice: 115.5,
-    price: 79,
+    price: 52,
     image: '/img/serum-anti-rides.jpg',
     rating: 4.7,
     reviews: 268,
@@ -77,7 +77,7 @@ export const PRODUCTS = [
     concern: 'Taches',
     volume: '30 ml',
     marketPrice: 38.9,
-    price: 26.9,
+    price: 19.9,
     image: '/img/serum-anti-taches.jpg',
     rating: 4.6,
     reviews: 731,
@@ -106,7 +106,7 @@ export const PRODUCTS = [
     concern: 'Anti-âge',
     volume: '15 ml',
     marketPrice: 111.5,
-    price: 74,
+    price: 48,
     image: '/img/contour-yeux.jpg',
     rating: 4.7,
     reviews: 189,
@@ -141,6 +141,18 @@ export const brandOf = (product) => BRANDS.find((brand) => brand.id === product.
 /** Prix effectif d'un produit, remise de lancement incluse. */
 export const finalPrice = (product) =>
   Math.round(product.price * (1 - FLASH_OFFER.percent / 100) * 100) / 100
+
+/** Statistiques de remise, dérivées du catalogue (évite les incohérences de texte). */
+export const PRICE_STATS = (() => {
+  const offs = PRODUCTS.map((p) => 1 - finalPrice(p) / p.marketPrice)
+  const average = Math.round((offs.reduce((a, b) => a + b, 0) / offs.length) * 100)
+  const best = Math.round(Math.min(...offs) * 100)
+  const worst = Math.round(Math.max(...offs) * 100)
+  const averageSaving = Math.round(
+    PRODUCTS.reduce((sum, p) => sum + (p.marketPrice - finalPrice(p)), 0) / PRODUCTS.length,
+  )
+  return { average, best, worst, averageSaving }
+})()
 
 export const CATEGORIES = [
   { id: 'all', label: 'Tout' },
@@ -190,8 +202,8 @@ export const PROMO_CODES = {
     label: 'Offre luxe',
     type: 'percent',
     value: 10,
-    minSubtotal: 150,
-    description: '−10 % dès 150 € d’achat.',
+    minSubtotal: 100,
+    description: '−10 % dès 100 € d’achat.',
   },
   LIVRAISON: {
     code: 'LIVRAISON',
@@ -255,7 +267,7 @@ export const FAQ = [
   },
   {
     q: 'Pourquoi vos prix sont-ils plus bas qu’en magasin ?',
-    a: "Nous achetons en volumes importants et vendons en ligne sans vitrine physique. Nous reversons cette économie dans le prix : en moyenne −30 % par rapport au prix conseillé en parfumerie. Le prix « marché » barré correspond au prix constaté en magasin.",
+    a: "Pas de vitrine, pas d'intermédiaire : nous achetons en direct et vendons en ligne. Nous répercutons presque toute la marge dans le prix, d'où des tarifs très inférieurs au prix conseillé en parfumerie. Le prix « marché » barré correspond au prix constaté en magasin.",
   },
   {
     q: 'Comment fonctionnent les offres automatiques ?',
@@ -267,7 +279,7 @@ export const FAQ = [
   },
   {
     q: 'Quels sont les délais de livraison ?',
-    a: 'Expédition sous 24 h ouvrées. Livraison offerte dès 60 € en France métropolitaine, 4,90 € en dessous. Comptez 2 à 3 jours ouvrés, et 4 à 6 jours pour l’Europe. Un numéro de suivi vous est envoyé par e-mail et par SMS.',
+    a: 'Expédition sous 24 h ouvrées. Livraison offerte dès 35 € en France métropolitaine, 3,90 € en dessous. Comptez 2 à 3 jours ouvrés, et 4 à 6 jours pour l’Europe. Un numéro de suivi vous est envoyé par e-mail et par SMS.',
   },
   {
     q: 'Puis-je retourner un produit ?',

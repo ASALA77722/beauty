@@ -1,8 +1,9 @@
 import Icon from './Icon'
+import { FREE_SHIPPING_THRESHOLD } from '../lib/format'
 
 const ITEMS = [
   { icon: 'shield', title: 'Authenticité garantie', text: 'Sourcé chez les maisons' },
-  { icon: 'truck', title: 'Livraison offerte dès 60 €', text: 'Expédié en 24 h' },
+  { icon: 'truck', title: `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`, text: 'Expédié en 24 h' },
   { icon: 'card', title: 'Paiement en 3× sans frais', text: 'CB, TWINT, virement −5 %' },
   { icon: 'phone', title: 'Conseil au 01 84 80 12 34', text: 'Lun–sam, 9 h–19 h' },
 ]

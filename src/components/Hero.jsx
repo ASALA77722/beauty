@@ -1,4 +1,4 @@
-import { FLASH_OFFER, PRODUCTS } from '../data/shop'
+import { FLASH_OFFER, PRICE_STATS, PRODUCTS } from '../data/shop'
 import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
 import Marquee from './Marquee'
@@ -52,7 +52,7 @@ export default function Hero() {
 
           <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-ink/10 pt-6">
             {[
-              ['−30 %', 'vs prix magasin'],
+              [`−${PRICE_STATS.average} %`, 'vs prix magasin'],
               ['100 %', 'produits authentiques'],
               ['48 h', 'livraison France'],
             ].map(([value, label]) => (

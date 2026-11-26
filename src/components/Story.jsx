@@ -1,10 +1,9 @@
+import { PRICE_STATS } from '../data/shop'
 import { euro } from '../lib/format'
 import Icon from './Icon'
 import { Reveal } from './Reveal'
 
 export default function Story() {
-  const averageSaving = 82
-
   return (
     <section className="bg-ivory py-16 lg:py-24">
       <div className="container-x grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
@@ -17,9 +16,9 @@ export default function Story() {
               className="aspect-[4/5] w-full object-cover shadow-card"
             />
             <div className="absolute -bottom-5 -right-3 max-w-[210px] bg-forest p-5 text-cream shadow-soft sm:-right-6">
-              <p className="font-serif text-[38px] leading-none text-gold">{euro(averageSaving)}</p>
+              <p className="font-serif text-[38px] leading-none text-gold">{euro(PRICE_STATS.averageSaving)}</p>
               <p className="mt-1.5 text-[10.5px] uppercase leading-relaxed tracking-[0.12em] text-cream/70">
-                d'économie moyenne par commande
+                d'économie moyenne par produit
               </p>
             </div>
           </div>

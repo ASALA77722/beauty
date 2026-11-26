@@ -1,7 +1,7 @@
 import { finalPrice } from '../data/shop'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
-import { euro } from '../lib/format'
+import { FREE_SHIPPING_THRESHOLD, euro } from '../lib/format'
 import Icon from './Icon'
 
 export default function CartDrawer({ onCheckout }) {
@@ -34,7 +34,7 @@ export default function CartDrawer({ onCheckout }) {
 
   if (!isOpen) return null
 
-  const progress = Math.min(100, Math.round((subtotal / 60) * 100))
+  const progress = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100))
 
   return (
     <div className="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-label="Panier">
@@ -80,7 +80,7 @@ export default function CartDrawer({ onCheckout }) {
               ) : (
                 <p className="text-[11.5px] text-inkSoft">
                   Plus que{' '}
-                  <strong className="text-ink">{euro(60 - subtotal)}</strong> pour la livraison
+                  <strong className="text-ink">{euro(FREE_SHIPPING_THRESHOLD - subtotal)}</strong> pour la livraison
                   offerte
                 </p>
               )}
