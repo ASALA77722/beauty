@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SHOP } from '../config'
 import { FAQ } from '../data/shop'
 import { useAuth } from '../hooks/useAuth'
 import Icon from './Icon'
@@ -18,10 +19,10 @@ export default function Faq() {
           </h2>
           <p className="mt-4 max-w-sm text-[13.5px] leading-relaxed text-inkSoft">
             Une question qui n'apparaît pas ici ? Écrivez-nous à{' '}
-            <a href="mailto:bonjour@beaute-paris.fr" className="link-underline text-ink">
-              bonjour@beaute-paris.fr
+            <a href={`mailto:${SHOP.email}`} className="link-underline text-ink">
+              {SHOP.email}
             </a>{' '}
-            ou appelez le 01 84 80 12 34.
+            ou appelez le {SHOP.phone}.
           </p>
 
           <div className="mt-6 rounded-xl border border-gold/30 bg-cream/60 p-5">

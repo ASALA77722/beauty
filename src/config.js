@@ -79,9 +79,9 @@ export const formatCrypto = (amount, wallet) => {
 
 export const SHOP = {
   name: 'Beauté Paris',
-  email: 'bonjour@beaute-paris.fr', // ← ton adresse réelle
-  /** Adresse qui reçoit le code de connexion (service gratuit FormSubmit). */
-  authEmail: 'bonjour@beaute-paris.fr', // ← la même, ou une autre boîte
+  /** Adresse de service : contact client ET envoi du code de connexion. */
+  email: 'beaute.paris@proton.me',
+  authEmail: 'beaute.paris@proton.me',
   phone: '01 84 80 12 34',
   address: '12 rue de la Paix, 75002 Paris',
   hours: 'Lun–sam, 9 h–19 h',
