@@ -146,8 +146,8 @@ export const formatCrypto = (amount, wallet) => {
 export const SHOP = {
   name: 'Beauté Paris',
   /** Adresse de service : contact client ET envoi du code de connexion. */
-  email: 'beaute.paris@proton.com',
-  authEmail: 'beaute.paris@proton.com',
+  email: 'beaute.paris@proton.me',
+  authEmail: 'beaute.paris@proton.me',
   /** Laisse vide ce que tu n'as pas : le site n'affiche rien plutôt qu'un faux numéro. */
   phone: '',
   address: '',
