@@ -123,7 +123,7 @@ export default function Offers() {
               <h3 className="mt-1 font-serif text-2xl text-cream">−5 % en crypto</h3>
               <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-cream/85">
                 Payez en USDT, BTC ou ETH et bénéficiez de 5 % de remise immédiate, automatiquement
-                déduits dans le récapitulatif. L’adresse de dépôt est affichée au moment du paiement.
+                déduits dans le récapitulatif. Le règlement se fait sur la page sécurisée de notre prestataire de paiement.
               </p>
               <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-cream/70">
                 Sans minimum d'achat

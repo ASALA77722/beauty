@@ -1,23 +1,14 @@
 import { useState } from 'react'
-import {
-  DONATION_COMMITMENT,
-  DONATIONS,
-  cryptoById,
-  donationsReady,
-  formatCrypto,
-  toCryptoAmount,
-  walletAddress,
-  SHOP,
-} from '../config'
+import { DONATION_COMMITMENT, DONATIONS, donationsReady, PAYOUT, payoutLink, SHOP } from '../config'
 import { euro } from '../lib/format'
 import Icon from './Icon'
+
 
 /**
  * Dons solidaires. Rien n'est affiché si aucun projet réel n'est décrit :
  * un don ne se promet pas avec un nom inventé.
  */
 export default function Donations() {
-  const wallet = cryptoById(DONATIONS.currency)
   const ready = donationsReady()
 
   if (!ready) {
@@ -42,28 +33,15 @@ export default function Donations() {
     )
   }
 
-  return <DonationPanel wallet={wallet} />
+  return <DonationPanel />
 }
 
-function DonationPanel({ wallet }) {
+function DonationPanel() {
   const [amount, setAmount] = useState(DONATIONS.presets[2] ?? 25)
   const [custom, setCustom] = useState('')
   const [donor, setDonor] = useState('')
-  const [copied, setCopied] = useState(false)
 
   const value = custom ? Math.max(0, Number(custom.replace(',', '.')) || 0) : amount
-  const cryptoAmount = toCryptoAmount(value, wallet)
-  const address = walletAddress(wallet)
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(address)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2200)
-    } catch {
-      /* presse-papiers indisponible */
-    }
-  }
 
   return (
     <section id="dons" className="scroll-mt-24 bg-ivory py-16 lg:py-20">
@@ -171,33 +149,29 @@ function DonationPanel({ wallet }) {
             <p className="mt-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-goldDeep">
               3 · Verser {value > 0 ? euro(value) : '—'}
             </p>
-            <p className="mt-1 font-serif text-[24px] leading-none text-ink">
-              {value > 0
-                ? formatCrypto(cryptoAmount, wallet).replace('.', ',')
-                : '—'}
+            <p className="mt-2 text-[11.5px] leading-relaxed text-inkSoft">
+              Votre don se règle sur la page sécurisée de notre prestataire, au nom de{' '}
+              <span className="font-medium text-ink">{SHOP.name}</span>. Aucune coordonnée de paiement
+              n’est affichée ici — vous ne partagez rien que vous ne choisissiez.
             </p>
-            <p className="mt-1 text-[10.5px] text-inkSoft">
-              Réseau {wallet.network} · frais ≈ 1 USDT, déduits de votre envoi
-            </p>
-
-            <div className="mt-3 flex items-start gap-2">
-              <code className="min-w-0 flex-1 break-all rounded-lg bg-ivory px-2.5 py-2 font-mono text-[10.5px] leading-relaxed text-ink">
-                {address}
-              </code>
-              <button
-                type="button"
-                onClick={copy}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink/15 text-ink transition-colors hover:bg-ivory"
-                aria-label="Copier l’adresse de don"
+            {payoutLink(value) ? (
+              <a
+                href={payoutLink(value)}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="btn-gold mt-3 w-full justify-center"
               >
-                <Icon name={copied ? 'check' : 'copy'} className="h-3.5 w-3.5" />
-              </button>
-            </div>
-
-            <p className="mt-3 text-[10.5px] leading-relaxed text-inkSoft">
-              Envoyez uniquement de l’USDT sur le réseau indiqué : un autre réseau signifie des fonds
-              perdus. Votre geste est définitif, comme tout virement crypto.
-            </p>
+                <Icon name="heart" className="h-4 w-4" /> Faire un don de {euro(value)}
+              </a>
+            ) : (
+              <p className="mt-3 rounded-xl border border-ink/15 bg-ivory px-3 py-2.5 text-[11.5px] leading-relaxed text-inkSoft">
+                Le don en ligne est en cours d’activation. Écrivez-nous à{' '}
+                <a href={`mailto:${SHOP.email}`} className="underline">
+                  {SHOP.email}
+                </a>{' '}
+                : nous vous transmettons le lien personnel de votre don.
+              </p>
+            )}
 
             <a
               href={`mailto:${SHOP.email}?subject=${encodeURIComponent(

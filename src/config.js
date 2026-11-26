@@ -178,6 +178,36 @@ export const SHOP = {
   hours: 'Réponse par e-mail sous 24 h ouvrées',
 }
 
+/**
+ * Encaissement par lien de paiement : la cliente ne voit JAMAIS d'adresse.
+ * Elle clique, le prestataire affiche « Payez à Beauté Paris » avec son propre
+ * QR code / adresse générée par commande.
+ * Ce que je fournis = uniquement l'URL publique du compte (jamais une clé API).
+ */
+export const PAYOUT = {
+  /** 'none' = aucun lien renseigné : le site n'affiche aucune adresse et renvoie vers le contact. */
+  provider: 'none', // 'nowpayments' | 'binancepay' | 'coingate'
+  /** Lien de paiement. Formes acceptées :
+   *   - 'https://nowpayments.io/payment/?iid=XXXXX'          (lien fixe, sans montant)
+   *   - 'https://nowpayments.io/payment/?iid=XXXXX&amount={amount}'
+   *   - 'https://nowpayments.io/payment/?iid=XXXXX&amount={amount}&currency={currency}'
+   * Rien n'est pré-rempli : sans lien, aucun paiement n'est proposé.
+   */
+  link: '',
+  /** Libellé affiché à la cliente (« Payer par carte ou crypto »). */
+  label: 'Payer en ligne',
+  /** Frais annoncés par le prestataire, en % (affiché au vendeur). */
+  fee: 0.5,
+}
+
+/** Le lien de paiement est-il utilisable ? */
+export const payoutLink = (amount) => {
+  if (!PAYOUT.link.trim()) return ''
+  return PAYOUT.link
+    .replace('{amount}', Number(amount).toFixed(2))
+    .replace('{currency}', 'eur')
+}
+
 /* 2 bis · DONS ---------------------------------------------- */
 
 /**
