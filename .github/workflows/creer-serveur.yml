@@ -22,9 +22,13 @@ jobs:
         env:
           DISCORD_BOT_TOKEN: ${{ inputs.bot_token || secrets.DISCORD_BOT_TOKEN }}
           DISCORD_GUILD_ID: ${{ inputs.guild_id || secrets.DISCORD_GUILD_ID }}
+        run: node scripts/creer-serveur.mjs > /tmp/sortie.txt 2>&1 || true
+      - name: Publier le journal dans le dépôt
         run: |
-          node scripts/creer-serveur.mjs 2>&1 | tee /tmp/sortie.txt
-          echo '### Resultat' >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          tail -60 /tmp/sortie.txt >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          mkdir -p docs
+          { echo "# Journal du dernier passage ($(date -u +%FT%TZ))"; echo; echo '```'; cat /tmp/sortie.txt; echo '```'; } > docs/journal-serveur.md
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/journal-serveur.md
+          git commit -m "Journal de création du serveur" || true
+          git push || true
