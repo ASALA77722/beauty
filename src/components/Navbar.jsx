@@ -28,7 +28,9 @@ export default function Navbar() {
         <div className="container-x flex h-9 items-center justify-center gap-2 overflow-hidden text-[10.5px] uppercase tracking-[0.2em] text-cream/85">
           <span className="hidden sm:inline">Livraison offerte dès {FREE_SHIPPING_THRESHOLD} €</span>
           <span className="hidden text-gold sm:inline">✦</span>
-          <span>{PRICE_STATS.average} % moins cher que le prix magasin</span>
+          <span className="font-semibold text-gold">
+            −{PRICE_STATS.average} % vs prix magasin
+          </span>
           <span className="hidden text-gold sm:inline">✦</span>
           <span className="hidden md:inline">Paiement en 3× sans frais</span>
         </div>

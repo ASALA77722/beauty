@@ -24,12 +24,12 @@ function Toast() {
   if (!toast) return null
 
   return (
-    <div className="fixed bottom-5 left-1/2 z-[90] w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 animate-fade-up">
-      <div className="flex items-center gap-3 rounded-xl bg-ink px-4 py-3.5 text-cream shadow-soft">
+    <div className="fixed bottom-4 left-1/2 z-[95] w-[calc(100%-1.5rem)] max-w-sm -translate-x-1/2 animate-fade-up">
+      <div className="flex items-center gap-3 rounded-xl border border-cream/15 bg-ink px-3.5 py-3 text-cream shadow-soft">
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage/25 text-sage">
           <Icon name="check" className="h-4 w-4" />
         </span>
-        <p className="flex-1 text-[12.5px] leading-snug">
+        <p className="min-w-0 flex-1 truncate text-[12px] leading-snug">
           <span className="font-medium">{toast.name}</span> ajouté au panier
         </p>
         <button

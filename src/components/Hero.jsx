@@ -1,13 +1,14 @@
-import { FLASH_OFFER, PRICE_STATS, PRODUCTS } from '../data/shop'
+import heroImg from '../assets/img/hero-luxe.jpg'
+import { FLASH_OFFER, PRICE_STATS, PRODUCTS, finalPrice } from '../data/shop'
 import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
 import Marquee from './Marquee'
-import heroImg from '../assets/img/hero-luxe.jpg'
 
 const FEATURED = PRODUCTS[0]
 
 export default function Hero() {
-  const saving = Math.round(FEATURED.marketPrice - FEATURED.price)
+  const saving = Math.round(FEATURED.marketPrice - finalPrice(FEATURED))
+  const off = discountPercent(FEATURED.marketPrice, finalPrice(FEATURED))
 
   return (
     <section id="top" className="relative overflow-hidden bg-ivory">
@@ -35,14 +36,25 @@ export default function Hero() {
             </span>
           </h1>
 
-          <p className="mt-7 max-w-md text-[15px] leading-relaxed text-inkSoft">
+          {/* bandeau de remise phare */}
+          <div className="mt-6 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-rose/25 bg-rose/8 px-4 py-2.5">
+            <span className="badge bg-rose px-2.5 py-1 text-[11px] font-bold text-ivory">
+              −{FLASH_OFFER.percent} %
+            </span>
+            <span className="text-[12.5px] font-medium text-ink">
+              {FLASH_OFFER.label} sur tout le site
+            </span>
+            <span className="text-[11.5px] text-inkSoft">· jusqu'à −{PRICE_STATS.worst} %</span>
+          </div>
+
+          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-inkSoft">
             Jeanne Piaubert, Stendhal, Laboratoires de Biarritz : les soins des grandes maisons
             françaises, authentiques et tracés, jusqu'à{' '}
-            <strong className="font-medium text-ink">−{PRICE_STATS.worst} %</strong> du prix constaté
-            en magasin.
+            <strong className="font-semibold text-ink">−{PRICE_STATS.worst} %</strong> du prix
+            constaté en magasin.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-7 flex flex-wrap items-center gap-3">
             <a href="#boutique" className="btn-gold group">
               Voir les soins
               <Icon name="arrow" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -52,7 +64,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-ink/10 pt-6">
+          <dl className="mt-9 grid max-w-lg grid-cols-3 gap-4 border-t border-ink/10 pt-6">
             {[
               [`−${PRICE_STATS.average} %`, 'vs prix magasin'],
               ['100 %', 'produits authentiques'],
@@ -60,7 +72,7 @@ export default function Hero() {
             ].map(([value, label]) => (
               <div key={label}>
                 <dt className="font-serif text-[28px] leading-none text-ink">{value}</dt>
-                <dd className="mt-1.5 text-[10.5px] uppercase leading-snug tracking-[0.12em] text-inkSoft">
+                <dd className="mt-1.5 text-[11px] uppercase leading-snug tracking-[0.12em] text-inkSoft">
                   {label}
                 </dd>
               </div>
@@ -85,20 +97,20 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* carte produit flottante */}
-          <div className="absolute -bottom-6 left-3 right-3 bg-ivory p-4 shadow-soft sm:-left-6 sm:right-auto sm:w-[292px]">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-goldDeep">Best-seller</p>
-            <p className="mt-1 font-serif text-lg leading-tight text-ink">
-              {FEATURED.name}
-            </p>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-lg font-medium text-ink">{euro(FEATURED.price)}</span>
-              <span className="market-price">{euro(FEATURED.marketPrice)}</span>
-              <span className="badge ml-auto bg-rose/15 text-rose">
-                −{discountPercent(FEATURED.marketPrice, FEATURED.price)} %
+          {/* carte produit flottante : la remise est le premier élément lu */}
+          <div className="absolute -bottom-6 left-3 right-3 bg-ivory p-4 shadow-soft sm:-left-6 sm:right-auto sm:w-[300px]">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-goldDeep">Best-seller</p>
+              <span className="badge bg-rose px-2 py-0.5 text-[11px] font-bold text-ivory">
+                −{off} %
               </span>
             </div>
-            <p className="mt-1 text-[11px] text-sage">Économisez {euro(saving)} vs magasin</p>
+            <p className="mt-1 font-serif text-lg leading-tight text-ink">{FEATURED.name}</p>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-[20px] font-medium text-ink">{euro(finalPrice(FEATURED))}</span>
+              <span className="market-price text-[12px]">{euro(FEATURED.marketPrice)}</span>
+            </div>
+            <p className="mt-1 text-[12px] font-semibold text-rose">Économisez {euro(saving)}</p>
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@ export default function LeadBanner() {
             {leads.map((product) => (
               <article
                 key={product.id}
-                className="flex items-center gap-3 border border-ink/10 bg-ivory p-3"
+                className="flex items-center gap-3 border border-ink/10 bg-ivory p-3 transition-colors hover:border-rose/40"
               >
                 <img
                   src={product.image}
@@ -38,14 +38,22 @@ export default function LeadBanner() {
                   className="h-20 w-16 shrink-0 object-cover"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-[9px] uppercase tracking-[0.16em] text-goldDeep">
-                    {brandOf(product).name}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-[9px] uppercase tracking-[0.16em] text-goldDeep">
+                      {brandOf(product).name}
+                    </p>
+                    <span className="badge bg-rose px-1.5 py-0.5 text-[10px] font-bold text-ivory">
+                      −{Math.round((1 - finalPrice(product) / product.marketPrice) * 100)} %
+                    </span>
+                  </div>
                   <p className="truncate font-serif text-[16px] leading-tight">{product.name}</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-[14px] font-medium text-ink">{euro(finalPrice(product))}</span>
-                    <span className="market-price">{euro(product.marketPrice)}</span>
+                    <span className="text-[17px] font-medium text-ink">{euro(finalPrice(product))}</span>
+                    <span className="market-price text-[11px]">{euro(product.marketPrice)}</span>
                   </div>
+                  <p className="text-[11px] font-semibold text-rose">
+                    Économisez {euro(Math.round((product.marketPrice - finalPrice(product)) * 100) / 100)}
+                  </p>
                   <StockMeter product={product} compact />
                 </div>
                 <button

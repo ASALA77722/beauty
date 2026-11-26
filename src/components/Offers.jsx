@@ -49,10 +49,12 @@ export default function Offers() {
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.16em] text-cream/60">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-cream/75">
                 {FLASH_OFFER.label} — fin dans
               </p>
-              <p className="font-serif text-2xl tabular-nums text-cream">{countdown}</p>
+              <p className="mt-0.5 inline-flex items-baseline gap-1 rounded-lg bg-cream/10 px-2.5 py-1 font-serif text-2xl tabular-nums text-gold">
+                {countdown}
+              </p>
             </div>
             <span className="badge bg-gold px-3 py-1.5 text-ink">
               −{FLASH_OFFER.percent} % sur tout le site
@@ -63,18 +65,21 @@ export default function Offers() {
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {AUTO_OFFERS.map((offer, index) => (
             <Reveal key={offer.id} delay={index * 80}>
-              <div className="flex h-full flex-col border border-cream/15 bg-forestSoft/40 p-6 transition-colors hover:border-gold/50">
+              <div className="flex h-full flex-col rounded-xl border border-cream/20 bg-forestSoft/70 p-6 transition-colors hover:border-gold/60">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 text-gold">
                   <Icon name={index === 0 ? 'sparkle' : 'ticket'} className="h-5 w-5" />
                 </span>
                 <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-gold">
                   Automatique
                 </p>
-                <h3 className="mt-1 font-serif text-2xl">{offer.label}</h3>
-                <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-cream/70">
+                <h3 className="mt-1 font-serif text-2xl text-cream">{offer.label}</h3>
+                <p className="mt-1 text-[26px] font-medium leading-none text-gold">
+                  −{offer.percent} %
+                </p>
+                <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-cream/85">
                   {offer.description}. Appliqué d'office dans le panier, sans code à saisir.
                 </p>
-                <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-cream/50">
+                <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-cream/70">
                   Dès {offer.minQty} produits
                 </p>
               </div>
@@ -82,12 +87,12 @@ export default function Offers() {
           ))}
 
           <Reveal delay={160}>
-            <div className="flex h-full flex-col border border-gold/40 bg-gradient-to-br from-gold/15 to-transparent p-6">
+            <div className="flex h-full flex-col rounded-xl border border-gold/50 bg-gradient-to-br from-gold/25 to-forestSoft/60 p-6">
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gold text-ink">
                 <Icon name="ticket" className="h-5 w-5" />
               </span>
               <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-gold">Avec code</p>
-              <h3 className="mt-1 font-serif text-2xl">Codes cumulables</h3>
+              <h3 className="mt-1 font-serif text-2xl text-cream">Codes cumulables</h3>
               <ul className="mt-2 flex-1 space-y-2.5">
                 {Object.values(PROMO_CODES).map((promo) => (
                   <li key={promo.code}>
@@ -115,12 +120,12 @@ export default function Offers() {
                 <Icon name="card" className="h-5 w-5" />
               </span>
               <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-gold">Au paiement</p>
-              <h3 className="mt-1 font-serif text-2xl">−5 % par virement</h3>
-              <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-cream/70">
+              <h3 className="mt-1 font-serif text-2xl text-cream">−5 % par virement</h3>
+              <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-cream/85">
                 Réglez par virement bancaire et bénéficiez de 5 % de remise immédiate,
                 automatiquement déduits dans le récapitulatif.
               </p>
-              <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-cream/50">
+              <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-cream/70">
                 Sans minimum d'achat
               </p>
             </div>
