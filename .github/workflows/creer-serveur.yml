@@ -1,0 +1,18 @@
+name: Créer la structure du serveur Discord
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  creer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Créer catégories, salons, rôles et textes
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+        run: node scripts/creer-serveur.mjs
