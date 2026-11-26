@@ -92,6 +92,9 @@ export const cryptoById = (id) => CRYPTO_WALLETS.find((wallet) => wallet.id === 
 
 const isAddressFilled = (address) => (address ?? '').trim().length > 20
 
+/** Vérifie qu'une devise a bien une adresse de caisse renseignée. */
+export const isWalletFilled = (id) => isAddressFilled(COLLECTION.addresses[id])
+
 /** La devise est utilisable dès qu'une adresse de caisse est renseignée. */
 export const isWalletReady = (wallet) => isAddressFilled(COLLECTION.addresses[wallet?.id])
 
@@ -150,6 +153,39 @@ export const SHOP = {
   address: '',
   hours: 'Réponse par e-mail sous 24 h ouvrées',
 }
+
+/* 2 bis · DONS ---------------------------------------------- */
+
+/**
+ * Les dons ne sont proposés QUE si un projet réel est décrit ET que la
+ * réception est activée. Aucun reçu fiscal n'est promis : une boutique ne
+ * peut pas en délivrer, seul un organisme habilité le peut.
+ */
+export const DONATIONS = {
+  enabled: false,
+  /** Nom réel du projet / de l'association soutenue. Vide = section masquée. */
+  projectName: '',
+  /** Ce que l'argent finance, en une phrase vraie et vérifiable. */
+  purpose: '',
+  /** Lien public : comptes publiés, page de l'association, etc. Vide = masqué. */
+  transparencyUrl: '',
+  /** Devise d'encaissement : 'usdt' (TRC20, frais ≈ 1 USDT). */
+  currency: 'usdt',
+  /** Montants suggérés, en euros. */
+  presets: [5, 10, 25, 50],
+  /** Reçu fiscal possible ? false tant qu'aucun organisme habilité n'est partenaire. */
+  taxReceipt: false,
+}
+
+/** Les dons peuvent-ils être affichés et encaissés ? */
+export const donationsReady = () =>
+  DONATIONS.enabled && Boolean(DONATIONS.projectName.trim()) && isWalletFilled(DONATIONS.currency)
+
+/**
+ * Versement d'un don : à réaliser dans les 30 jours, puis marqué dans l'espace
+ * vendeur. Sert de preuve de sérieux, jamais de promesse de reçu fiscal.
+ */
+export const DONATION_COMMITMENT = 'Versement effectué sous 30 jours, justificatif sur demande.'
 
 /* 3 · ACCÈS VENDEUR ----------------------------------------- */
 

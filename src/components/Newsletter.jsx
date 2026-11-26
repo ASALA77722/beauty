@@ -47,9 +47,11 @@ export default function Newsletter() {
 
         <div className="rounded-2xl border border-cream/15 bg-forestSoft/40 p-6">
           <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-gold">
-            −10 % sur votre 1ʳᵉ commande
+            Offres privées
           </p>
-          <p className="mt-2 font-serif text-2xl leading-tight">Recevez le code BIENVENUE10</p>
+          <p className="mt-2 font-serif text-2xl leading-tight">
+            Vos offres, avant tout le monde
+          </p>
           <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-2.5 sm:flex-row" noValidate>
             <label htmlFor="nl-value" className="sr-only">
               Votre adresse e-mail
@@ -61,7 +63,7 @@ export default function Newsletter() {
                 setValue(event.target.value)
                 if (status !== 'idle') setStatus('idle')
               }}
-              placeholder="vous@email.fr ou 06 12 34 56 78"
+              placeholder="vous@email.fr"
               className="w-full rounded-full border border-cream/30 bg-transparent px-5 py-3.5 text-sm text-cream placeholder:text-cream/45 focus:border-gold focus:outline-none"
               aria-invalid={status === 'error'}
               aria-describedby="nl-status"
@@ -72,7 +74,8 @@ export default function Newsletter() {
           </form>
           <p id="nl-status" aria-live="polite" className="mt-2.5 min-h-[18px] text-[11.5px] text-cream/80">
             {status === 'error' && 'Indiquez une adresse e-mail valide.'}
-            {status === 'success' && '✦ Merci ! Votre code BIENVENUE10 arrive par e-mail.'}
+            {status === 'success' &&
+              '✦ Merci ! Votre inscription est notée sur cet appareil : les offres privées arrivent par e-mail.'}
           </p>
         </div>
       </div>
