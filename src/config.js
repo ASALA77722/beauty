@@ -39,6 +39,20 @@ export const SPLIT = {
    */
   partnerAddress: '',
   /**
+   * Sur quelle page de paiement la cliente règle ('shop' ou 'partner').
+   * Le montant demandé reste le total : la répartition est faite par le
+   * prestataire, ou par toi depuis #vendeur.
+   */
+  linkMode: 'shop',
+  /** S'applique-t-il aux commandes, aux dons, ou aux deux ? */
+  scope: { orders: true, donations: true },
+  /**
+   * Part du partenaire sur les DONS, en %. Distincte des ventes : sur un don,
+   * une part prélevée est contestable — la convention dite « donation sharing »
+   * de Google Ad Grants l'interdit explicitement. 0 par défaut.
+   */
+  donationShare: 0,
+  /**
    * Service qui fait le partage à ta place. Aucun ne se configure depuis le
    * navigateur : la clé API reste côté serveur, jamais dans ce fichier.
    *  - 'none'        : virement manuel depuis ton portefeuille
@@ -119,9 +133,11 @@ export const toCryptoAmount = (euros, wallet) => {
   return Math.ceil(euros * (CRYPTO_CONFIG.rates[wallet.symbol] ?? 1) * factor) / factor
 }
 
-/** Le partage automatique est-il réellement opérationnel ? */
-export const splitActive = () =>
-  SPLIT.enabled && SPLIT.partnerShare > 0 && SPLIT.provider !== 'none' && SPLIT.providerConnected
+/** Le partage est-il demandé pour un type d'encaissement ? */
+export const splitActive = (kind = 'orders') =>
+  SPLIT.enabled &&
+  SPLIT.scope?.[kind] !== false &&
+  (kind === 'donations' ? SPLIT.donationShare : SPLIT.partnerShare) > 0
 
 /**
  * Lien qui prépare le virement de la part de l'associé depuis un portefeuille.
@@ -142,11 +158,12 @@ export const partnerPayout = (amount, wallet) => {
 }
 
 /** Détail de la répartition d'un encaissement (affiché au vendeur uniquement). */
-export const splitBreakdown = (euros) => {
+export const splitBreakdown = (euros, kind = 'orders') => {
   const total = Math.round(euros * 100) / 100
-  if (!splitActive()) return { total, shared: false, shop: total, partner: 0, fee: 0 }
-  const fee = Math.round(total * (SPLIT.providerFee / 100) * 100) / 100
-  const partner = Math.round((total - fee) * (SPLIT.partnerShare / 100) * 100) / 100
+  if (!splitActive(kind)) return { total, shared: false, shop: total, partner: 0, fee: 0 }
+  const share = kind === 'donations' ? SPLIT.donationShare : SPLIT.partnerShare
+  const fee = Math.round(total * (PAYOUT.fee / 100) * 100) / 100
+  const partner = Math.round((total - fee) * (share / 100) * 100) / 100
   return {
     total,
     shared: true,
@@ -180,33 +197,48 @@ export const SHOP = {
 
 /**
  * Encaissement par lien de paiement : la cliente ne voit JAMAIS d'adresse.
- * Elle clique, le prestataire affiche « Payez à Beauté Paris » avec son propre
- * QR code / adresse générée par commande.
- * Ce que je fournis = uniquement l'URL publique du compte (jamais une clé API).
+ * Elle clique, le prestataire affiche « Payez à Beauté Paris ».
+ *
+ * DEUX LIENS POSSIBLES (un par bénéficiaire). Le site n'en affiche qu'UN seul
+ * au moment du paiement : quelle que soit la façon dont le prestataire répartit,
+ * la part de chacun est calculée sur le montant total et suivie dans l'espace
+ * vendeur (chaque bénéficiaire reçoit « sa » page de paiement, le montant total).
+ * Aucun des deux liens n'est affiché en clair : seul le bouton est visible.
+ *
+ * Modes de présentation (SPLIT.linkMode) :
+ *  - 'shop'    : la cliente règle tout sur la page de la boutique. Le prestataire
+ *                reverse ensuite la part de l'associé (automatique s'il le fait,
+ *                sinon virement guidé depuis #vendeur).
+ *  - 'partner' : idem, mais sur la page de l'associé.
  */
 export const PAYOUT = {
-  /** 'none' = aucun lien renseigné : le site n'affiche aucune adresse et renvoie vers le contact. */
+  /** 'none' = aucun lien renseigné : aucune coordonnée affichée, renvoi vers le contact. */
   provider: 'none', // 'nowpayments' | 'binancepay' | 'coingate'
-  /** Lien de paiement. Formes acceptées :
-   *   - 'https://nowpayments.io/payment/?iid=XXXXX'          (lien fixe, sans montant)
-   *   - 'https://nowpayments.io/payment/?iid=XXXXX&amount={amount}'
-   *   - 'https://nowpayments.io/payment/?iid=XXXXX&amount={amount}&currency={currency}'
-   * Rien n'est pré-rempli : sans lien, aucun paiement n'est proposé.
-   */
-  link: '',
-  /** Libellé affiché à la cliente (« Payer par carte ou crypto »). */
+  /** Lien de la boutique (ta part). {amount} et {currency} sont remplacés. */
+  shopLink: '',
+  /** Lien de ton associé. */
+  partnerLink: '',
+  /** Libellé du bouton affiché à la cliente. */
   label: 'Payer en ligne',
-  /** Frais annoncés par le prestataire, en % (affiché au vendeur). */
+  /** Frais estimés du prestataire, en % (affiché au vendeur). */
   fee: 0.5,
 }
 
-/** Le lien de paiement est-il utilisable ? */
-export const payoutLink = (amount) => {
-  if (!PAYOUT.link.trim()) return ''
-  return PAYOUT.link
-    .replace('{amount}', Number(amount).toFixed(2))
+/** Lien utilisable pour un bénéficiaire ('shop' | 'partner'). */
+export const linkFor = (payee, amount) => {
+  const raw = payee === 'partner' ? PAYOUT.partnerLink : PAYOUT.shopLink
+  if (!raw || !raw.trim()) return ''
+  return raw
+    .replace('{amount}', Number(amount ?? 0).toFixed(2))
     .replace('{currency}', 'eur')
 }
+
+/** Le lien réellement proposé à la cliente (selon le mode de partage). */
+export const payoutLink = (amount) =>
+  linkFor(SPLIT.enabled && SPLIT.linkMode === 'partner' ? 'partner' : 'shop', amount)
+
+/** Au moins un lien est-il prêt ? */
+export const payoutReady = () => Boolean(linkFor('shop', 0) || linkFor('partner', 0))
 
 /* 2 bis · DONS ---------------------------------------------- */
 

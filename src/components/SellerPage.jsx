@@ -280,8 +280,8 @@ function SellerDashboard({ onBack, onLock }) {
         >
           <Icon name={walletsReady ? 'check' : 'shield'} className="h-3.5 w-3.5" />
           {walletsReady
-            ? `Paiement crypto actif — ${ACTIVE_WALLETS.map((wallet) => wallet.symbol).join(' · ')}`
-            : 'Paiement crypto inactif'}
+            ? `Encaissement actif — ${PAYOUT.provider}`
+            : 'Encaissement inactif'}
         </p>
         <p className="mt-1 text-[11px] leading-relaxed text-inkSoft">
           {PAYOUT.link
@@ -290,14 +290,15 @@ function SellerDashboard({ onBack, onLock }) {
         </p>
         <p className="mt-2 flex items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.1em] text-inkSoft">
           <Icon name={splitActive() ? 'check' : 'shield'} className="h-3 w-3" />
-          {splitActive()
-            ? `Partage automatique actif — ${SPLIT.partnerShare} % vers ${SPLIT.partnerLabel}`
-            : 'Aucun partage automatique configuré'}
+          {splitActive('orders')
+            ? `Partage ventes actif — ${SPLIT.partnerShare} % vers ${SPLIT.partnerLabel}`
+            : 'Aucun partage configuré sur les ventes'}
+          {splitActive('donations') ? ` · dons : ${SPLIT.donationShare} %` : ' · dons : 100 % au projet'}
         </p>
         <p className="mt-1 text-[10.5px] leading-relaxed text-inkSoft">
-          {splitActive()
-            ? `La cliente ne voit qu’une adresse : la caisse. Le service (${SPLIT.provider}) reverse ensuite la part de ${SPLIT.partnerLabel}.`
-            : 'La cliente paie sur une seule adresse. Pour reverser automatiquement une part à un associé, il faut connecter un service de payout (NOWPayments ou Binance Pay) : voir SPLIT dans src/config.js.'}
+          {splitActive('orders')
+            ? `La cliente règle sur une page de paiement (${SPLIT.linkMode === 'partner' ? 'celle de l’associé' : 'la boutique'}). La part de chacun est calculée à chaque vente et suivie ci-dessous : bouton de virement préparé, puis « part reversée ».`
+            : 'Aucun partage configuré : chaque encaissement reste sur la boutique. Pour en activer un, renseigner SPLIT (part, lien de l’associé) dans src/config.js.'}
         </p>
       </div>
 

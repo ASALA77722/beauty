@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  CRYPTO_WALLETS,
-  PAYOUT,
-  payoutLink,
-  SHOP,
-} from '../config'
+import { CRYPTO_WALLETS, PAYOUT, payoutLink, splitActive, SHOP } from '../config'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { useOrders } from '../hooks/useOrders'
@@ -401,6 +396,13 @@ export default function CheckoutModal({ open, onClose }) {
                   de <span className="font-medium text-ink">{SHOP.name}</span>. Vous choisissez votre
                   moyen de paiement, puis vous revenez ici valider votre commande.
                 </p>
+
+                {splitActive('orders') && (
+                  <p className="mt-2 rounded-lg border border-sage/25 bg-sage/8 px-2.5 py-2 text-[10.5px] leading-relaxed text-inkSoft">
+                    Un seul paiement suffit : nous reversons ensuite la part revenant à notre
+                    partenaire. Aucun frais supplémentaire pour vous.
+                  </p>
+                )}
 
                 {link ? (
                   <a
