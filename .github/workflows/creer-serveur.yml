@@ -1,7 +1,14 @@
 name: Créer la structure du serveur Discord
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      guild_id:
+        description: 'Identifiant du serveur Discord'
+        required: false
+      bot_token:
+        description: 'Jeton du bot (laisser vide si le secret existe)'
+        required: false
 
 jobs:
   creer:
@@ -13,6 +20,6 @@ jobs:
           node-version: '20'
       - name: Créer catégories, salons, rôles et textes
         env:
-          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
-          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+          DISCORD_BOT_TOKEN: ${{ inputs.bot_token || secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_GUILD_ID: ${{ inputs.guild_id || secrets.DISCORD_GUILD_ID }}
         run: node scripts/creer-serveur.mjs
