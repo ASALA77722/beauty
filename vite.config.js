@@ -9,7 +9,8 @@ export default defineConfig(() => {
   const singleFile = process.env.SINGLE_FILE === '1'
   return {
     plugins: [react(), ...(singleFile ? [viteSingleFile()] : [])],
-    base: './',
+    // chemin public : « /Beaut-/ » sur GitHub Pages, relatif pour le fichier autonome
+    base: process.env.PAGES_BASE || './',
     server: {
       host: '0.0.0.0',
       port: 5173,
