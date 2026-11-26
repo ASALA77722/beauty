@@ -94,7 +94,7 @@ Un point 🟡 orange devient ✅ vert quand c'est terminé.
 
 Ouvre :
 
-> # 🔗 https://asala77722.github.io/Beaut-/
+> # 🔗 https://asala77722.github.io/beauty/
 
 ⏳ Au tout premier chargement, GitHub peut mettre **1 à 2 minutes** de plus.
 Si la page affiche « 404 », attends une minute et rafraîchis.

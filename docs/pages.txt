@@ -1,2 +1,2 @@
-site: https://asala77722.github.io/Beaut-/
-repo: https://github.com/ASALA77722/Beaut-
+site: https://asala77722.github.io/beauty/
+repo: https://github.com/ASALA77722/beauty
