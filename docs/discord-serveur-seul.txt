@@ -24,7 +24,7 @@ n invente aucun chiffre ni partenariat ni association sinon A COMPLETER
 une seule carte a confirmer
 ```
 
-## Version B — avec salons boutique et solidarité (1742)
+## Version B — avec salons boutique et solidarité (1583)
 ```
 nom serveur Beaute Paris
 theme beaute parfumerie francaise ton sobre elegant vouvoiement noms de salons simples sans emoji
