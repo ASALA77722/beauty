@@ -8,6 +8,7 @@ import Faq from './components/Faq'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
 import LeadBanner from './components/LeadBanner'
+import LegalPage from './components/LegalPage'
 import Icon from './components/Icon'
 import Navbar from './components/Navbar'
 import OrderTracking from './components/OrderTracking'
@@ -27,6 +28,10 @@ function useHashRoute() {
   const read = () => {
     const hash = window.location.hash.replace(/^#/, '')
     if (hash.startsWith('vendeur')) return { name: 'seller', ref: null }
+    if (hash.startsWith('mentions')) return { name: 'legal', page: 'legal' }
+    if (hash.startsWith('cgv')) return { name: 'legal', page: 'cgv' }
+    if (hash.startsWith('confidentialite')) return { name: 'legal', page: 'privacy' }
+    if (hash.startsWith('cookies')) return { name: 'legal', page: 'cookies' }
     if (hash.startsWith('suivi')) return { name: 'tracking', ref: decodeURIComponent(hash.split('/')[1] ?? '') }
     return { name: 'home', ref: null }
   }
@@ -115,6 +120,8 @@ export default function App() {
         <main>
           <SellerPage onBack={goHome} />
         </main>
+      ) : route.name === 'legal' ? (
+        <LegalPage page={route.page} onBack={goHome} />
       ) : route.name === 'tracking' ? (
         <main>
           <OrderTracking reference={route.ref} onBack={goHome} />

@@ -110,8 +110,8 @@ export default function CheckoutModal({ open, onClose }) {
       setError('Renseignez votre prénom et votre nom.')
       return false
     }
-    if (!form.email.trim() && !form.phone.trim()) {
-      setError('Indiquez un e-mail ou un téléphone : c’est par là que nous vous joignons pour la livraison.')
+    if (!form.email.trim()) {
+      setError('Indiquez votre adresse e-mail : c’est par là que nous vous envoyons le suivi de commande.')
       return false
     }
     if (!canPay) {
@@ -245,7 +245,7 @@ export default function CheckoutModal({ open, onClose }) {
                 </div>
                 <div>
                   <label htmlFor="co-phone" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
-                    Téléphone
+                    Téléphone <span className="normal-case tracking-normal text-inkSoft/70">(facultatif)</span>
                   </label>
                   <input
                     id="co-phone"
