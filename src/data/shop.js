@@ -1,228 +1,276 @@
+// ─────────────────────────────────────────────────────────────
+// Catalogue — prix « marché » (constatés en parfumerie) vs prix site.
+// Les montants sont en euros, TTC.
+// ─────────────────────────────────────────────────────────────
+
+export const BRANDS = [
+  { id: 'jeanne-piaubert', name: 'Jeanne Piaubert', note: 'Maison parisienne de soins anti-âge depuis 1936' },
+  { id: 'stendhal', name: 'Stendhal', note: "L'expertise française de l'algue Millennium" },
+  { id: 'biarritz', name: 'Laboratoires de Biarritz', note: 'Cosmétique marine, 100 % d’origine naturelle' },
+]
+
 export const PRODUCTS = [
   {
-    id: 'serum-eclat',
-    name: 'Sérum Éclat',
-    subtitle: 'Vitamine C & argousier',
-    price: 48,
-    image: '/img/p1.jpg',
-    category: 'Visage',
-    volume: '30 ml',
-    rating: 4.9,
-    reviews: 214,
-    tag: 'Best-seller',
-    description:
-      "Un sérum léger à la vitamine C stabilisée et à l'huile d'argousier, qui ravive l'éclat des peaux fatiguées et unifie le teint dès quatre semaines.",
-    details: [
-      'Vitamine C stabilisée à 8 %',
-      "Huile d'argousier bio pressée à froid",
-      'Texture fluide, fini non gras',
-      "98,7 % d'ingrédients d'origine naturelle",
-    ],
-    skin: ['Teint terne', 'Taches', 'Toutes peaux'],
-    inci:
-      "Aqua, Rosa damascena flower water*, Hippophae rhamnoides fruit oil*, Glycerin*, Sodium ascorbyl phosphate, Squalane, Cetearyl olivate, Sorbitan olivate, Tocopherol, Helianthus annuus seed oil*, Sodium hyaluronate, Citric acid, Sodium benzoate, Potassium sorbate. *Ingrédients issus de l'agriculture biologique.",
-  },
-  {
-    id: 'creme-nuit',
-    name: 'Crème de Nuit',
-    subtitle: 'Bakuchiol & beurre de karité',
-    price: 56,
-    image: '/img/p2.jpg',
-    category: 'Visage',
+    id: 'baume-integral-nuit',
+    brandId: 'jeanne-piaubert',
+    name: 'Baume Intégral Anti-Âge Nuit',
+    line: "Suprém'Advance Premium",
+    category: 'Soin visage',
+    concern: 'Anti-âge',
     volume: '50 ml',
+    marketPrice: 219.5,
+    price: 149,
+    image: '/img/baume.jpg',
     rating: 4.8,
-    reviews: 168,
-    tag: null,
+    reviews: 412,
+    bestseller: true,
+    isNew: false,
+    stock: 8,
     description:
-      'Une crème fondante au bakuchiol, alternative végétale au rétinol, qui accompagne la peau pendant la nuit pour une texture lissée au réveil.',
-    details: [
-      'Bakuchiol 1 % — alternative végétale au rétinol',
-      'Beurre de karité non raffiné',
-      'Riche en omégas 6 et 9',
-      'Sans parfum ajouté',
+      "Le baume de nuit signature de la Méthode Jeanne Piaubert. Sa texture fondante au complexe Suprém'Advance Premium accompagne la peau pendant le sommeil : rides lissées, fermeté retrouvée, teint reposé au réveil.",
+    benefits: [
+      'Rides et ridules visiblement lissées dès 4 semaines',
+      'Fermeté et densité améliorées',
+      'Éclat révélé au réveil',
+      'Texture baume fondante, fini satiné',
     ],
-    skin: ['Peaux sèches', 'Premières rides', 'Sensibles'],
+    usage:
+      "Le soir, sur peau propre, appliquer une noisette sur le visage et le cou en massant du centre vers l'extérieur. Éviter le contour des yeux.",
     inci:
-      "Aqua, Butyrospermum parkii butter*, Glycerin*, Bakuchiol, Coco-caprylate, Cetearyl alcohol, Cetearyl glucoside, Prunus amygdalus dulcis oil*, Squalane, Tocopherol, Xanthan gum, Sodium benzoate, Potassium sorbate, Citric acid. *Ingrédients issus de l'agriculture biologique.",
+      "Aqua, Glycerin, Caprylic/Capric Triglyceride, Butyrospermum Parkii Butter, Cetearyl Alcohol, Squalane, Dimethicone, Tocopherol, Sodium Hyaluronate, Adenosine, Parfum, Phenoxyethanol.",
   },
   {
-    id: 'huile-rose',
-    name: 'Huile Précieuse',
-    subtitle: 'Rose musquée & figue de Barbarie',
-    price: 62,
-    image: '/img/p3.jpg',
-    category: 'Visage',
+    id: 'serum-anti-rides',
+    brandId: 'stendhal',
+    name: 'Sérum Anti-Rides Performance',
+    line: 'Recette Merveilleuse',
+    category: 'Sérum',
+    concern: 'Anti-âge',
     volume: '30 ml',
-    rating: 4.9,
-    reviews: 302,
-    tag: 'Édition limitée',
-    description:
-      "Sept huiles botaniques pressées à froid qui nourrissent, réparent et laissent un voile de satiné. Quelques gouttes suffisent, le matin ou le soir.",
-    details: [
-      'Rose musquée du Chili bio',
-      'Figue de Barbarie du Maroc',
-      'Flacon en verre teinté rechargeable',
-      'Sans silicone ni huile minérale',
-    ],
-    skin: ['Peaux sèches', 'Éclat', 'Toutes peaux'],
-    inci:
-      "Rosa canina fruit oil*, Opuntia ficus-indica seed oil*, Argania spinosa kernel oil*, Prunus armeniaca kernel oil*, Simmondsia chinensis seed oil*, Squalane, Tocopherol, Helianthus annuus seed oil*. *Ingrédients issus de l'agriculture biologique.",
-  },
-  {
-    id: 'gel-nettoyant',
-    name: 'Gel Douceur',
-    subtitle: 'Aloe vera & camomille',
-    price: 28,
-    image: '/img/p4.jpg',
-    category: 'Visage',
-    volume: '200 ml',
+    marketPrice: 115.5,
+    price: 79,
+    image: '/img/serum-anti-rides.jpg',
     rating: 4.7,
-    reviews: 421,
-    tag: null,
+    reviews: 268,
+    bestseller: true,
+    isNew: false,
+    stock: 14,
     description:
-      "Un gel nettoyant sans savon qui élimine les impuretés sans décaper la barrière cutanée. La peau est nette, souple et confortable.",
-    details: [
-      'Aloe vera bio à 32 %',
-      'Camomille matricaire apaisante',
-      'pH physiologique 5,5',
-      'Testé sous contrôle dermatologique',
+      "Un sérum concentré à l'extrait d'Algue Millennium, l'actif signature de Stendhal. Il cible les rides installées et prévient leur formation, pour une peau repulpée et un galbe redessiné.",
+    benefits: [
+      "Extrait d'Algue Millennium dosé au plus juste",
+      'Rides installées visiblement atténuées',
+      'Grain de peau affiné et repulpé',
+      'Texture sérum fraîche, pénétration immédiate',
     ],
-    skin: ['Peaux mixtes', 'Sensibles', 'Toutes peaux'],
+    usage:
+      "Matin et soir, appliquer 3 à 4 gouttes sur le visage et le cou avant la crème habituelle.",
     inci:
-      "Aqua, Aloe barbadensis leaf juice*, Coco-glucoside, Glycerin*, Chamomilla recutita flower extract*, Sodium cocoyl glutamate, Glyceryl oleate, Panthenol, Citric acid, Sodium benzoate, Potassium sorbate. *Ingrédients issus de l'agriculture biologique.",
+      "Aqua, Glycerin, Alcohol Denat., Butylene Glycol, Pentylene Glycol, Algae Extract, Sodium Hyaluronate, Panthenol, Tocopheryl Acetate, Parfum, Phenoxyethanol.",
   },
   {
-    id: 'beurre-corps',
-    name: 'Beurre de Corps',
-    subtitle: 'Karité brut & lavande',
-    price: 34,
-    image: '/img/p5.jpg',
-    category: 'Corps',
-    volume: '180 ml',
-    rating: 4.8,
-    reviews: 96,
-    tag: 'Nouveau',
-    description:
-      "Un baume riche en karité brut et en cire d'abeille, parfumé à la lavande de Provence. Il enveloppe les peaux sèches d'un cocon durable.",
-    details: [
-      'Karité brut du Ghana',
-      'Lavande fine de Provence',
-      "Pot en terre cuite réutilisable",
-      'Texture baume fondante',
-    ],
-    skin: ['Peaux très sèches', 'Corps'],
-    inci:
-      "Butyrospermum parkii butter*, Cocos nucifera oil*, Cera alba*, Lavandula angustifolia oil*, Prunus amygdalus dulcis oil*, Tocopherol, Helianthus annuus seed oil*, Linalool**, Limonene**. *Bio. **Présents naturellement dans l'huile essentielle.",
-  },
-  {
-    id: 'brume-eclat',
-    name: 'Brume Éclat',
-    subtitle: 'Eau de rose & hibiscus',
-    price: 24,
-    image: '/img/p6.jpg',
-    category: 'Visage',
-    volume: '100 ml',
+    id: 'serum-anti-taches',
+    brandId: 'biarritz',
+    name: 'Sérum Anti-Taches',
+    line: 'Dark Spot Serum',
+    category: 'Sérum',
+    concern: 'Taches',
+    volume: '30 ml',
+    marketPrice: 38.9,
+    price: 26.9,
+    image: '/img/serum-anti-taches.jpg',
     rating: 4.6,
-    reviews: 137,
-    tag: null,
+    reviews: 731,
+    bestseller: true,
+    isNew: false,
+    stock: 32,
     description:
-      "Une brume fine à l'eau de rose distillée et aux acides de fruits d'hibiscus, à vaporiser à tout moment pour réveiller le teint et fixer le maquillage.",
-    details: [
-      'Eau de rose de Damas distillée',
-      'Acides de fruits d’hibiscus',
-      'Sans alcool dénaturé',
-      'Vaporisateur rechargeable',
+      "Un sérum 100 % d'origine naturelle qui cible les taches pigmentaires et prévient leur réapparition. Formulé à l'extrait de camomille et à la vitamine C d'origine naturelle, il unifie le teint sans photosensibiliser.",
+    benefits: [
+      "Action anti-récidive sur les taches",
+      "100 % d'ingrédients d'origine naturelle",
+      'Convient à tous les types de peau, même sensible',
+      'Teint plus uniforme en 8 semaines',
     ],
-    skin: ['Toutes peaux', 'Teint terne'],
+    usage:
+      "Le matin et/ou le soir sur l'ensemble du visage, avant la crème hydratante. Toujours associer une protection solaire le jour.",
     inci:
-      "Rosa damascena flower water*, Aqua, Hibiscus sabdariffa flower extract*, Glycerin*, Sodium PCA, Panthenol, Sodium benzoate, Potassium sorbate, Citric acid. *Ingrédients issus de l'agriculture biologique.",
+      "Aqua, Aloe Barbadensis Leaf Juice*, Glycerin, Alcohol Denat.*, Chrysanthemum Parthenium Flower Extract*, Sodium Ascorbyl Phosphate, Niacinamide, Sodium Hyaluronate, Citric Acid, Sodium Benzoate. *Ingrédients issus de l'agriculture biologique.",
   },
   {
-    id: 'savon-botanique',
-    name: 'Savon Botanique',
-    subtitle: 'Avoine & miel',
-    price: 16,
-    image: '/img/p7.jpg',
-    category: 'Corps',
-    volume: '100 g',
+    id: 'contour-des-yeux',
+    brandId: 'jeanne-piaubert',
+    name: 'Contour des Yeux Anti-Âge',
+    line: "Suprém'Advance Premium",
+    category: 'Soin visage',
+    concern: 'Anti-âge',
+    volume: '15 ml',
+    marketPrice: 111.5,
+    price: 74,
+    image: '/img/contour-yeux.jpg',
     rating: 4.7,
-    reviews: 64,
-    tag: null,
+    reviews: 189,
+    bestseller: false,
+    isNew: true,
+    stock: 6,
     description:
-      "Saponifié à froid, ce savon à l'avoine colloïdale et au miel adoucit les peaux les plus sensibles. Une mousse crémeuse, un parfum de céréales douces.",
-    details: [
-      'Saponification à froid',
-      'Avoine colloïdale bio',
-      'Miel de châtaignier',
-      'Zéro emballage plastique',
+      'Un soin ciblé pour le regard : poches désengorgées, cernes atténués, rides de la patte d’oie lissées. Sa texture gel-crème se fond instantanément et convient au port de lentilles.',
+    benefits: [
+      'Région du regard défatiguée',
+      'Rides de la patte d’oie lissées',
+      'Cernes et poches atténués',
+      'Texture gel-crème, sans parfum',
     ],
-    skin: ['Peaux sensibles', 'Corps'],
+    usage:
+      "Matin et soir, tapoter une petite quantité du bout du doigt sur la région orbitale, du coin interne vers l'extérieur.",
     inci:
-      "Sodium olivate*, Sodium cocoate*, Aqua, Avena sativa kernel flour*, Mel*, Glycerin*, Lavandula angustifolia oil*, Tocopherol. *Ingrédients issus de l'agriculture biologique.",
+      "Aqua, Glycerin, Dimethicone, Squalane, Caffeine, Sodium Hyaluronate, Adenosine, Tocopherol, Acrylates/C10-30 Alkyl Acrylate Crosspolymer, Phenoxyethanol.",
   },
 ]
 
+/** Prix de lancement / offre du moment, appliqué par-dessus le prix site. */
+export const FLASH_OFFER = {
+  label: 'Prix de lancement',
+  percent: 5,
+  endsInHours: 72,
+  code: 'LANCEMENT5',
+}
+
+export const brandOf = (product) => BRANDS.find((brand) => brand.id === product.brandId)
+
+/** Prix effectif d'un produit, remise de lancement incluse. */
+export const finalPrice = (product) =>
+  Math.round(product.price * (1 - FLASH_OFFER.percent / 100) * 100) / 100
+
 export const CATEGORIES = [
   { id: 'all', label: 'Tout' },
-  { id: 'Visage', label: 'Visage' },
-  { id: 'Corps', label: 'Corps' },
+  { id: 'Sérum', label: 'Sérums' },
+  { id: 'Soin visage', label: 'Soins visage' },
+]
+
+export const CONCERNS = ['Tout', 'Anti-âge', 'Taches']
+
+// ─────────────────────────────────────────────────────────────
+// Offres automatiques — appliquées d'office dans le panier,
+// la plus avantageuse uniquement.
+// ─────────────────────────────────────────────────────────────
+export const AUTO_OFFERS = [
+  {
+    id: 'duo',
+    label: 'Rituel duo',
+    description: '2 produits achetés → −10 % sur le 2ᵉ',
+    kind: 'second-unit',
+    percent: 10,
+    minQty: 2,
+  },
+  {
+    id: 'trio',
+    label: 'Rituel complet',
+    description: '3 produits et plus → −15 % sur le total',
+    kind: 'order',
+    percent: 15,
+    minQty: 3,
+  },
+]
+
+// ─────────────────────────────────────────────────────────────
+// Codes promotionnels — à cumuler avec le prix site
+// ─────────────────────────────────────────────────────────────
+export const PROMO_CODES = {
+  BIENVENUE10: {
+    code: 'BIENVENUE10',
+    label: 'Bienvenue chez Beauté',
+    type: 'percent',
+    value: 10,
+    minSubtotal: 0,
+    description: '−10 % sur votre première commande, sans minimum.',
+  },
+  LUXE15: {
+    code: 'LUXE15',
+    label: 'Offre luxe',
+    type: 'percent',
+    value: 10,
+    minSubtotal: 150,
+    description: '−10 % dès 150 € d’achat.',
+  },
+  LIVRAISON: {
+    code: 'LIVRAISON',
+    label: 'Livraison offerte',
+    type: 'shipping',
+    value: 0,
+    minSubtotal: 0,
+    description: 'Livraison standard offerte.',
+  },
+}
+
+export const PAYMENT_OFFERS = [
+  {
+    id: 'card',
+    label: 'Carte bancaire',
+    note: 'Visa, Mastercard, CB',
+    discount: 0,
+    icon: 'card',
+  },
+  {
+    id: 'twint',
+    label: 'TWINT',
+    note: 'Paiement mobile suisse',
+    discount: 0,
+    icon: 'phone',
+  },
+  {
+    id: 'transfer',
+    label: 'Virement bancaire',
+    note: '−5 % immédiat sur la commande',
+    discount: 5,
+    icon: 'bank',
+  },
 ]
 
 export const TESTIMONIALS = [
   {
     quote:
-      "Le Sérum Éclat a changé ma routine. Trois semaines et mon teint est visiblement plus lumineux, sans aucune irritation.",
-    author: 'Camille R.',
-    detail: 'Sérum Éclat · Paris',
+      "J'ai retrouvé mon baume Jeanne Piaubert ici à un prix que je n'avais jamais vu, même en parapharmacie. Livraison en 48 h, tout est parfait.",
+    author: 'Sonia M.',
+    detail: 'Baume Intégral Anti-Âge Nuit',
   },
   {
     quote:
-      "Enfin une marque qui explique ce qu'elle met dans ses flacons. La Crème de Nuit est devenue mon rituel du soir.",
-    author: 'Inès B.',
-    detail: 'Crème de Nuit · Lyon',
+      'Le sérum Stendhal est mon indispensable depuis des années. Commandé avec le code BIENVENUE10, emballage soigné, échantillons offerts.',
+    author: 'Hélène D.',
+    detail: 'Sérum Anti-Rides Performance',
   },
   {
     quote:
-      "L'Huile Précieuse sent divinement bon et ne laisse pas de film gras. Le packaging en verre est superbe.",
-    author: 'Julie M.',
-    detail: 'Huile Précieuse · Bordeaux',
+      'Le sérum anti-taches de Biarritz a réellement calmé mes taches. Le conseil par téléphone avant l’achat a fait la différence.',
+    author: 'Awa T.',
+    detail: 'Sérum Anti-Taches',
   },
 ]
 
 export const FAQ = [
   {
-    q: 'Vos produits conviennent-ils aux peaux sensibles ?',
-    a: "Toutes nos formules sont testées sous contrôle dermatologique et pensées pour les peaux réactives : sans parfum ajouté lorsque c'est possible, sans alcool dénaturé, sans huile essentielle agressive. En cas de doute, commencez par un test sur l'avant-bras pendant 48 heures.",
+    q: 'Vos produits sont-ils authentiques ?',
+    a: "Oui. Tous nos flacons proviennent directement des marques ou de leurs distributeurs agréés, avec traçabilité des lots. Chaque commande est accompagnée de sa facture et de la garantie de fraîcheur. Aucun produit n'est reconditionné.",
   },
   {
-    q: 'Quels sont les délais et frais de livraison ?',
-    a: 'Expédition sous 24 h ouvrées depuis notre atelier de Grasse. Livraison offerte dès 60 € en France métropolitaine, 4,90 € en dessous. Comptez 2 à 3 jours ouvrés, et 4 à 6 jours pour l’Europe.',
+    q: 'Pourquoi vos prix sont-ils plus bas qu’en magasin ?',
+    a: "Nous achetons en volumes importants et vendons en ligne sans vitrine physique. Nous reversons cette économie dans le prix : en moyenne −30 % par rapport au prix conseillé en parfumerie. Le prix « marché » barré correspond au prix constaté en magasin.",
   },
   {
-    q: 'Vos emballages sont-ils recyclables ?',
-    a: "Nos flacons sont en verre teinté, rechargeables ou recyclables à l'infini. Les pots sont en terre cuite et en verre. Les cartons sont en fibre recyclée non blanchie, imprimés à l'encre végétale. Nous ne vendons aucun produit dans du plastique vierge.",
+    q: 'Comment fonctionnent les offres automatiques ?',
+    a: "Elles s'appliquent seules dans le panier, sans code : à partir de 2 produits, −10 % sur le 2ᵉ ; à partir de 3 produits, −15 % sur le total. La remise la plus avantageuse est retenue automatiquement. Les codes promotionnels (BIENVENUE10, LUXE15…) se cumulent avec ces offres.",
+  },
+  {
+    q: 'Comment créer mon compte : e-mail ou téléphone ?',
+    a: "Les deux fonctionnent. Vous pouvez vous identifier avec votre adresse e-mail ou votre numéro de téléphone : nous vous envoyons un code à 6 chiffres pour sécuriser la connexion — aucun mot de passe à retenir. La connexion est obligatoire pour finaliser une commande, afin de garantir la livraison et le suivi.",
+  },
+  {
+    q: 'Quels sont les délais de livraison ?',
+    a: 'Expédition sous 24 h ouvrées. Livraison offerte dès 60 € en France métropolitaine, 4,90 € en dessous. Comptez 2 à 3 jours ouvrés, et 4 à 6 jours pour l’Europe. Un numéro de suivi vous est envoyé par e-mail et par SMS.',
   },
   {
     q: 'Puis-je retourner un produit ?',
-    a: 'Vous disposez de 30 jours pour changer d’avis. Les produits non ouverts sont remboursés intégralement, et nous garantissons aussi le remboursement des produits ouverts s’ils ne conviennent pas à votre peau.',
-  },
-  {
-    q: 'Vos produits sont-ils testés sur les animaux ?',
-    a: "Jamais. Depuis 2019, Maison Lumière est certifiée sans cruauté par Leaping Bunny. Nos formules sont exclusivement testées sur des volontaires humains rémunérés, dans des laboratoires indépendants français.",
-  },
-]
-
-export const PROMISES = [
-  {
-    title: 'Formules courtes',
-    text: "12 ingrédients en moyenne, tous listés en clair sur nos flacons. Ce qui n'est pas utile n'entre pas.",
-  },
-  {
-    title: 'Fabriqué à Grasse',
-    text: 'Formulé, testé et conditionné dans notre atelier familial des Alpes-Maritimes.',
-  },
-  {
-    title: 'Sans compromis',
-    text: 'Certifiée bio par Ecocert, vegan et sans cruauté animale. Des emballages rechargeables.',
+    a: "Vous disposez de 30 jours pour changer d'avis. Les produits non ouverts sont remboursés intégralement. En cas d'allergie ou de réaction, contactez-nous : le remboursement est pris en charge, même produit ouvert.",
   },
 ]

@@ -1,10 +1,13 @@
-# Maison Lumière — boutique de cosmétiques naturels
+# Beauté Paris — parfumerie beauté en ligne
 
-Site e-commerce vitrine (français) pour une marque fictive de soins naturels fabriqués à Grasse.
-Construit avec **React 18 + Vite + Tailwind CSS**, sans backend : le panier est persisté dans le
-`localStorage`.
+Boutique e-commerce (français) de soins de parfumerie multimarques : **Jeanne Piaubert**,
+**Stendhal**, **Laboratoires de Biarritz**. Prix « marché » barrés, offres automatiques,
+codes promo, compte client par **e-mail ou téléphone** et tunnel de commande complet.
 
-![aperçu](public/img/hero.jpg)
+Stack : **React 18 + Vite + Tailwind CSS**, sans backend (panier, compte et commandes
+persistés dans le `localStorage`).
+
+![aperçu](public/img/hero-luxe.jpg)
 
 ## Démarrer
 
@@ -15,40 +18,64 @@ npm run build    # build de production dans dist/
 npm run preview  # sert le build
 ```
 
-## Ce qui est inclus
+## Catalogue et positionnement prix
 
-- **Hero éditorial** avec visuel produit et bandeau défilant (signaux de confiance).
-- **Catalogue de 7 soins** : filtres par catégorie (Visage / Corps), tri (sélection, prix, notes).
-- **Fiche produit en modale** : description, actifs, bénéfices, composition INCI dépliable,
-  sélecteur de quantité.
-- **Panier coulissant** : ajout/suppression, quantités, sous-total, frais de port et jauge
-  « livraison offerte dès 60 € », persistance `localStorage`.
-- **Toast** de confirmation d'ajout + bouton « Voir » qui ouvre le panier.
-- **Sections** : engagements, la maison, rituel en 3 étapes (ajout du trio), transparence des
-  ingrédients, avis clients, FAQ en accordéon, newsletter avec validation.
-- **Accessibilité** : navigation clavier, `aria-*` sur les contrôles, lien d'évitement, focus visible,
-  respect de `prefers-reduced-motion`.
-- **Responsive** de 320 px à 1440 px, menu mobile plein écran.
+| Produit | Marque | Prix magasin | Prix site | Remise |
+| --- | --- | --- | --- | --- |
+| Baume Intégral Anti-Âge Nuit 50 ml | Jeanne Piaubert | 219,50 € | **149 €** | −32 % |
+| Sérum Anti-Rides Performance 30 ml | Stendhal | 115,50 € | **79 €** | −32 % |
+| Sérum Anti-Taches 30 ml | Biarritz | 38,90 € | **26,90 €** | −31 % |
+| Contour des Yeux Anti-Âge 15 ml | Jeanne Piaubert | 111,50 € | **74 €** | −34 % |
+
+Le prix affiché en boutique inclut ensuite le **prix de lancement −5 %** (`FLASH_OFFER`),
+soit −34 à −37 % par rapport au prix magasin. Tous les montants se pilotent depuis
+`src/data/shop.js`.
+
+## Mécaniques commerciales
+
+- **Offres automatiques** (`AUTO_OFFERS`), la plus avantageuse est retenue :
+  - dès 2 produits → −10 % sur le 2ᵉ article ;
+  - dès 3 produits → −15 % sur le total.
+- **Codes promo cumulables** (`PROMO_CODES`) : `BIENVENUE10` (−10 %), `LUXE15`
+  (−10 % dès 150 €), `LIVRAISON` (port offert).
+- **Remise moyen de paiement** : −5 % par virement bancaire (`PAYMENT_OFFERS`).
+- **Livraison offerte dès 60 €** (`FREE_SHIPPING_THRESHOLD`).
+- Chaque récapitulatif affiche l'économie réalisée (prix magasin + remises).
+
+## Compte client (e-mail **ou** téléphone)
+
+`src/hooks/useAuth.jsx` gère un parcours en 3 étapes, sans mot de passe :
+
+1. l'utilisateur saisit un e-mail *ou* un téléphone (détection et normalisation automatiques :
+   `06…` → `+336…`, `+41…`, `00…`) ;
+2. un **code à 6 chiffres** est généré (affiché à l'écran en mode démo) ;
+3. nouvelle cliente → prénom/nom + téléphone de suivi.
+
+**La commande exige une connexion** : le bouton du panier devient « Se connecter et commander »
+et enchaîne automatiquement sur le paiement après authentification.
 
 ## Structure
 
 ```
 src/
-  App.jsx                 assemblage des sections + toast
-  data/shop.js            produits, avis, FAQ, engagements (source de vérité du contenu)
-  hooks/useCart.jsx       contexte panier (ajout, quantités, totaux, frais de port)
-  hooks/useReveal.js      apparitions au scroll, barre de nav, verrou de scroll
-  lib/format.js           formatage €, constantes livraison, lecture/écriture du panier
-  components/             Navbar, Hero, Shop, ProductCard, ProductModal, CartDrawer,
-                          Ritual, Story, Ingredients, Testimonials, Faq, Newsletter, Footer
-public/img/               visuels produits et éditoriaux (générés pour ce projet)
+  App.jsx                  assemblage des sections, modales, toasts
+  data/shop.js             produits, marques, offres, codes promo, avis, FAQ
+  lib/pricing.js           moteur de remises (offres auto + promo + paiement + port)
+  lib/format.js            € formaté, seuils, validation e-mail / téléphone
+  hooks/useCart.jsx        panier (quantités, codes, moyen de paiement, totaux)
+  hooks/useAuth.jsx        compte client (code 6 chiffres, profil, requireAuth)
+  hooks/useReveal.js       animations au scroll, nav, verrou de scroll
+  components/              Navbar, Hero, Shop, ProductCard, ProductModal, CartDrawer,
+                           CheckoutModal, AuthModal, Offers, Brands, Story,
+                           Testimonials, Faq, Newsletter, Footer, TrustBar, Marquee
+public/img/                packshots retravaillés en studio + visuel d'accueil
 ```
 
-## Personnalisation rapide
+## Notes
 
-- **Produits / prix / textes** : tout est dans `src/data/shop.js`.
-- **Couleurs et typographies** : `tailwind.config.js` (`ivory`, `sand`, `clay`, `ink`, `sage`) et
-  polices Cormorant Garamond + Jost chargées dans `index.html`.
-- **Seuil de livraison offerte** : `FREE_SHIPPING_THRESHOLD` dans `src/lib/format.js`.
-- **Paiement réel** : brancher Stripe Checkout sur le bouton « Passer commande »
-  (`src/components/CartDrawer.jsx`) et remplacer `addItem`/`clear` par des appels API.
+- Les visuels produits ont été reconstruits en packshot studio (fond ivoire, ombre douce) à
+  partir des photos fournies du Baume Jeanne Piaubert, du Sérum Stendhal et du Sérum Biarritz.
+- Aucun paiement réel : valider la commande crée une référence `BP-…` et un historique local.
+  Pour la production, brancher Stripe Checkout dans `CheckoutModal.jsx` (`placeOrder`) et remplacer
+  `requestCode` / `verifyCode` par un envoi d'e-mail (Resend, Postmark) ou de SMS (Twilio).
+- Textes, prix et remises sont fictifs et fournis à titre de démonstration commerciale.

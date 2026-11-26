@@ -8,26 +8,59 @@ export const euro = (value) =>
 export const FREE_SHIPPING_THRESHOLD = 60
 export const SHIPPING_COST = 4.9
 
-export const STORAGE_KEY = 'maison-lumiere-cart'
+export const CART_KEY = 'beaute-cart-v2'
+export const USER_KEY = 'beaute-user-v2'
+export const ORDERS_KEY = 'beaute-orders-v2'
 
-export function readCart() {
+export const discountPercent = (market, price) =>
+  market > price ? Math.round(((market - price) / market) * 100) : 0
+
+export const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())
+
+/** Normalise un numéro FR/CH/BE : ne conserve que les chiffres, avec indicatif. */
+export const normalizePhone = (value) => {
+  const digits = value.replace(/[^\d+]/g, '')
+  if (digits.startsWith('+')) return digits
+  if (digits.startsWith('00')) return `+${digits.slice(2)}`
+  if (digits.startsWith('0') && digits.length === 10) return `+33${digits.slice(1)}`
+  return digits
+}
+
+export const isPhone = (value) => {
+  const normalized = normalizePhone(value)
+  return /^\+\d{8,15}$/.test(normalized)
+}
+
+/** Détecte automatiquement le type d'identifiant saisi. */
+export const detectIdentifier = (value) => {
+  const trimmed = value.trim()
+  if (trimmed.includes('@')) return 'email'
+  if (/[\d]/.test(trimmed) && !/[a-zA-Z]/.test(trimmed.replace(/^\+/, ''))) return 'phone'
+  return null
+}
+
+export function readJson(key, fallback) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return []
-    return parsed.filter(
-      (item) => item && typeof item.id === 'string' && Number.isFinite(item.qty) && item.qty > 0,
-    )
+    const raw = localStorage.getItem(key)
+    if (!raw) return fallback
+    return JSON.parse(raw)
   } catch {
-    return []
+    return fallback
   }
 }
 
-export function writeCart(items) {
+export function writeJson(key, value) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    localStorage.setItem(key, JSON.stringify(value))
   } catch {
-    /* stockage indisponible : on continue en mémoire */
+    /* stockage indisponible */
   }
+}
+
+export function readCart() {
+  const parsed = readJson(CART_KEY, [])
+  if (!Array.isArray(parsed)) return []
+  return parsed.filter(
+    (item) => item && typeof item.id === 'string' && Number.isFinite(item.qty) && item.qty > 0,
+  )
 }

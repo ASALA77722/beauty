@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { PRODUCTS } from '../data/shop'
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_COST, readCart, writeCart } from '../lib/format'
+import { PRODUCTS, PAYMENT_OFFERS } from '../data/shop'
+import { CART_KEY, readJson, writeJson } from '../lib/format'
+import { computeTotals } from '../lib/pricing'
 
 const CartContext = createContext(null)
 
@@ -13,18 +14,29 @@ function enrich(lines) {
     .filter(Boolean)
 }
 
+const initialLines = () => {
+  const parsed = readJson(CART_KEY, [])
+  if (!Array.isArray(parsed)) return []
+  return parsed.filter(
+    (item) => item && typeof item.id === 'string' && Number.isFinite(item.qty) && item.qty > 0,
+  )
+}
+
 export function CartProvider({ children }) {
-  const [lines, setLines] = useState(() => readCart())
+  const [lines, setLines] = useState(initialLines)
   const [isOpen, setIsOpen] = useState(false)
   const [toast, setToast] = useState(null)
+  const [promoInput, setPromoInput] = useState('')
+  const [appliedCode, setAppliedCode] = useState(null)
+  const [paymentId, setPaymentId] = useState('card')
 
   useEffect(() => {
-    writeCart(lines)
+    writeJson(CART_KEY, lines)
   }, [lines])
 
   useEffect(() => {
     if (!toast) return
-    const timer = setTimeout(() => setToast(null), 3200)
+    const timer = setTimeout(() => setToast(null), 3400)
     return () => clearTimeout(timer)
   }, [toast])
 
@@ -34,6 +46,13 @@ export function CartProvider({ children }) {
       document.body.style.overflow = ''
     }
   }, [isOpen])
+
+  const items = useMemo(() => enrich(lines), [lines])
+  const payment = PAYMENT_OFFERS.find((option) => option.id === paymentId) ?? null
+  const totals = useMemo(
+    () => computeTotals(items, { code: appliedCode, payment }),
+    [items, appliedCode, payment],
+  )
 
   const addItem = useCallback((product, qty = 1) => {
     setLines((current) => {
@@ -60,25 +79,32 @@ export function CartProvider({ children }) {
     setLines((current) => current.filter((line) => line.id !== id))
   }, [])
 
-  const clear = useCallback(() => setLines([]), [])
+  const clear = useCallback(() => {
+    setLines([])
+    setAppliedCode(null)
+    setPromoInput('')
+  }, [])
 
-  const items = useMemo(() => enrich(lines), [lines])
-  const count = useMemo(() => items.reduce((sum, item) => sum + item.qty, 0), [items])
-  const subtotal = useMemo(
-    () => items.reduce((sum, item) => sum + item.product.price * item.qty, 0),
-    [items],
+  const applyPromo = useCallback(
+    (value) => {
+      const code = (value ?? promoInput).trim().toUpperCase()
+      if (!code) return
+      setAppliedCode(code)
+      setPromoInput(code)
+    },
+    [promoInput],
   )
-  const shipping = subtotal === 0 || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST
-  const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal)
+
+  const removePromo = useCallback(() => {
+    setAppliedCode(null)
+    setPromoInput('')
+  }, [])
 
   const value = useMemo(
     () => ({
       items,
-      count,
-      subtotal,
-      shipping,
-      total: subtotal + shipping,
-      remainingForFreeShipping,
+      count: totals.count,
+      ...totals,
       addItem,
       setQty,
       removeItem,
@@ -86,20 +112,31 @@ export function CartProvider({ children }) {
       isOpen,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
+      promoInput,
+      setPromoInput,
+      appliedCode,
+      applyPromo,
+      removePromo,
+      paymentId,
+      setPaymentId,
+      payment,
       toast,
       dismissToast: () => setToast(null),
     }),
     [
       items,
-      count,
-      subtotal,
-      shipping,
-      remainingForFreeShipping,
+      totals,
       addItem,
       setQty,
       removeItem,
       clear,
       isOpen,
+      promoInput,
+      appliedCode,
+      applyPromo,
+      removePromo,
+      paymentId,
+      payment,
       toast,
     ],
   )

@@ -1,23 +1,21 @@
-import { useState } from 'react'
+import { FLASH_OFFER, brandOf, finalPrice } from '../data/shop'
 import { useCart } from '../hooks/useCart'
-import { euro } from '../lib/format'
+import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
+import Stars from './Stars'
 
 export default function ProductCard({ product, onOpen }) {
   const { addItem } = useCart()
-  const [added, setAdded] = useState(false)
-
-  const handleAdd = (event) => {
-    event.stopPropagation()
-    addItem(product, 1)
-    setAdded(true)
-    setTimeout(() => setAdded(false), 1400)
-  }
+  const brand = brandOf(product)
+  const price = finalPrice(product)
+  const off = discountPercent(product.marketPrice, price)
+  const launchSaving = Math.round((product.price - price) * 100) / 100
+  const lowStock = product.stock <= 8
 
   return (
     <article className="group flex flex-col">
       <div
-        className="relative cursor-pointer overflow-hidden bg-sand"
+        className="relative cursor-pointer overflow-hidden bg-cream"
         onClick={() => onOpen(product)}
         role="button"
         tabIndex={0}
@@ -31,44 +29,63 @@ export default function ProductCard({ product, onOpen }) {
       >
         <img
           src={product.image}
-          alt={product.name}
+          alt={`${brand.name} — ${product.name}`}
           loading="lazy"
-          className="aspect-[4/5] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+          className="aspect-[4/5] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
         />
-        {product.tag && (
-          <span className="absolute left-4 top-4 bg-ivory/95 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-ink">
-            {product.tag}
-          </span>
-        )}
+
+        <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
+          {off > 0 && <span className="badge bg-rose text-ivory">−{off} %</span>}
+          {product.bestseller && <span className="badge bg-ivory/95 text-ink">Best-seller</span>}
+          {product.isNew && <span className="badge bg-forest text-cream">Nouveau</span>}
+        </div>
 
         <div className="absolute inset-x-3 bottom-3 translate-y-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 max-md:translate-y-0 max-md:opacity-100">
           <button
             type="button"
-            onClick={handleAdd}
-            className={`w-full rounded-full py-3 text-[11px] font-medium uppercase tracking-[0.18em] transition-colors ${
-              added ? 'bg-sage text-ivory' : 'bg-ivory/95 text-ink hover:bg-ink hover:text-ivory'
-            }`}
+            onClick={(event) => {
+              event.stopPropagation()
+              addItem(product, 1)
+            }}
+            className="w-full rounded-full bg-ink/90 py-3 text-[10.5px] font-medium uppercase tracking-[0.18em] text-ivory backdrop-blur transition-colors hover:bg-goldDeep"
           >
-            {added ? 'Ajouté au panier ✓' : 'Ajouter au panier'}
+            Ajouter au panier
           </button>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col pt-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="font-serif text-[22px] leading-tight text-ink">{product.name}</h3>
-            <p className="mt-0.5 text-xs text-inkSoft">{product.subtitle}</p>
-          </div>
-          <span className="shrink-0 pt-1 text-sm font-medium tabular-nums">{euro(product.price)}</span>
+      <div className="flex flex-1 flex-col pt-3.5">
+        <p className="text-[10px] uppercase tracking-[0.16em] text-goldDeep">{brand.name}</p>
+        <h3 className="mt-1 font-serif text-[19px] leading-tight text-ink">{product.name}</h3>
+        <p className="mt-0.5 text-[11px] text-inkSoft">
+          {product.volume} · {product.concern}
+        </p>
+
+        <div className="mt-2 flex items-center gap-2">
+          <Stars value={product.rating} className="h-3 w-3" />
+          <span className="text-[10.5px] text-inkSoft">
+            {product.rating} ({product.reviews})
+          </span>
         </div>
-        <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-inkSoft">
-          <Icon name="star" className="h-3.5 w-3.5 fill-clay/20 text-clay" />
-          <span className="font-medium text-ink">{product.rating}</span>
-          <span>({product.reviews})</span>
-          <span className="mx-1">·</span>
-          <span>{product.volume}</span>
+
+        <div className="mt-2.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <span className="text-[17px] font-medium text-ink">{euro(price)}</span>
+          <span className="market-price">{euro(product.marketPrice)}</span>
+          <span className="text-[10.5px] font-medium text-sage">
+            −{euro(Math.round((product.marketPrice - price) * 100) / 100)}
+          </span>
         </div>
+
+        {launchSaving > 0 && (
+          <p className="mt-1 text-[10.5px] text-goldDeep">
+            {FLASH_OFFER.label} −{FLASH_OFFER.percent} % inclus
+          </p>
+        )}
+
+        <p className="mt-1.5 flex items-center gap-1.5 text-[10.5px] text-inkSoft">
+          <Icon name="truck" className="h-3.5 w-3.5 text-gold" />
+          {lowStock ? `Plus que ${product.stock} en stock` : 'Expédié en 24 h'}
+        </p>
       </div>
     </article>
   )
