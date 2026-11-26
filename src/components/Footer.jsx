@@ -1,4 +1,5 @@
 import Icon from './Icon'
+import { SHOP } from '../config'
 
 const COLUMNS = [
   {
@@ -28,7 +29,7 @@ const COLUMNS = [
       ['Suivre ma commande', '#suivi'],
       ['Livraison & retours', '#faq'],
       ['Authenticité', '#faq'],
-      ['Nous contacter', 'mailto:bonjour@beaute-paris.fr'],
+      ['Nous contacter', `mailto:${SHOP.email}`],
       ['FAQ', '#faq'],
     ],
   },
@@ -61,9 +62,13 @@ export default function Footer() {
               ))}
             </div>
             <p className="mt-5 text-[11px] leading-relaxed text-cream/45">
-              Service client : 01 84 80 12 34
+              Service client : {SHOP.phone}
               <br />
-              Lun–sam, 9 h–19 h · 12 rue de la Paix, 75002 Paris
+              {SHOP.hours} · {SHOP.address}
+              <br />
+              <a href={`mailto:${SHOP.email}`} className="transition-colors hover:text-cream">
+                {SHOP.email}
+              </a>
             </p>
           </div>
 

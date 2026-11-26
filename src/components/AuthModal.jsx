@@ -20,6 +20,7 @@ export default function AuthModal() {
     verifyCode,
     completeProfile,
     sending,
+    masked,
     shopEmail,
     setStep,
   } = useAuth()
@@ -130,7 +131,7 @@ export default function AuthModal() {
               noValidate
             >
               <p className="text-[12.5px] leading-relaxed text-inkSoft">
-                Code envoyé à <strong className="font-medium text-ink">{identifier}</strong>.
+                Code envoyé à <strong className="font-medium text-ink">{masked || identifier}</strong>.
               </p>
               <p className="mt-2 rounded-lg bg-cream px-3 py-2 text-[11px] leading-relaxed text-inkSoft">
                 Rien reçu ? Vérifiez les indésirables. Au tout premier envoi, un message d’activation
@@ -157,7 +158,7 @@ export default function AuthModal() {
               </button>
               <button
                 type="button"
-                onClick={() => requestCode(identifier)}
+                onClick={() => requestCode()}
                 disabled={sending}
                 className="mt-2 w-full text-center text-[11.5px] text-inkSoft underline-offset-4 hover:underline disabled:opacity-50"
               >

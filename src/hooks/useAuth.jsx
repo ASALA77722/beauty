@@ -34,6 +34,7 @@ export function AuthProvider({ children }) {
   const [sentCode, setSentCode] = useState(null)
   const [sentAt, setSentAt] = useState(null)
   const [sending, setSending] = useState(false)
+  const [masked, setMasked] = useState('')
   const [pendingUser, setPendingUser] = useState(null)
   const [notice, setNotice] = useState(null)
   const resolveAction = useRef(null)
@@ -92,6 +93,8 @@ export function AuthProvider({ children }) {
       }
 
       const normalized = trimmed.toLowerCase()
+      const [local, domain] = normalized.split('@')
+      const emailMask = `${local.slice(0, 2)}${'•'.repeat(Math.max(1, local.length - 2))}@${domain}`
       const code = makeCode()
       setIdentifier(normalized)
       setChannel('email')
@@ -101,8 +104,9 @@ export function AuthProvider({ children }) {
         await sendLoginCode({ to: normalized, code, minutes: CODE_TTL_MINUTES })
         setSentCode(code)
         setSentAt(Date.now())
+        setMasked(emailMask)
         setStep('code')
-        setNotice(`Code envoyé à ${normalized}`)
+        setNotice(`Code envoyé à ${emailMask}`)
         return true
       } catch {
         setError(
@@ -226,6 +230,7 @@ export function AuthProvider({ children }) {
       notice,
       sentCode,
       sending,
+      masked,
       openAuth,
       closeAuth,
       requestCode,
