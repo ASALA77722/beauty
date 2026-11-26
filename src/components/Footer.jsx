@@ -106,10 +106,15 @@ export default function Footer() {
             Espace vendeur
           </a>
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            {['Mentions légales', 'CGV', 'Confidentialité', 'Cookies'].map((item) => (
-              <li key={item}>
-                <a href="#faq" className="transition-colors hover:text-cream">
-                  {item}
+            {[
+              { label: 'Mentions légales', href: '#mentions' },
+              { label: 'CGV', href: '#cgv' },
+              { label: 'Confidentialité', href: '#confidentialite' },
+              { label: 'Cookies', href: '#cookies' },
+            ].map((item) => (
+              <li key={item.href}>
+                <a href={item.href} className="transition-colors hover:text-cream">
+                  {item.label}
                 </a>
               </li>
             ))}

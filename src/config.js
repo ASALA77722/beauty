@@ -146,8 +146,8 @@ export const formatCrypto = (amount, wallet) => {
 export const SHOP = {
   name: 'Beauté Paris',
   /** Adresse de service : contact client ET envoi du code de connexion. */
-  email: 'beaute.paris@proton.me',
-  authEmail: 'beaute.paris@proton.me',
+  email: 'beaute.paris@proton.com',
+  authEmail: 'beaute.paris@proton.com',
   /** Laisse vide ce que tu n'as pas : le site n'affiche rien plutôt qu'un faux numéro. */
   phone: '',
   address: '',
@@ -186,6 +186,39 @@ export const donationsReady = () =>
  * vendeur. Sert de preuve de sérieux, jamais de promesse de reçu fiscal.
  */
 export const DONATION_COMMITMENT = 'Versement effectué sous 30 jours, justificatif sur demande.'
+
+/* 2 ter · IDENTITÉ LÉGALE ET INTERMÉDIAIRES ------------------ */
+
+/**
+ * Ce qui est publié dans les pages légales. Laisser vide = la mention est
+ * affichée comme « non renseignée », jamais remplacée par une valeur inventée.
+ */
+export const LEGAL = {
+  editorName: 'Beauté Paris',
+  /** Statut réel. 'non_immatricule' = activité non enregistrée (à régulariser). */
+  status: 'non_immatricule', // 'micro' | 'sasu' | 'association' | 'non_immatricule'
+  siret: '',
+  /** Adresse professionnelle publiée. Vide → « adresse communiquée sur demande ». */
+  address: '',
+  vat: 'franchise', // 'franchise' | 'assujettie'
+  publisher: '', // nom de la personne responsable de la publication
+  /** Hébergeur réel du site. */
+  host: { name: 'GitHub, Inc.', address: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis' },
+  /**
+   * Prestataire de paiement crypto. 'none' tant qu'aucun service n'est signé :
+   * les CGV disent alors que le paiement est vérifié par la boutique elle-même.
+   */
+  paymentProcessor: { id: 'none', name: '' }, // 'nowpayments' | 'binancepay'
+  /** Notification des commandes : Discord (automatique) ou e-mail (manuel). */
+  orderChannel: 'email', // 'discord' | 'email'
+  /** Médiateur de la consommation : obligatoire, à adhérer (≈ 30 €/an). */
+  mediator: { name: '', url: '' },
+  /** Assurance responsabilité civile professionnelle, si souscrite. */
+  insurance: '',
+}
+
+/** Le statut est-il en règle ? (droit de vendre durablement) */
+export const sellingLegal = () => LEGAL.status !== 'non_immatricule' && LEGAL.siret.trim().length > 0
 
 /* 3 · ACCÈS VENDEUR ----------------------------------------- */
 
