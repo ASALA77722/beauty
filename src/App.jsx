@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import AuthModal from './components/AuthModal'
 import Brands from './components/Brands'
 import CartDrawer from './components/CartDrawer'
@@ -9,6 +9,8 @@ import Hero from './components/Hero'
 import LeadBanner from './components/LeadBanner'
 import Icon from './components/Icon'
 import Navbar from './components/Navbar'
+import OrderTracking from './components/OrderTracking'
+import SellerPage from './components/SellerPage'
 import Newsletter from './components/Newsletter'
 import Offers from './components/Offers'
 import ProductModal from './components/ProductModal'
@@ -18,6 +20,30 @@ import Reviews from './components/Reviews'
 import TrustBar from './components/TrustBar'
 import { useAuth } from './hooks/useAuth'
 import { useCart } from './hooks/useCart'
+
+/** Mini-routeur par hash : #vendeur, #suivi/BP-…, sinon la boutique. */
+function useHashRoute() {
+  const read = () => {
+    const hash = window.location.hash.replace(/^#/, '')
+    if (hash.startsWith('vendeur')) return { name: 'seller', ref: null }
+    if (hash.startsWith('suivi')) return { name: 'tracking', ref: decodeURIComponent(hash.split('/')[1] ?? '') }
+    return { name: 'home', ref: null }
+  }
+  const [route, setRoute] = useState(read)
+
+  useEffect(() => {
+    const onChange = () => {
+      const next = read()
+      setRoute(next)
+      if (next.name !== 'home') window.scrollTo({ top: 0 })
+    }
+    window.addEventListener('hashchange', onChange)
+    onChange()
+    return () => window.removeEventListener('hashchange', onChange)
+  }, [])
+
+  return route
+}
 
 function Toast() {
   const { toast, dismissToast, openCart } = useCart()
@@ -61,6 +87,7 @@ export default function App() {
   const [activeProduct, setActiveProduct] = useState(null)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const { closeCart } = useCart()
+  const route = useHashRoute()
 
   const closeProduct = useCallback(() => setActiveProduct(null), [])
 
@@ -68,6 +95,10 @@ export default function App() {
     closeCart()
     setCheckoutOpen(true)
   }, [closeCart])
+
+  const goHome = useCallback(() => {
+    window.location.hash = ''
+  }, [])
 
   return (
     <>
@@ -79,23 +110,37 @@ export default function App() {
       </a>
 
       <Navbar />
-      <main>
-        <Hero />
-        <TrustBar />
-        <LeadBanner />
-        <Shop onOpenProduct={setActiveProduct} />
-        <Offers />
-        <Brands />
-        <Story />
-        <Reviews />
-        <Faq />
-        <Newsletter />
-      </main>
+      {route.name === 'seller' ? (
+        <main>
+          <SellerPage onBack={goHome} />
+        </main>
+      ) : route.name === 'tracking' ? (
+        <main>
+          <OrderTracking reference={route.ref} onBack={goHome} />
+        </main>
+      ) : (
+        <main>
+          <Hero />
+          <TrustBar />
+          <LeadBanner />
+          <Shop onOpenProduct={setActiveProduct} />
+          <Offers />
+          <Brands />
+          <Story />
+          <Reviews />
+          <Faq />
+          <Newsletter />
+        </main>
+      )}
       <Footer />
 
-      <CartDrawer onCheckout={startCheckout} />
-      <ProductModal product={activeProduct} onClose={closeProduct} />
-      <CheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
+      {route.name === 'home' && (
+        <>
+          <CartDrawer onCheckout={startCheckout} />
+          <ProductModal product={activeProduct} onClose={closeProduct} />
+          <CheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
+        </>
+      )}
       <AuthModal />
       <AuthNotice />
       <Toast />

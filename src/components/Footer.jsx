@@ -16,8 +16,8 @@ const COLUMNS = [
     links: [
       ['Offres automatiques', '#offres'],
       ['Codes promo', '#offres'],
-      ['Paiement en 3×', '#offres'],
-      ['−5 % par virement', '#offres'],
+      ['Paiement crypto', '#offres'],
+      ['−5 % en crypto', '#offres'],
       ['Newsletter', '#compte'],
     ],
   },
@@ -25,6 +25,7 @@ const COLUMNS = [
     title: 'Aide',
     links: [
       ['Créer mon compte', '#compte'],
+      ['Suivre ma commande', '#suivi'],
       ['Livraison & retours', '#faq'],
       ['Authenticité', '#faq'],
       ['Nous contacter', 'mailto:bonjour@beaute-paris.fr'],
@@ -86,6 +87,12 @@ export default function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-cream/15 py-5 text-[10.5px] uppercase tracking-[0.1em] text-cream/50 md:flex-row">
           <p>© {new Date().getFullYear()} Beauté Paris · Site de démonstration</p>
+          <a
+            href="#vendeur"
+            className="text-[10px] uppercase tracking-[0.14em] text-gold/70 transition-colors hover:text-gold"
+          >
+            Espace vendeur
+          </a>
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             {['Mentions légales', 'CGV', 'Confidentialité', 'Cookies'].map((item) => (
               <li key={item}>

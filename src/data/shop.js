@@ -231,11 +231,11 @@ export const PAYMENT_OFFERS = [
     icon: 'phone',
   },
   {
-    id: 'transfer',
-    label: 'Virement bancaire',
+    id: 'crypto',
+    label: 'Crypto (USDT · BTC · ETH)',
     note: '−5 % immédiat sur la commande',
     discount: 5,
-    icon: 'bank',
+    icon: 'coin',
   },
 ]
 
@@ -276,6 +276,18 @@ export const FAQ = [
   {
     q: 'Comment créer mon compte : e-mail ou téléphone ?',
     a: "Les deux fonctionnent. Vous pouvez vous identifier avec votre adresse e-mail ou votre numéro de téléphone : nous vous envoyons un code à 6 chiffres pour sécuriser la connexion — aucun mot de passe à retenir. La connexion est obligatoire pour finaliser une commande, afin de garantir la livraison et le suivi.",
+  },
+  {
+    q: 'Comment payer en crypto ?',
+    a: "Choisissez votre devise au moment de la commande : USDT (réseau TRC20 / Tron, le plus économique), Bitcoin ou Ethereum. Le montant exact à envoyer est calculé et affiché à l’euro près, avec l’adresse de dépôt à copier. Envoyez la somme en une seule transaction sur le réseau indiqué, puis collez le hash de transaction dans le champ prévu : votre commande est vérifiée et préparée immédiatement après confirmation (2 à 10 minutes). Le paiement crypto donne droit à 5 % de remise automatique.",
+  },
+  {
+    q: 'Point relais ou livraison à domicile ?',
+    a: "Les deux sont disponibles, sans surcoût. Pour le point relais, tapez votre code postal : la liste des commerces du secteur s’affiche avec adresse et horaires, et vous pouvez aussi saisir vous-même le relais de votre choix. Le colis vous attend 8 jours, avec une pièce d’identité et le code de retrait. L’emballage est neutre, sans mention de beauté ni de parfum.",
+  },
+  {
+    q: 'Comment suivre ma commande et joindre la boutique ?',
+    a: "Chaque commande reçoit une référence du type BP-261126-1242. Ouvrez « Suivre ma commande » (ou l’adresse du site suivie de #suivi/référence) pour voir le statut en temps réel, l’adresse de livraison et la messagerie privée avec la boutique. Vous pouvez écrire à tout moment : la réponse apparaît dans ce même fil.",
   },
   {
     q: 'Quels sont les délais de livraison ?',

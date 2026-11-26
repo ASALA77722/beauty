@@ -28,7 +28,7 @@ export function CartProvider({ children }) {
   const [toast, setToast] = useState(null)
   const [promoInput, setPromoInput] = useState('')
   const [appliedCode, setAppliedCode] = useState(null)
-  const [paymentId, setPaymentId] = useState('card')
+  const [paymentId, setPaymentId] = useState('crypto')
   const [reservedUntil, setReservedUntil] = useState(() => Date.now() + 15 * 60000)
 
   useEffect(() => {
