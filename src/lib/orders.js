@@ -133,9 +133,9 @@ export function buildOrder({ items, totals, form, deliveryMode, pickup, wallet, 
       address: null,
       amount: formatCrypto(amount, asset),
       /** Répartition enregistrée à la vente : le vendeur sait quoi reverser. */
-      split: splitActive()
+      split: splitActive('orders')
         ? {
-            ...splitBreakdown(totals.total),
+            ...splitBreakdown(totals.total, 'orders'),
             partnerLabel: SPLIT.partnerLabel,
             provider: SPLIT.provider,
             status: 'to_transfer',

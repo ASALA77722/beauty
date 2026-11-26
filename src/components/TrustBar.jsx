@@ -5,7 +5,7 @@ import { FREE_SHIPPING_THRESHOLD } from '../lib/format'
 const ITEMS = [
   { icon: 'shield', title: 'Authenticité garantie', text: 'Sourcé chez les maisons' },
   { icon: 'truck', title: `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`, text: 'Expédié en 24 h' },
-  { icon: 'coin', title: 'Paiement crypto −5 %', text: 'USDT, BTC ou ETH' },
+  { icon: 'coin', title: 'Paiement en ligne −5 %', text: 'crypto ou carte' },
   { icon: 'mail', title: 'Conseil par e-mail', text: SHOP.hours },
 ]
 

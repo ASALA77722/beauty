@@ -1,5 +1,14 @@
 import { useState } from 'react'
-import { DONATION_COMMITMENT, DONATIONS, donationsReady, PAYOUT, payoutLink, SHOP } from '../config'
+import {
+  DONATION_COMMITMENT,
+  DONATIONS,
+  SPLIT,
+  donationsReady,
+  payoutLink,
+  splitActive,
+  splitBreakdown,
+  SHOP,
+} from '../config'
 import { euro } from '../lib/format'
 import Icon from './Icon'
 
@@ -67,6 +76,18 @@ function DonationPanel() {
                 <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-sage" />
                 {DONATION_COMMITMENT}
               </li>
+              {splitActive('donations') && (
+                <li className="flex items-start gap-2.5">
+                  <Icon name="shield" className="mt-0.5 h-4 w-4 shrink-0 text-goldDeep" />
+                  <span>
+                    <span className="font-medium text-ink">
+                      {splitBreakdown(100, 'donations').partner} % de votre don est versé à notre
+                      partenaire, {splitBreakdown(100, 'donations').shop} % finance le projet.
+                    </span>{' '}
+                    Ce partage est affiché pour que vous sachiez exactement où va votre argent.
+                  </span>
+                </li>
+              )}
               <li className="flex items-start gap-2.5">
                 <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-sage" />
                 {DONATIONS.taxReceipt
