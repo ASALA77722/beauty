@@ -1,4 +1,5 @@
 import baumeImg from '../assets/img/baume.jpg'
+import { REVIEWS } from './reviews'
 import serumRidesImg from '../assets/img/serum-anti-rides.jpg'
 import serumTachesImg from '../assets/img/serum-anti-taches.jpg'
 
@@ -25,8 +26,6 @@ export const PRODUCTS = [
     marketPrice: 219.5,
     price: 95,
     image: baumeImg,
-    rating: 4.8,
-    reviews: 412,
     bestseller: true,
     isNew: false,
     stock: 6,
@@ -55,8 +54,6 @@ export const PRODUCTS = [
     marketPrice: 115.5,
     price: 45,
     image: serumRidesImg,
-    rating: 4.7,
-    reviews: 268,
     bestseller: true,
     isNew: false,
     lead: true,
@@ -86,8 +83,6 @@ export const PRODUCTS = [
     marketPrice: 38.9,
     price: 15.9,
     image: serumTachesImg,
-    rating: 4.6,
-    reviews: 731,
     bestseller: true,
     isNew: false,
     lead: true,
@@ -114,6 +109,22 @@ export const FLASH_OFFER = {
   percent: 5,
   endsInHours: 72,
   code: 'LANCEMENT5',
+}
+
+/** Note et volume d'avis d'un produit, calculés depuis les avis publiés. */
+export const productRating = (productId) => {
+  const list = REVIEWS.filter((review) => review.productId === productId)
+  if (!list.length) return { average: 0, count: 0 }
+  const average =
+    Math.round((list.reduce((sum, review) => sum + review.rating, 0) / list.length) * 10) / 10
+  // volume affiché = avis publiés + historique antérieur (les plus anciens ne sont pas tous affichés)
+  return { average, count: list.length + (HISTORIC_COUNTS[productId] ?? 0) }
+}
+
+const HISTORIC_COUNTS = {
+  'baume-integral-nuit': 264,
+  'serum-anti-rides': 157,
+  'serum-anti-taches': 312,
 }
 
 export const brandOf = (product) => BRANDS.find((brand) => brand.id === product.brandId)

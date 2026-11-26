@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { FLASH_OFFER, brandOf, finalPrice } from '../data/shop'
+import { FLASH_OFFER, brandOf, finalPrice, productRating } from '../data/shop'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { discountPercent, euro } from '../lib/format'
@@ -7,6 +7,9 @@ import Icon from './Icon'
 import Stars from './Stars'
 import StockMeter from './StockMeter'
 import { PriceBlock } from './ProductCard'
+import RatingSummary from './RatingSummary'
+import ReviewCard from './ReviewCard'
+import { useReviews } from '../hooks/useReviews'
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart()
@@ -15,6 +18,8 @@ export default function ProductModal({ product, onClose }) {
   const [showInci, setShowInci] = useState(false)
   const [showUsage, setShowUsage] = useState(false)
   const addButtonRef = useRef(null)
+  const { reviews, stats, toggleHelpful } = useReviews(product?.id ?? null)
+  const [showReviews, setShowReviews] = useState(false)
 
   useEffect(() => {
     if (!product) return
@@ -73,9 +78,23 @@ export default function ProductModal({ product, onClose }) {
               {product.line} · {product.category}
             </p>
 
-            <div className="mt-2.5 flex items-center gap-2">
-              <Stars value={product.rating} showValue count={product.reviews} />
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowReviews((value) => !value)}
+              className="mt-2.5 flex items-center gap-2 text-left"
+              aria-expanded={showReviews}
+            >
+              <Stars value={stats.average} showValue />
+              <span className="text-[11px] text-inkSoft underline-offset-2 hover:underline">
+                · {stats.total} avis vérifiés
+              </span>
+              <Icon
+                name="chevron"
+                className={`h-3.5 w-3.5 text-inkSoft transition-transform ${
+                  showReviews ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
 
             <PriceBlock product={product} size="modal" />
             <p className="mt-1.5 text-[11px] text-inkSoft">
@@ -100,6 +119,29 @@ export default function ProductModal({ product, onClose }) {
                 Stock réel, mis à jour en continu. Expédition sous 24 h ouvrées.
               </p>
             </div>
+
+            {showReviews && (
+              <div className="mt-4 animate-fade-in">
+                <RatingSummary stats={stats} title="Avis" />
+                <div className="mt-2">
+                  {reviews.slice(0, 4).map((review) => (
+                    <ReviewCard
+                      key={review.id}
+                      review={review}
+                      onHelpful={toggleHelpful}
+                      compact
+                    />
+                  ))}
+                </div>
+                <a
+                  href="#avis"
+                  onClick={onClose}
+                  className="mt-2 block text-center text-[11px] font-medium uppercase tracking-[0.1em] text-goldDeep hover:underline"
+                >
+                  Voir les {stats.total} avis
+                </a>
+              </div>
+            )}
 
             <div className="mt-4 divide-y divide-ink/10 border-y border-ink/10">
               <div>
