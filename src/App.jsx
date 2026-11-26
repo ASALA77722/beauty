@@ -3,6 +3,7 @@ import AuthModal from './components/AuthModal'
 import Brands from './components/Brands'
 import CartDrawer from './components/CartDrawer'
 import CheckoutModal from './components/CheckoutModal'
+import Donations from './components/Donations'
 import Faq from './components/Faq'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
@@ -128,6 +129,7 @@ export default function App() {
           <Brands />
           <Story />
           <Reviews />
+          <Donations />
           <Faq />
           <Newsletter />
         </main>

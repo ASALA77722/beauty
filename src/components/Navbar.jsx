@@ -11,6 +11,7 @@ const LINKS = [
   { href: '#offres', label: 'Offres' },
   { href: '#marques', label: 'Marques' },
   { href: '#avis', label: 'Avis' },
+  { href: '#dons', label: 'Solidarité' },
   { href: '#faq', label: 'Aide' },
 ]
 
