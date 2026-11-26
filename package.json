@@ -1,0 +1,28 @@
+{
+  "name": "beaute-paris",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "build:file": "SINGLE_FILE=1 vite build"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/jost": "^5.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^158.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "puppeteer-core": "^25.19.0",
+    "tailwindcss": "^3.4.19",
+    "vite": "^5.4.11",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

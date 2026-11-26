@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+.vite
+.DS_Store
+*.log
+.env
+.env.local
+image-search
+.ref
+/apercu
+.chromelibs
