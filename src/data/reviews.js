@@ -1,575 +1,52 @@
 // ─────────────────────────────────────────────────────────────
-// Avis clients réalistes — comptes fictifs mais crédibles.
-// Les notes sont volontairement nuancées (dont des 3 et 4 étoiles)
-// et les textes mentionnent les limites des produits.
+// Avis clients — uniquement des avis réellement déposés.
+// Aucun avis n'est pré-rempli : le site n'affiche que ce que les
+// clientes ont écrit, et le dit clairement quand il n'y en a pas
+// encore assez pour calculer une moyenne.
 // ─────────────────────────────────────────────────────────────
 
-/** Comptes clients. `verified` = achat confirmé, `reviewCount` = nombre d'avis du profil. */
-export const CUSTOMERS = [
-  {
-    id: 'c1',
-    name: 'Sonia Merabet',
-    initials: 'SM',
-    city: 'Marseille',
-    age: 42,
-    skin: 'Peau sèche, 40 ans et plus',
-    memberSince: 'mars 2023',
-    verified: true,
-    reviewCount: 7,
-    helpful: 128,
-  },
-  {
-    id: 'c2',
-    name: 'Hélène Duprat',
-    initials: 'HD',
-    city: 'Bordeaux',
-    age: 36,
-    skin: 'Peau mixte, 30-40 ans',
-    memberSince: 'janvier 2022',
-    verified: true,
-    reviewCount: 14,
-    helpful: 241,
-  },
-  {
-    id: 'c3',
-    name: 'Awa Traoré',
-    initials: 'AT',
-    city: 'Lyon',
-    age: 29,
-    skin: 'Peau normale à grasse, 20-30 ans',
-    memberSince: 'septembre 2024',
-    verified: true,
-    reviewCount: 3,
-    helpful: 56,
-  },
-  {
-    id: 'c4',
-    name: 'Camille Roussel',
-    initials: 'CR',
-    city: 'Nantes',
-    age: 45,
-    skin: 'Peau sensible, 40 ans et plus',
-    memberSince: 'novembre 2021',
-    verified: true,
-    reviewCount: 22,
-    helpful: 412,
-  },
-  {
-    id: 'c5',
-    name: 'Inès Bonnet',
-    initials: 'IB',
-    city: 'Paris',
-    age: 33,
-    skin: 'Peau mixte, 30-40 ans',
-    memberSince: 'février 2023',
-    verified: true,
-    reviewCount: 9,
-    helpful: 173,
-  },
-  {
-    id: 'c6',
-    name: 'Nadia Cherif',
-    initials: 'NC',
-    city: 'Lille',
-    age: 51,
-    skin: 'Peau très sèche, 50 ans et plus',
-    memberSince: 'juin 2020',
-    verified: true,
-    reviewCount: 31,
-    helpful: 688,
-  },
-  {
-    id: 'c7',
-    name: 'Julie Marchand',
-    initials: 'JM',
-    city: 'Toulouse',
-    age: 27,
-    skin: 'Peau grasse, 20-30 ans',
-    memberSince: 'avril 2025',
-    verified: true,
-    reviewCount: 2,
-    helpful: 41,
-  },
-  {
-    id: 'c8',
-    name: 'Marlène Vasseur',
-    initials: 'MV',
-    city: 'Strasbourg',
-    age: 38,
-    skin: 'Peau sensible, 30-40 ans',
-    memberSince: 'octobre 2022',
-    verified: true,
-    reviewCount: 11,
-    helpful: 197,
-  },
-  {
-    id: 'c9',
-    name: 'Fatou Diallo',
-    initials: 'FD',
-    city: 'Montpellier',
-    age: 31,
-    skin: 'Peau à tendance pigmentaire',
-    memberSince: 'mai 2024',
-    verified: true,
-    reviewCount: 5,
-    helpful: 88,
-  },
-  {
-    id: 'c10',
-    name: 'Claire Vasseur',
-    initials: 'CV',
-    city: 'Rennes',
-    age: 47,
-    skin: 'Peau sèche, 40 ans et plus',
-    memberSince: 'août 2019',
-    verified: true,
-    reviewCount: 26,
-    helpful: 534,
-  },
-  {
-    id: 'c11',
-    name: 'Émilie Fontaine',
-    initials: 'EF',
-    city: 'Grenoble',
-    age: 34,
-    skin: 'Peau déshydratée',
-    memberSince: 'décembre 2023',
-    verified: true,
-    reviewCount: 8,
-    helpful: 132,
-  },
-  {
-    id: 'c12',
-    name: 'Sarah Lemoine',
-    initials: 'SL',
-    city: 'Angers',
-    age: 24,
-    skin: 'Peau jeune, premières imperfections',
-    memberSince: 'juillet 2025',
-    verified: true,
-    reviewCount: 1,
-    helpful: 19,
-  },
-  {
-    id: 'c13',
-    name: 'Bertrand Ojeda',
-    initials: 'BO',
-    city: 'Nice',
-    age: 55,
-    skin: 'Peau mature',
-    memberSince: 'janvier 2020',
-    verified: true,
-    reviewCount: 18,
-    helpful: 305,
-  },
-  {
-    id: 'c14',
-    name: 'Léa Nguyen',
-    initials: 'LN',
-    city: 'Reims',
-    age: 30,
-    skin: 'Peau mixte',
-    memberSince: 'mars 2024',
-    verified: true,
-    reviewCount: 4,
-    helpful: 67,
-  },
-  {
-    id: 'c15',
-    name: 'Margaux Pelletier',
-    initials: 'MP',
-    city: 'La Rochelle',
-    age: 39,
-    skin: 'Peau réactive',
-    memberSince: 'septembre 2021',
-    verified: true,
-    reviewCount: 16,
-    helpful: 288,
-  },
-  {
-    id: 'c16',
-    name: 'Louise Ferrand',
-    initials: 'LF',
-    city: 'Toulouse',
-    age: 27,
-    skin: 'Peau mixte à grasse, 20-30 ans',
-    memberSince: 'avril 2024',
-    verified: true,
-    reviewCount: 5,
-    helpful: 41,
-  },
-  {
-    id: 'c17',
-    name: 'Margot Leclerc',
-    initials: 'ML',
-    city: 'Strasbourg',
-    age: 39,
-    skin: 'Peau réactive, 30-40 ans',
-    memberSince: 'août 2022',
-    verified: true,
-    reviewCount: 11,
-    helpful: 205,
-  },
-  {
-    id: 'c18',
-    name: 'Farida Benali',
-    initials: 'FB',
-    city: 'Villeurbanne',
-    age: 48,
-    skin: 'Peau sèche et sensible, 40 ans et plus',
-    memberSince: 'mai 2025',
-    verified: true,
-    reviewCount: 2,
-    helpful: 12,
-  },
-]
+export const REVIEWS_KEY = 'beaute-reviews-v1'
 
-export const getCustomer = (id) => CUSTOMERS.find((customer) => customer.id === id)
-
-/**
- * Avis. `rating` de 1 à 5, `date` au format ISO.
- * `pros` / `cons` rendent les avis crédibles ; `orderRef` prouve l'achat.
- */
-export const REVIEWS = [
-  // ── Baume Intégral Anti-Âge Nuit ───────────────────────────
-  {
-    id: 'r1',
-    productId: 'baume-integral-nuit',
-    customerId: 'c6',
-    rating: 5,
-    date: '2026-11-14',
-    title: 'La seule crème qui tient sur ma peau très sèche',
-    body: "À 51 ans, ma peau tirait dès le réveil, même avec des crèmes à 80 €. Ici, la texture est riche sans être collante et au bout de trois semaines mes joues sont souples toute la journée. Le pot est lourd, très beau, mais il faut faire attention à ne pas le faire tomber.",
-    pros: ['Texture riche', 'Effet dès 3 semaines', 'Aucune irritation'],
-    cons: ['Pot en verre lourd'],
-    wouldRecommend: true,
-    helpful: 84,
-    orderRef: 'BP-20481937',
-  },
-  {
-    id: 'r2',
-    productId: 'baume-integral-nuit',
-    customerId: 'c10',
-    rating: 4,
-    date: '2026-11-08',
-    title: 'Très bon soin, parfum un peu présent',
-    body: "Efficacité au rendez-vous sur mes ridules du contour de la bouche, ça se voit sur les photos. Je retire une étoile pour le parfum : il est discret mais je préfère les soins sans fragrance pour le soir. Le prix reste imbattable par rapport à la parfumerie où je l'achetais avant.",
-    pros: ['Efficace sur les ridules', 'Prix', 'Texture agréable'],
-    cons: ['Parfum perceptible'],
-    wouldRecommend: true,
-    helpful: 61,
-    orderRef: 'BP-20391288',
-  },
-  {
-    id: 'r3',
-    productId: 'baume-integral-nuit',
-    customerId: 'c4',
-    rating: 3,
-    date: '2026-10-27',
-    title: 'Bien mais trop riche pour ma peau sensible',
-    body: "La formule est clairement de qualité et mes rougeurs n'ont pas empiré, ce qui est déjà bien. En revanche, deux noisettes et j'ai des petits boutons sur le front. Je l'utilise maintenant uniquement sur le cou et le contour des yeux le soir. Ce n'est pas un mauvais produit, juste pas le bon pour moi.",
-    pros: ['Ne fait pas rougir', 'Très nourrissant'],
-    cons: ['Trop riche pour peau mixte', 'Boutons sur le front'],
-    wouldRecommend: false,
-    helpful: 112,
-    orderRef: 'BP-20334471',
-  },
-  {
-    id: 'r4',
-    productId: 'baume-integral-nuit',
-    customerId: 'c13',
-    rating: 5,
-    date: '2026-11-02',
-    title: 'Acheté pour ma femme, finalement je le garde',
-    body: 'Je cherchais un cadeau et j’ai fini par tester. La sensation est vraiment agréable, la peau est repulpée le matin. Je ne suis pas un expert des soins mais le résultat est là et il n’y a pas cette odeur de parfum agressive.',
-    pros: ['Confort immédiat', 'Résultat visible'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 57,
-    orderRef: 'BP-20419003',
-  },
-  {
-    id: 'r5',
-    productId: 'baume-integral-nuit',
-    customerId: 'c15',
-    rating: 4,
-    date: '2026-10-19',
-    title: 'Aucune réaction sur peau réactive',
-    body: "C'est mon critère principal : zéro picotement, zéro rougeur. Mission accomplie. Je mets 4 étoiles parce que le pot est un peu difficile à ouvrir avec les doigts gras, détail mais agaçant.",
-    pros: ['Zéro picotement', 'Convient aux peaux réactives'],
-    cons: ['Couvercle difficile à ouvrir'],
-    wouldRecommend: true,
-    helpful: 39,
-    orderRef: 'BP-20308742',
-  },
-  {
-    id: 'r6',
-    productId: 'baume-integral-nuit',
-    customerId: 'c1',
-    rating: 5,
-    date: '2026-09-30',
-    title: 'Le même pot qu’en parfumerie, moitié prix',
-    body: "J'ai comparé le numéro de lot avec mon ancien pot acheté chez Marionnaud : c'est identique. Livraison en 48 h, facture dans le colis, deux échantillons offerts. Franchement, je ne vois pas pourquoi je paierais 219 €.",
-    pros: ['Authentique', 'Livraison rapide', 'Échantillons'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 203,
-    orderRef: 'BP-20265810',
-  },
-
-  // ── Sérum Anti-Rides Performance ───────────────────────────
-  {
-    id: 'r7',
-    productId: 'serum-anti-rides',
-    customerId: 'c2',
-    rating: 5,
-    date: '2026-11-16',
-    title: 'Mon indispensable depuis 4 ans',
-    body: "Je l'achetais en parfumerie à 115 €, je le prends ici à 42 €. Texture fluide, pénétration immédiate, je peux mettre mon fond de teint juste après sans que ça peluche. Sur mes rides du front, l'effet est progressif : rien de magique, mais net au bout de deux mois.",
-    pros: ['Absorption rapide', 'Compatible maquillage', 'Prix'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 156,
-    orderRef: 'BP-20492281',
-  },
-  {
-    id: 'r8',
-    productId: 'serum-anti-rides',
-    customerId: 'c5',
-    rating: 4,
-    date: '2026-11-11',
-    title: 'Bon sérum, pompe capricieuse',
-    body: "Le produit fait ce qu'on lui demande : peau plus lisse, teint moins fatigué. Le bémol c'est le flacon : il faut pomper plusieurs fois à chaque utilisation et j'ai l'impression qu'il restera du produit au fond. Pour ce prix, ça reste une très bonne affaire.",
-    pros: ['Peau plus lisse', 'Teint reposé'],
-    cons: ['Pompe peu pratique', 'Produit perdu en fin de flacon'],
-    wouldRecommend: true,
-    helpful: 78,
-    orderRef: 'BP-20447766',
-  },
-  {
-    id: 'r9',
-    productId: 'serum-anti-rides',
-    customerId: 'c8',
-    rating: 3,
-    date: '2026-10-30',
-    title: 'Efficace mais l’alcool me dérange',
-    body: "En troisième position dans la composition, l'alcool se sent sur ma peau sensible : une légère sensation de tiraillement les premières minutes. J'ai continué un mois, les résultats sont corrects mais je ne rachèterai pas, je préfère payer plus cher un sérum sans alcool.",
-    pros: ['Résultats sur le grain de peau'],
-    cons: ['Alcool denat. en 3e position', 'Tiraillements'],
-    wouldRecommend: false,
-    helpful: 96,
-    orderRef: 'BP-20371154',
-  },
-  {
-    id: 'r10',
-    productId: 'serum-anti-rides',
-    customerId: 'c11',
-    rating: 5,
-    date: '2026-11-05',
-    title: 'Parfait pour peau déshydratée',
-    body: "Ma peau buvait le sérum en deux minutes. Je l'associe à une crème classique et j'ai arrêté de peler sur les pommettes cet hiver. Le flacon me fait un peu plus d'un mois et demi à raison de 3 gouttes matin et soir.",
-    pros: ['Hydratation immédiate', 'Dure longtemps'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 64,
-    orderRef: 'BP-20425540',
-  },
-  {
-    id: 'r11',
-    productId: 'serum-anti-rides',
-    customerId: 'c3',
-    rating: 4,
-    date: '2026-10-12',
-    title: 'Efficacité réelle, packaging à revoir',
-    body: "Je suis à la moitié du flacon et la différence est visible sur mes pattes d'oie naissantes. Deux choses : le bouchon noir garde les traces de doigts et le nom imprimé s'efface un peu avec l'usage. Rien de rédhibitoire.",
-    pros: ['Rides atténuées', 'Texture légère'],
-    cons: ['Bouchon qui marque', 'Marquage qui s’efface'],
-    wouldRecommend: true,
-    helpful: 42,
-    orderRef: 'BP-20340218',
-  },
-  {
-    id: 'r12',
-    productId: 'serum-anti-rides',
-    customerId: 'c14',
-    rating: 5,
-    date: '2026-09-22',
-    title: 'Trois semaines, résultat net',
-    body: "J'ai pris des photos avant/après pour comparer. Sur le front, les deux rides horizontales sont nettement moins marquées. Je n'y croyais pas trop mais le recul me fait dire que oui, ça fonctionne.",
-    pros: ['Résultat mesurable', 'Facile à intégrer dans la routine'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 71,
-    orderRef: 'BP-20258779',
-  },
-
-  // ── Sérum Anti-Taches ──────────────────────────────────────
-  {
-    id: 'r13',
-    productId: 'serum-anti-taches',
-    customerId: 'c9',
-    rating: 4,
-    date: '2026-11-15',
-    title: 'Mes taches se sont éclaircies, lentement',
-    body: "J'ai une peau métissée avec des taches d'anciennes boutons sur les joues. Après deux mois, elles sont moins contrastées sans avoir disparu. C'est long mais c'est la première fois qu'un produit naturel fait quelque chose de visible. Il faut absolument mettre une protection solaire, sinon on repart de zéro.",
-    pros: ['Éclaircissement progressif', 'Pas d’irritation'],
-    cons: ['Résultat lent', 'Indispensable de se protéger du soleil'],
-    wouldRecommend: true,
-    helpful: 134,
-    orderRef: 'BP-20489871',
-  },
-  {
-    id: 'r14',
-    productId: 'serum-anti-taches',
-    customerId: 'c7',
-    rating: 4,
-    date: '2026-11-09',
-    title: 'Bon rapport qualité-prix pour un premier sérum',
-    body: "À 15 € je n'attendais pas de miracle, mais c'est un vrai sérum, agréable, qui ne colle pas. Mes marques rouges post-boutons ont diminué en six semaines. Je retire une étoile parce qu'il peut piquer un peu si ma peau est fragilisée.",
-    pros: ['Prix', 'Non collant', 'Efficace sur cicatrices'],
-    cons: ['Légère sensation de picotement'],
-    wouldRecommend: true,
-    helpful: 92,
-    orderRef: 'BP-20415509',
-  },
-  {
-    id: 'r15',
-    productId: 'serum-anti-taches',
-    customerId: 'c12',
-    rating: 3,
-    date: '2026-10-24',
-    title: 'Déçue par le résultat sur moi',
-    body: "Je l'ai utilisé un mois et demi matin et soir, sans voir de différence sur mon masque de grossesse. Le produit est agréable, la composition propre, mais ça n'a pas marché pour moi. Le service client m'a proposé un remboursement, ce qui est correct.",
-    pros: ['Composition naturelle', 'Service client réactif'],
-    cons: ['Aucun effet sur mes taches', 'Flacon petit'],
-    wouldRecommend: false,
-    helpful: 147,
-    orderRef: 'BP-20358662',
-  },
-  {
-    id: 'r16',
-    productId: 'serum-anti-taches',
-    customerId: 'c1',
-    rating: 5,
-    date: '2026-11-03',
-    title: 'Enfin un anti-taches que ma peau tolère',
-    body: "J'ai arrêté la vitamine C pure qui me brûlait. Celui-ci est doux, s'applique sans sensation, et même si c'est plus lent, mes taches sont bien estompées. Le format 30 ml me fait deux mois.",
-    pros: ['Doux', 'Économique'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 88,
-    orderRef: 'BP-20420193',
-  },
-  {
-    id: 'r17',
-    productId: 'serum-anti-taches',
-    customerId: 'c15',
-    rating: 4,
-    date: '2026-10-16',
-    title: 'Bien sur les taches, parfait sur le teint',
-    body: "Étonnée par l'effet global : mon teint est plus uniforme, indépendamment des taches. Petit bémol, le flacon s'ouvre mal avec des mains mouillées et j'ai peur de le casser.",
-    pros: ['Teint plus uniforme', 'Texture légère'],
-    cons: ['Flacon fragile'],
-    wouldRecommend: true,
-    helpful: 33,
-    orderRef: 'BP-20334412',
-  },
-  {
-    id: 'r18',
-    productId: 'serum-anti-taches',
-    customerId: 'c10',
-    rating: 5,
-    date: '2026-09-28',
-    title: 'Rachat n°3',
-    body: 'Troisième flacon. Mes taches d’âge sur le front ne reviennent pas, je suis très assidue sur la protection solaire. Le prix est presque indécent pour la qualité, ne changez rien.',
-    pros: ['Efficace sur taches d’âge', 'Prix imbattable'],
-    cons: [],
-    wouldRecommend: true,
-    helpful: 119,
-    orderRef: 'BP-20268104',
-  },
-  {
-    id: 'r19',
-    productId: 'serum-anti-taches',
-    customerId: 'c8',
-    rating: 3,
-    date: '2026-09-11',
-    title: 'Correct mais très liquide',
-    body: "La texture est presque aqueuse, je mets trois gouttes dans les mains et j'en perds la moitié. Sur les résultats, c'est trop tôt pour juger (deux semaines). Je reviendrai modifier mon avis.",
-    pros: ['Non gras', 'Absorption rapide'],
-    cons: ['Trop liquide', 'Difficile à doser'],
-    wouldRecommend: null,
-    helpful: 26,
-    orderRef: 'BP-20247119',
-  },
-  {
-    id: 'r20',
-    productId: 'serum-anti-rides',
-    customerId: 'c17',
-    rating: 2,
-    date: '2026-10-28',
-    title: 'Ma peau n’a pas supporté',
-    body: "Deux applications et une sensation de cuisson sur les pommettes, avec des rougeurs le lendemain. J'ai arrêté au bout de quatre jours. Le service client a été très correct et m'a remboursée sans discuter, mais ce sérum n'est pas pour les peaux réactives comme la mienne. À réserver aux peaux tolérantes.",
-    pros: ['Service client réactif'],
-    cons: ['Picotements', 'Rougeurs', 'Pas adapté aux peaux réactives'],
-    wouldRecommend: false,
-    helpful: 87,
-    orderRef: 'BP-20451902',
-  },
-  {
-    id: 'r21',
-    productId: 'baume-integral-nuit',
-    customerId: 'c18',
-    rating: 4,
-    date: '2026-11-02',
-    title: 'Très bon, mais le pot est petit',
-    body: "La matière est vraiment belle, ma peau très sèche est confortable au réveil. Seul point : 50 ml, en l'utilisant tous les soirs, le pot dure deux mois à peine. Avec la réduction le rapport qualité-prix reste correct, sans elle j'y réfléchirais à deux fois.",
-    pros: ['Confort immédiat', 'Aucune irritation'],
-    cons: ['Pot vide vite', 'Cher sans remise'],
-    wouldRecommend: true,
-    helpful: 64,
-    orderRef: 'BP-20467731',
-  },
-  {
-    id: 'r22',
-    productId: 'serum-anti-taches',
-    customerId: 'c16',
-    rating: 3,
-    date: '2026-10-09',
-    title: 'Efficace sur les taches, moins sur le reste',
-    body: "Sur une tache de soleil au-dessus de la lèvre, il y a un vrai mieux en cinq semaines. En revanche je le trouve collant le matin sous la crème solaire et il laisse un film brillant. Je le garde pour le soir seulement. Honnêtement, à 15,90 € je ne regrette pas l'achat, mais ce n'est pas le produit miracle décrit partout.",
-    pros: ['Tache atténuée', 'Prix très doux'],
-    cons: ['Collant sous la crème solaire', 'Effet brillant'],
-    wouldRecommend: null,
-    helpful: 45,
-    orderRef: 'BP-20398220',
-  },
-  {
-    id: 'r23',
-    productId: 'serum-anti-rides',
-    customerId: 'c5',
-    rating: 4,
-    date: '2026-09-19',
-    title: 'Bonne surprise, mais l’odeur divise',
-    body: "Je l'utilise depuis six semaines : front plus lisse, teint plus clair. Ma seule réserve est l'odeur, assez marquée et florale, que je sens encore dix minutes après. Ma mère l'adore, moi j'ai mis du temps à m'y habituer. Le flacon pompe est pratique et ne s'oxyde pas.",
-    pros: ['Front plus lisse', 'Flacon pompe propre'],
-    cons: ['Parfum marqué', 'Texture riche en été'],
-    wouldRecommend: true,
-    helpful: 52,
-    orderRef: 'BP-20375108',
-  },
-
-]
-
-/** Réponse de la boutique sur certains avis. */
-export const BRAND_REPLIES = {
-  r3: "Merci Camille pour ce retour nuancé. Sur une peau mixte, nous conseillons une noisette chauffée entre les doigts et une application uniquement sur les zones sèches. Nous vous envoyons un échantillon de la version légère avec votre prochaine commande.",
-  r9: "Votre remarque est juste : l'alcool denaturé est un solvant qui aide à la pénétration de l'Algue Millennium. Nous évaluons une formule sans alcool. Nous vous proposons le Sérum Anti-Taches, plus doux, en remplacement.",
-  r15: "Merci pour votre transparence. Les taches de grossesse (mélasma) sont les plus tenaces et nécessitent souvent un traitement dermatologique en complément. Le remboursement intégral a bien été émis.",
+const read = () => {
+  try {
+    const raw = window.localStorage.getItem(REVIEWS_KEY)
+    const parsed = raw ? JSON.parse(raw) : []
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
 }
 
-/** Répartition des notes affichée (dérivée des avis réels). */
-export const ratingBreakdown = (reviews) => {
+const write = (list) => {
+  try {
+    window.localStorage.setItem(REVIEWS_KEY, JSON.stringify(list))
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
+export const loadReviews = () => read()
+
+export const addReview = (review) => {
+  const list = [review, ...read()]
+  write(list)
+  window.dispatchEvent(new Event('beaute-reviews-updated'))
+  return list
+}
+
+/** Un avis ne peut plus être modifié au-delà de 24 h (règle affichée). */
+export const canEdit = (review) => Date.now() - new Date(review.date).getTime() < 86400000
+
+export const reviewsForProduct = (productId) =>
+  read()
+    .filter((review) => review.productId === productId)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+
+/**
+ * Statistiques honnêtes : la moyenne n'est affichée qu'à partir de 3 avis,
+ * pour éviter une note calculée sur un seul témoignage.
+ */
+export function ratingBreakdown(reviews) {
   const total = reviews.length
   const rows = [5, 4, 3, 2, 1].map((star) => {
     const count = reviews.filter((review) => review.rating === star).length
@@ -578,5 +55,20 @@ export const ratingBreakdown = (reviews) => {
   const average = total
     ? Math.round((reviews.reduce((sum, review) => sum + review.rating, 0) / total) * 10) / 10
     : 0
-  return { rows, total, average }
+  const recommend = reviews.filter((review) => review.wouldRecommend === true).length
+  return {
+    rows,
+    total,
+    average,
+    verified: reviews.filter((review) => review.orderRef).length,
+    recommendPercent: total ? Math.round((recommend / total) * 100) : 0,
+    reliable: total >= 3,
+  }
+}
+
+/** Prénom + initiale : « Camille R. » — jamais de nom complet publié. */
+export const publicName = (name) => {
+  const parts = (name ?? '').trim().split(/\s+/)
+  if (parts.length === 0 || !parts[0]) return 'Cliente'
+  return parts.length > 1 ? `${parts[0]} ${parts[1][0]}.` : parts[0]
 }

@@ -10,6 +10,7 @@ import { PriceBlock } from './ProductCard'
 import RatingSummary from './RatingSummary'
 import ReviewCard from './ReviewCard'
 import { useReviews } from '../hooks/useReviews'
+import ReviewForm from './ReviewForm'
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart()
@@ -18,8 +19,9 @@ export default function ProductModal({ product, onClose }) {
   const [showInci, setShowInci] = useState(false)
   const [showUsage, setShowUsage] = useState(false)
   const addButtonRef = useRef(null)
-  const { reviews, stats, toggleHelpful } = useReviews(product?.id ?? null)
+  const { reviews, stats } = useReviews(product?.id ?? null)
   const [showReviews, setShowReviews] = useState(false)
+  const [formOpen, setFormOpen] = useState(false)
 
   useEffect(() => {
     if (!product) return
@@ -84,9 +86,15 @@ export default function ProductModal({ product, onClose }) {
               className="mt-2.5 flex items-center gap-2 text-left"
               aria-expanded={showReviews}
             >
-              <Stars value={stats.average} showValue />
+              {stats.reliable ? (
+                <Stars value={stats.average} showValue />
+              ) : (
+                <Icon name="star" className="h-3.5 w-3.5 text-goldDeep" />
+              )}
               <span className="text-[11px] text-inkSoft underline-offset-2 hover:underline">
-                · {stats.total} avis vérifiés
+                {stats.total === 0
+                  ? 'Écrire le premier avis'
+                  : `${stats.total} avis`}
               </span>
               <Icon
                 name="chevron"
@@ -116,7 +124,7 @@ export default function ProductModal({ product, onClose }) {
             <div className="mt-4 rounded-xl bg-cream/70 px-3.5 py-2.5">
               <StockMeter product={product} compact />
               <p className="mt-1.5 text-[10.5px] text-inkSoft">
-                Stock réel, mis à jour en continu. Expédition sous 24 h ouvrées.
+                Expédition sous 24 h ouvrées après confirmation du paiement.
               </p>
             </div>
 
@@ -125,21 +133,27 @@ export default function ProductModal({ product, onClose }) {
                 <RatingSummary stats={stats} title="Avis" />
                 <div className="mt-2">
                   {reviews.slice(0, 4).map((review) => (
-                    <ReviewCard
-                      key={review.id}
-                      review={review}
-                      onHelpful={toggleHelpful}
-                      compact
-                    />
+                    <ReviewCard key={review.id} review={review} compact />
                   ))}
                 </div>
-                <a
-                  href="#avis"
-                  onClick={onClose}
-                  className="mt-2 block text-center text-[11px] font-medium uppercase tracking-[0.1em] text-goldDeep hover:underline"
-                >
-                  Voir les {stats.total} avis
-                </a>
+                <div className="mt-2 flex flex-wrap justify-center gap-3">
+                  {stats.total > 0 && (
+                    <a
+                      href="#avis"
+                      onClick={onClose}
+                      className="text-[11px] font-medium uppercase tracking-[0.1em] text-goldDeep hover:underline"
+                    >
+                      Voir les {stats.total} avis
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setFormOpen(true)}
+                    className="text-[11px] font-medium uppercase tracking-[0.1em] text-ink hover:underline"
+                  >
+                    Écrire un avis
+                  </button>
+                </div>
               </div>
             )}
 
@@ -220,7 +234,7 @@ export default function ProductModal({ product, onClose }) {
 
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10.5px] text-inkSoft">
                 <span className="flex items-center gap-1.5">
-                  <Icon name="shield" className="h-3.5 w-3.5 text-gold" /> Authenticité garantie
+                  <Icon name="shield" className="h-3.5 w-3.5 text-gold" /> Produit authentique
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Icon name="truck" className="h-3.5 w-3.5 text-gold" /> Expédié en 24 h
@@ -239,13 +253,17 @@ export default function ProductModal({ product, onClose }) {
                   >
                     Connectez-vous
                   </button>{' '}
-                  avec votre e-mail ou téléphone pour finaliser la commande.
+                  avec votre adresse e-mail pour finaliser la commande.
                 </p>
               )}
             </div>
           </div>
         </div>
       </div>
+
+      {formOpen && (
+        <ReviewForm productId={product.id} onClose={() => setFormOpen(false)} />
+      )}
     </div>
   )
 }

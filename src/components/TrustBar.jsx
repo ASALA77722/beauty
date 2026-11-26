@@ -6,7 +6,7 @@ const ITEMS = [
   { icon: 'shield', title: 'Authenticité garantie', text: 'Sourcé chez les maisons' },
   { icon: 'truck', title: `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`, text: 'Expédié en 24 h' },
   { icon: 'coin', title: 'Paiement crypto −5 %', text: 'USDT, BTC ou ETH' },
-  { icon: 'phone', title: `Conseil au ${SHOP.phone}`, text: SHOP.hours },
+  { icon: 'mail', title: 'Conseil par e-mail', text: SHOP.hours },
 ]
 
 export default function TrustBar() {

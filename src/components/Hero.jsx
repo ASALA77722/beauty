@@ -39,12 +39,12 @@ export default function Hero() {
           {/* bandeau de remise phare */}
           <div className="mt-6 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-rose/25 bg-rose/8 px-4 py-2.5">
             <span className="badge bg-rose px-2.5 py-1 text-[11px] font-bold text-ivory">
-              −{FLASH_OFFER.percent} %
+              −{off} %
             </span>
             <span className="text-[12.5px] font-medium text-ink">
-              {FLASH_OFFER.label} sur tout le site
+              sur le prix constaté en magasin
             </span>
-            <span className="text-[11.5px] text-inkSoft">· jusqu'à −{PRICE_STATS.worst} %</span>
+            <span className="text-[11.5px] text-inkSoft">· {euro(saving)} d'économie</span>
           </div>
 
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-inkSoft">
@@ -68,7 +68,7 @@ export default function Hero() {
             {[
               [`−${PRICE_STATS.average} %`, 'vs prix magasin'],
               ['100 %', 'produits authentiques'],
-              ['48 h', 'livraison France'],
+              ['24 h', 'expédition France'],
             ].map(([value, label]) => (
               <div key={label}>
                 <dt className="font-serif text-[28px] leading-none text-ink">{value}</dt>

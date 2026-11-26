@@ -200,7 +200,7 @@ export default function Navbar() {
             </ul>
 
             <p className="mt-auto pt-8 text-xs leading-relaxed text-inkSoft">
-              Connexion par e-mail ou téléphone
+              Connexion par e-mail · code à 6 chiffres
               <br />
               Livraison offerte dès {FREE_SHIPPING_THRESHOLD} € · Retours 30 jours
             </p>

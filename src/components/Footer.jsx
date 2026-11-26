@@ -62,13 +62,20 @@ export default function Footer() {
               ))}
             </div>
             <p className="mt-5 text-[11px] leading-relaxed text-cream/45">
-              Service client : {SHOP.phone}
-              <br />
-              {SHOP.hours} · {SHOP.address}
+              Service client
               <br />
               <a href={`mailto:${SHOP.email}`} className="transition-colors hover:text-cream">
                 {SHOP.email}
               </a>
+              <br />
+              {SHOP.phone ? `${SHOP.phone} · ` : ''}
+              {SHOP.hours}
+              {SHOP.address ? (
+                <>
+                  <br />
+                  {SHOP.address}
+                </>
+              ) : null}
             </p>
           </div>
 

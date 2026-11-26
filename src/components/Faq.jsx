@@ -21,8 +21,8 @@ export default function Faq() {
             Une question qui n'apparaît pas ici ? Écrivez-nous à{' '}
             <a href={`mailto:${SHOP.email}`} className="link-underline text-ink">
               {SHOP.email}
-            </a>{' '}
-            ou appelez le {SHOP.phone}.
+            </a>
+            {SHOP.phone ? ` ou appelez le ${SHOP.phone}.` : ' — réponse sous 24 h ouvrées.'}
           </p>
 
           <div className="mt-6 rounded-xl border border-gold/30 bg-cream/60 p-5">
@@ -31,8 +31,8 @@ export default function Faq() {
               Créer mon compte
             </p>
             <p className="mt-1.5 text-[11.5px] leading-relaxed text-inkSoft">
-              Avec votre e-mail <em>ou</em> votre numéro de téléphone. Pas de mot de passe : un code à
-              6 chiffres sécurise chaque connexion.
+              Avec votre adresse e-mail. Pas de mot de passe : un code à 6 chiffres, valable
+              10 minutes, sécurise chaque connexion.
             </p>
             <button type="button" onClick={() => openAuth()} className="btn-outline mt-3 w-full py-2.5 text-[10.5px]">
               Se connecter

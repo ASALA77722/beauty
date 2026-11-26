@@ -26,22 +26,22 @@ export default function Newsletter() {
             Espace client
           </p>
           <h2 className="mt-3 font-serif text-[clamp(1.9rem,4vw,2.9rem)] font-light leading-tight">
-            Un compte, deux façons de se connecter
+            Un compte, une seule adresse
           </h2>
           <p className="mt-3 max-w-md text-[13.5px] leading-relaxed text-cream/75">
-            E-mail ou numéro de téléphone, à votre convenance. Suivi de commande, historique,
-            échantillons choisis et offres privées — sans mot de passe à retenir.
+            Votre adresse e-mail suffit : un code à 6 chiffres ouvre votre espace. Suivi de
+            commande, historique et offres privées — sans mot de passe à retenir.
           </p>
           <div className="mt-5 flex flex-wrap gap-2.5">
             <button type="button" onClick={() => openAuth()} className="btn-gold">
               <Icon name="mail" className="h-4 w-4" /> Se connecter par e-mail
             </button>
-            <button type="button" onClick={() => openAuth()} className="btn border border-cream/30 text-cream hover:bg-cream hover:text-ink">
-              <Icon name="phone" className="h-4 w-4" /> Par téléphone
-            </button>
+            <a href="#boutique" className="btn border border-cream/30 text-cream hover:bg-cream hover:text-ink">
+              <Icon name="bag" className="h-4 w-4" /> Voir la boutique
+            </a>
           </div>
           <p className="mt-3 text-[10.5px] uppercase tracking-[0.12em] text-cream/45">
-            Code à 6 chiffres · achat invité impossible par sécurité
+            Code à 6 chiffres · aucun mot de passe à retenir
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export default function Newsletter() {
           <p className="mt-2 font-serif text-2xl leading-tight">Recevez le code BIENVENUE10</p>
           <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-2.5 sm:flex-row" noValidate>
             <label htmlFor="nl-value" className="sr-only">
-              Votre e-mail ou numéro de téléphone
+              Votre adresse e-mail
             </label>
             <input
               id="nl-value"
@@ -71,7 +71,7 @@ export default function Newsletter() {
             </button>
           </form>
           <p id="nl-status" aria-live="polite" className="mt-2.5 min-h-[18px] text-[11.5px] text-cream/80">
-            {status === 'error' && 'Indiquez un e-mail ou un numéro de téléphone valide.'}
+            {status === 'error' && 'Indiquez une adresse e-mail valide.'}
             {status === 'success' && '✦ Merci ! Votre code BIENVENUE10 arrive par e-mail.'}
           </p>
         </div>
