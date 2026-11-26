@@ -72,7 +72,7 @@ export default function Newsletter() {
           </form>
           <p id="nl-status" aria-live="polite" className="mt-2.5 min-h-[18px] text-[11.5px] text-cream/80">
             {status === 'error' && 'Indiquez un e-mail ou un numéro de téléphone valide.'}
-            {status === 'success' && '✦ Merci ! Votre code BIENVENUE10 arrive par e-mail ou SMS.'}
+            {status === 'success' && '✦ Merci ! Votre code BIENVENUE10 arrive par e-mail.'}
           </p>
         </div>
       </div>

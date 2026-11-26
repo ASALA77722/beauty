@@ -215,50 +215,15 @@ export const PROMO_CODES = {
   },
 }
 
-export const PAYMENT_OFFERS = [
-  {
-    id: 'card',
-    label: 'Carte bancaire',
-    note: 'Visa, Mastercard, CB',
-    discount: 0,
-    icon: 'card',
-  },
-  {
-    id: 'twint',
-    label: 'TWINT',
-    note: 'Paiement mobile suisse',
-    discount: 0,
-    icon: 'phone',
-  },
-  {
-    id: 'crypto',
-    label: 'Crypto (USDT · BTC · ETH)',
-    note: '−5 % immédiat sur la commande',
-    discount: 5,
-    icon: 'coin',
-  },
-]
+/** Moyen de paiement unique : la crypto, avec 5 % de remise immédiate. */
+export const PAYMENT_METHOD = {
+  id: 'crypto',
+  label: 'Paiement crypto',
+  note: '−5 % immédiat sur la commande',
+  discount: 5,
+  icon: 'coin',
+}
 
-export const TESTIMONIALS = [
-  {
-    quote:
-      "J'ai retrouvé mon baume Jeanne Piaubert ici à un prix que je n'avais jamais vu, même en parapharmacie. Livraison en 48 h, tout est parfait.",
-    author: 'Sonia M.',
-    detail: 'Baume Intégral Anti-Âge Nuit',
-  },
-  {
-    quote:
-      'Le sérum Stendhal est mon indispensable depuis des années. Commandé avec le code BIENVENUE10, emballage soigné, échantillons offerts.',
-    author: 'Hélène D.',
-    detail: 'Sérum Anti-Rides Performance',
-  },
-  {
-    quote:
-      'Le sérum anti-taches de Biarritz a réellement calmé mes taches. Le conseil par téléphone avant l’achat a fait la différence.',
-    author: 'Awa T.',
-    detail: 'Sérum Anti-Taches',
-  },
-]
 
 export const FAQ = [
   {
@@ -274,8 +239,8 @@ export const FAQ = [
     a: "Elles s'appliquent seules dans le panier, sans code : à partir de 2 produits, −10 % sur le 2ᵉ ; à partir de 3 produits, −15 % sur le total. La remise la plus avantageuse est retenue automatiquement. Les codes promotionnels (BIENVENUE10, LUXE15…) se cumulent avec ces offres.",
   },
   {
-    q: 'Comment créer mon compte : e-mail ou téléphone ?',
-    a: "Les deux fonctionnent. Vous pouvez vous identifier avec votre adresse e-mail ou votre numéro de téléphone : nous vous envoyons un code à 6 chiffres pour sécuriser la connexion — aucun mot de passe à retenir. La connexion est obligatoire pour finaliser une commande, afin de garantir la livraison et le suivi.",
+    q: 'Comment créer mon compte ?',
+    a: "Avec votre adresse e-mail : nous y envoyons un code à 6 chiffres, valable 10 minutes, à saisir pour ouvrir votre espace. Aucun mot de passe à retenir. Votre téléphone est demandé plus tard, au moment de la commande, uniquement pour que le transporteur puisse vous prévenir.",
   },
   {
     q: 'Comment payer en crypto ?',
@@ -291,7 +256,7 @@ export const FAQ = [
   },
   {
     q: 'Quels sont les délais de livraison ?',
-    a: 'Expédition sous 24 h ouvrées. Livraison offerte dès 35 € en France métropolitaine, 3,90 € en dessous. Comptez 2 à 3 jours ouvrés, et 4 à 6 jours pour l’Europe. Un numéro de suivi vous est envoyé par e-mail et par SMS.',
+    a: 'Expédition sous 24 h ouvrées. Livraison offerte dès 35 € en France métropolitaine, 3,90 € en dessous. Comptez 2 à 3 jours ouvrés, et 4 à 6 jours pour l’Europe. Un numéro de suivi vous est communiqué par e-mail et dans la messagerie de votre commande.',
   },
   {
     q: 'Puis-je retourner un produit ?',

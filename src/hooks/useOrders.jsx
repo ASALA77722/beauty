@@ -3,7 +3,6 @@ import { normalizeClientNumber } from '../lib/code'
 import {
   appendMessage,
   loadOrders,
-  makeDemoOrders,
   markClientMessagesRead,
   patchOrder,
   saveOrders,
@@ -99,19 +98,6 @@ export function OrdersProvider({ children }) {
     [publish],
   )
 
-  const loadDemo = useCallback(() => {
-    const existing = loadOrders()
-    const next = [...makeDemoOrders(), ...existing]
-    saveOrders(next)
-    publish(next)
-  }, [publish])
-
-  const clearDemo = useCallback(() => {
-    const next = loadOrders().filter((order) => !order.demo)
-    saveOrders(next)
-    publish(next)
-  }, [publish])
-
   const stats = useMemo(() => {
     const paid = orders.filter((order) =>
       ['paid', 'preparing', 'shipped', 'relay_arrived', 'delivered'].includes(order.status),
@@ -139,12 +125,10 @@ export function OrdersProvider({ children }) {
       changeStatus,
       sendMessage,
       markRead,
-      clearDemo,
-      loadDemo,
       findOrders,
       importOrder,
     }),
-    [orders, stats, refresh, createOrder, updateOrder, changeStatus, sendMessage, markRead, clearDemo, loadDemo, findOrders, importOrder],
+    [orders, stats, refresh, createOrder, updateOrder, changeStatus, sendMessage, markRead, findOrders, importOrder],
   )
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>

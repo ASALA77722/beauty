@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { PRODUCTS, PAYMENT_OFFERS } from '../data/shop'
+import { PRODUCTS, PAYMENT_METHOD } from '../data/shop'
 import { CART_KEY, readJson, writeJson } from '../lib/format'
 import { computeTotals } from '../lib/pricing'
 
@@ -28,7 +28,6 @@ export function CartProvider({ children }) {
   const [toast, setToast] = useState(null)
   const [promoInput, setPromoInput] = useState('')
   const [appliedCode, setAppliedCode] = useState(null)
-  const [paymentId, setPaymentId] = useState('crypto')
   const [reservedUntil, setReservedUntil] = useState(() => Date.now() + 15 * 60000)
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export function CartProvider({ children }) {
   }, [isOpen])
 
   const items = useMemo(() => enrich(lines), [lines])
-  const payment = PAYMENT_OFFERS.find((option) => option.id === paymentId) ?? null
+  const payment = PAYMENT_METHOD
   const totals = useMemo(
     () => computeTotals(items, { code: appliedCode, payment }),
     [items, appliedCode, payment],
@@ -119,8 +118,6 @@ export function CartProvider({ children }) {
       appliedCode,
       applyPromo,
       removePromo,
-      paymentId,
-      setPaymentId,
       payment,
       reservedUntil,
       toast,
@@ -138,7 +135,6 @@ export function CartProvider({ children }) {
       appliedCode,
       applyPromo,
       removePromo,
-      paymentId,
       payment,
       reservedUntil,
       toast,

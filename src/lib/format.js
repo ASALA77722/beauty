@@ -10,7 +10,6 @@ export const SHIPPING_COST = 3.9
 
 export const CART_KEY = 'beaute-cart-v2'
 export const USER_KEY = 'beaute-user-v2'
-export const ORDERS_KEY = 'beaute-orders-v2'
 
 export const discountPercent = (market, price) =>
   market > price ? Math.round(((market - price) / market) * 100) : 0

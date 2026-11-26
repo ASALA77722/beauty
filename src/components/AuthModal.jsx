@@ -3,8 +3,8 @@ import { useAuth } from '../hooks/useAuth'
 import Icon from './Icon'
 
 const STEPS = {
-  identify: { title: 'Se connecter', subtitle: 'Par e-mail ou par téléphone — au choix.' },
-  code: { title: 'Vérification', subtitle: 'Saisissez le code à 6 chiffres reçu.' },
+  identify: { title: 'Se connecter', subtitle: 'Un code à 6 chiffres, envoyé par e-mail.' },
+  code: { title: 'Vérification', subtitle: 'Saisissez le code reçu dans votre boîte mail.' },
   profile: { title: 'Bienvenue', subtitle: 'Deux informations et c’est terminé.' },
 }
 
@@ -15,12 +15,12 @@ export default function AuthModal() {
     step,
     identifier,
     setIdentifier,
-    channel,
     error,
     requestCode,
     verifyCode,
     completeProfile,
-    sentCode,
+    sending,
+    shopEmail,
     setStep,
   } = useAuth()
 
@@ -88,7 +88,7 @@ export default function AuthModal() {
               noValidate
             >
               <label htmlFor="auth-identifier" className="text-[11px] font-medium uppercase tracking-[0.14em] text-inkSoft">
-                E-mail ou téléphone
+                Adresse e-mail
               </label>
               <div className="relative mt-2">
                 <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-inkSoft">
@@ -100,22 +100,23 @@ export default function AuthModal() {
                 </span>
                 <input
                   id="auth-identifier"
-                  type="text"
+                  type="email"
                   inputMode="email"
-                  autoComplete="username"
+                  autoComplete="email"
                   value={identifier}
                   onChange={(event) => setIdentifier(event.target.value)}
-                  placeholder="vous@email.fr ou 06 12 34 56 78"
+                  placeholder="vous@email.fr"
                   className="field pl-7"
                   autoFocus
                 />
               </div>
-              <button type="submit" className="btn-gold mt-5 w-full">
-                Recevoir mon code
+              <button type="submit" className="btn-gold mt-5 w-full" disabled={sending}>
+                {sending ? 'Envoi en cours…' : 'Recevoir mon code'}
                 <Icon name="arrow" className="h-4 w-4" />
               </button>
               <p className="mt-3 text-center text-[11px] leading-relaxed text-inkSoft">
-                Aucun mot de passe : nous envoyons un code à 6 chiffres par e-mail ou par SMS.
+                Aucun mot de passe à retenir : le code arrive à l’adresse indiquée et vaut {10}{' '}
+                minutes.
               </p>
             </form>
           )}
@@ -128,15 +129,14 @@ export default function AuthModal() {
               }}
               noValidate
             >
-              <p className="text-[12.5px] text-inkSoft">
-                Code envoyé {channel === 'phone' ? 'par SMS' : 'par e-mail'} à{' '}
-                <strong className="font-medium text-ink">{identifier}</strong>
+              <p className="text-[12.5px] leading-relaxed text-inkSoft">
+                Code envoyé à <strong className="font-medium text-ink">{identifier}</strong>.
               </p>
-              {sentCode && (
-                <p className="mt-2 rounded-lg bg-cream px-3 py-2 text-[11.5px] text-inkSoft">
-                  Mode démo — votre code est <strong className="text-ink">{sentCode}</strong>
-                </p>
-              )}
+              <p className="mt-2 rounded-lg bg-cream px-3 py-2 text-[11px] leading-relaxed text-inkSoft">
+                Rien reçu ? Vérifiez les indésirables. Au tout premier envoi, un message d’activation
+                de <strong className="text-ink">FormSubmit</strong> arrive : cliquez une seule fois sur
+                son lien. L’adresse d’expédition est <span className="text-ink">{shopEmail}</span>.
+              </p>
               <label htmlFor="auth-code" className="sr-only">
                 Code à 6 chiffres
               </label>
@@ -157,10 +157,18 @@ export default function AuthModal() {
               </button>
               <button
                 type="button"
+                onClick={() => requestCode(identifier)}
+                disabled={sending}
+                className="mt-2 w-full text-center text-[11.5px] text-inkSoft underline-offset-4 hover:underline disabled:opacity-50"
+              >
+                {sending ? 'Envoi…' : 'Renvoyer un code'}
+              </button>
+              <button
+                type="button"
                 onClick={() => setStep('identify')}
                 className="mt-3 w-full text-center text-[11.5px] text-inkSoft underline-offset-4 hover:underline"
               >
-                Modifier mon e-mail / téléphone
+                Modifier mon e-mail
               </button>
             </form>
           )}

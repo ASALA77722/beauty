@@ -1,12 +1,9 @@
 import { readJson, writeJson } from './format'
-import { cryptoById, formatCrypto, toCryptoAmount } from '../data/crypto'
+import { SELLER_KEY, cryptoById, formatCrypto, toCryptoAmount } from '../config'
 import { encodeOrderCode } from './code'
 
 export const ORDERS_V3_KEY = 'beaute-orders-v3'
 export const SELLER_KEY_STORAGE = 'beaute-seller-v1'
-
-/** Clé d'accès à l'espace vendeur — modifiable ici en une ligne. */
-export const SELLER_KEY = 'BP-ADMIN-2026'
 
 export const ORDER_STATUSES = [
   {
@@ -295,7 +292,9 @@ export const isSellerUnlocked = () => {
 }
 
 export const unlockSeller = (key) => {
-  if (key.trim() !== SELLER_KEY) return false
+  if (key.trim() !== SELLER_KEY) {
+    return false
+  }
   try {
     window.sessionStorage.setItem(SELLER_KEY_STORAGE, 'ok')
   } catch {
@@ -310,140 +309,4 @@ export const lockSeller = () => {
   } catch {
     /* stockage indisponible */
   }
-}
-
-/* ── Commandes d'exemple (démonstration du tableau de bord) ── */
-
-const demoPickup = (name, address, zip, city, hours) => ({ id: 'demo', name, address, zip, city, hours })
-
-export function makeDemoOrders() {
-  const base = Date.now()
-  const day = 86400000
-  const samples = [
-    {
-      offset: -1.2,
-      status: 'awaiting_payment',
-      firstName: 'Awa',
-      lastName: 'Traoré',
-      city: 'Lyon',
-      email: 'awa.traore@exemple.fr',
-      phone: '06 44 21 08 77',
-      mode: 'home',
-      address: '18 rue de Bonnel',
-      zip: '69003',
-      items: [{ id: 'serum-anti-taches', name: 'Sérum Anti-Taches', brand: 'Laboratoires de Biarritz', qty: 2, unit: 15.9 }],
-      asset: 'usdt',
-      total: 28.6,
-      tx: null,
-    },
-    {
-      offset: -0.6,
-      status: 'paid',
-      firstName: 'Sonia',
-      lastName: 'Merabet',
-      city: 'Marseille',
-      email: 'sonia.merabet@exemple.fr',
-      phone: '07 81 55 30 12',
-      mode: 'pickup',
-      pickup: demoPickup('Relais Castellane', '22 rue de Rome', '13006', 'Marseille', 'Lun–sam 8 h–20 h'),
-      items: [{ id: 'baume-integral-nuit', name: 'Baume Intégral Anti-Âge Nuit', brand: 'Jeanne Piaubert', qty: 1, unit: 90.25 }],
-      asset: 'btc',
-      total: 90.25,
-      tx: '7b1e0c9a4f2d8b6e5a3c1d0f9e8b7a6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f00',
-      message: 'Bonjour, je serai absente la semaine prochaine. Est-ce que je peux décaler le retrait au samedi ? Merci !',
-    },
-    {
-      offset: -2.4,
-      status: 'shipped',
-      firstName: 'Hélène',
-      lastName: 'Duprat',
-      city: 'Bordeaux',
-      email: 'helene.duprat@exemple.fr',
-      phone: '06 12 90 44 51',
-      mode: 'pickup',
-      pickup: demoPickup('Librairie Gambetta', '56 cours Gambetta', '33000', 'Bordeaux', 'Mar–sam 9 h–19 h'),
-      items: [
-        { id: 'serum-anti-rides', name: 'Sérum Anti-Rides Performance', brand: 'Stendhal', qty: 1, unit: 42.75 },
-        { id: 'serum-anti-taches', name: 'Sérum Anti-Taches', brand: 'Laboratoires de Biarritz', qty: 1, unit: 15.11 },
-      ],
-      asset: 'usdt',
-      total: 52.1,
-      tx: '3f9a1c7e5b2d8a4f6c0e9b7d5a3f1c8e6b4d2a0f9e7c5b3d1a8f6e4c2b0d9a71',
-      message: 'Colis bien arrivé, merci beaucoup pour l’échantillon !',
-    },
-    {
-      offset: -5.1,
-      status: 'delivered',
-      firstName: 'Nadia',
-      lastName: 'Cherif',
-      city: 'Lille',
-      email: 'nadia.cherif@exemple.fr',
-      phone: '06 78 12 33 90',
-      mode: 'home',
-      address: '14 rue Nationale',
-      zip: '59000',
-      items: [{ id: 'baume-integral-nuit', name: 'Baume Intégral Anti-Âge Nuit', brand: 'Jeanne Piaubert', qty: 1, unit: 90.25 }],
-      asset: 'eth',
-      total: 90.25,
-      tx: '0x8c2b4e6a1f3d5b7c9e0a2f4d6b8c0e1a3f5d7b9c1e2a4f6d8b0c2e4a6f8d0b13',
-      message: 'Merci, la crème est parfaite pour ma peau très sèche.',
-    },
-  ]
-
-  return samples.map((sample, index) => {
-    const created = new Date(base + sample.offset * day).toISOString()
-    const asset = cryptoById(sample.asset)
-    const subtotal = Math.round(sample.items.reduce((s, i) => s + i.unit * i.qty, 0) * 100) / 100
-    const discount = Math.round(subtotal * 0.15 * 100) / 100
-    const total = Math.round((subtotal - discount) * 100) / 100
-    const amount = toCryptoAmount(total, asset)
-    return {
-      reference: `BP-${new Date(created).toISOString().slice(2, 10).replace(/-/g, '')}-90${index + 1}`,
-      clientNumber: ['482913', '715204', '306978', '924157'][index] ?? null,
-      createdAt: created,
-      updatedAt: created,
-      demo: true,
-      status: sample.status,
-      statusHistory: [{ status: 'awaiting_payment', at: created }],
-      items: sample.items.map((item) => ({ ...item, line: Math.round(item.unit * item.qty * 100) / 100 })),
-      amounts: {
-        subtotal,
-        marketTotal: Math.round(subtotal * 2.4 * 100) / 100,
-        discount,
-        shipping: 0,
-        total,
-        saved: Math.round((subtotal * 2.4 - total) * 100) / 100,
-      },
-      payment: {
-        method: 'crypto',
-        asset: asset.symbol,
-        assetName: asset.name,
-        network: asset.network,
-        address: asset.address,
-        amount: formatCrypto(amount, asset),
-        rawAmount: amount,
-        eurAmount: total,
-        txHash: sample.tx,
-        declaredAt: sample.tx ? created : null,
-        confirmedAt: sample.tx ? created : null,
-      },
-      delivery: {
-        mode: sample.mode,
-        firstName: sample.firstName,
-        lastName: sample.lastName,
-        email: sample.email,
-        phone: sample.phone,
-        address: sample.pickup ? sample.pickup.address : sample.address,
-        zip: sample.pickup ? sample.pickup.zip : sample.zip,
-        city: sample.city,
-        country: 'France',
-        notes: '',
-        pickup: sample.pickup ?? null,
-      },
-      messages: sample.message
-        ? [{ id: `demo-${index}`, from: 'client', body: sample.message, at: created, read: false }]
-        : [],
-      clientKey: sample.email,
-    }
-  })
 }

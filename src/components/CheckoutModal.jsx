@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CRYPTO_CONFIG, CRYPTO_WALLETS, cryptoById, formatCrypto, toCryptoAmount } from '../data/crypto'
+import { CRYPTO_CONFIG, ACTIVE_WALLETS, cryptoById, formatCrypto, isWalletReady, toCryptoAmount } from '../config'
 import { searchPickupPoints } from '../data/pickup'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
@@ -49,13 +49,14 @@ export default function CheckoutModal({ open, onClose }) {
   const [pickupQuery, setPickupQuery] = useState('')
   const [pickup, setPickup] = useState(null)
   const [manualPickup, setManualPickup] = useState({ name: '', address: '', zip: '', city: '', hours: '' })
-  const [walletId, setWalletId] = useState('usdt')
+  const [walletId, setWalletId] = useState(ACTIVE_WALLETS[0]?.id ?? 'usdt')
   const [txHash, setTxHash] = useState('')
   const [confirmed, setConfirmed] = useState(null)
   const [error, setError] = useState(null)
   const [copied, setCopied] = useState(null)
 
   const wallet = cryptoById(walletId)
+  const canPay = isWalletReady(wallet)
   const cryptoAmount = toCryptoAmount(total, wallet)
   const pickupResults = useMemo(() => searchPickupPoints(pickupQuery), [pickupQuery])
   const orderText = confirmed ? orderToText(confirmed) : ''
@@ -103,6 +104,10 @@ export default function CheckoutModal({ open, onClose }) {
     }
     if (!form.email.trim() && !form.phone.trim()) {
       setError('Laissez au moins un e-mail ou un téléphone : c’est par là que nous vous écrivons.')
+      return false
+    }
+    if (!canPay) {
+      setError('Le paiement crypto n’est pas encore activé par la boutique. Aucune adresse de dépôt n’est renseignée : contactez-nous avant de commander.')
       return false
     }
     if (deliveryMode === 'pickup') {
@@ -369,8 +374,8 @@ export default function CheckoutModal({ open, onClose }) {
 
                   {pickupQuery.trim().length >= 2 && pickupResults.length === 0 && (
                     <p className="mt-2 rounded-lg bg-cream/70 px-3 py-2 text-[11px] text-inkSoft">
-                      Aucun relais de démonstration dans ce secteur. Saisissez ci-dessous le relais que
-                      vous voulez, nous l’utiliserons tel quel.
+                      Aucun relais listé dans ce secteur. Saisissez ci-dessous celui que vous voulez,
+                      nous l’utiliserons tel quel.
                     </p>
                   )}
 
@@ -426,7 +431,20 @@ export default function CheckoutModal({ open, onClose }) {
                 <span className="badge bg-forest/10 text-[9px] text-forest">−5 % automatique</span>
               </h3>
               <div className="mt-2 space-y-2">
-                {CRYPTO_WALLETS.map((option) => {
+                {!canPay && (
+                  <div className="rounded-xl border border-rose/30 bg-rose/8 p-3.5">
+                    <p className="flex items-center gap-2 text-[12px] font-medium text-rose">
+                      <Icon name="shield" className="h-4 w-4" />
+                      Paiement crypto non activé
+                    </p>
+                    <p className="mt-1 text-[11.5px] leading-relaxed text-inkSoft">
+                      La boutique n’a pas encore renseigné d’adresse de dépôt. Par sécurité, aucun
+                      paiement n’est proposé : écrivez-nous et nous vous envoyons l’adresse par
+                      message, ou commandez via la messagerie du site.
+                    </p>
+                  </div>
+                )}
+                {ACTIVE_WALLETS.map((option) => {
                   const amount = toCryptoAmount(total, option)
                   return (
                     <button
@@ -458,6 +476,7 @@ export default function CheckoutModal({ open, onClose }) {
                 })}
               </div>
 
+              {canPay && (
               <div className={`mt-3 ${panel} bg-cream/50`}>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-goldDeep">
                   Envoyez exactement
@@ -485,19 +504,14 @@ export default function CheckoutModal({ open, onClose }) {
                     <Icon name={copied === 'addr' ? 'check' : 'copy'} className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                {CRYPTO_CONFIG.demo && (
-                  <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-gold/15 px-2.5 py-1.5 text-[10.5px] leading-relaxed text-goldDeep">
-                    <Icon name="shield" className="mt-0.5 h-3 w-3 shrink-0" />
-                    Adresse de démonstration : aucun virement réel n’est possible dessus. Le vendeur
-                    remplace l’adresse dans <code>src/data/crypto.js</code>.
-                  </p>
-                )}
                 <p className="mt-2 text-[10.5px] leading-relaxed text-inkSoft">
                   Envoyez en une seule transaction, sur le réseau indiqué (une erreur de réseau =
                   fonds perdus). Confirmation en {CRYPTO_CONFIG.confirmations}.
                 </p>
               </div>
+              )}
 
+              {canPay && (
               <div className="mt-3">
                 <label htmlFor="co-tx" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
                   Hash de transaction (optionnel mais recommandé)
@@ -514,6 +528,7 @@ export default function CheckoutModal({ open, onClose }) {
                   du colis.
                 </p>
               </div>
+              )}
 
               {error && (
                 <p className="mt-3 rounded-lg bg-rose/10 px-3 py-2 text-[12px] text-rose" role="alert">
@@ -581,17 +596,24 @@ export default function CheckoutModal({ open, onClose }) {
                   <dt>Total à payer</dt>
                   <dd>{euro(total)}</dd>
                 </div>
-                <div className="flex justify-between text-[11px] text-goldDeep">
-                  <dt>Soit en {wallet.symbol}</dt>
-                  <dd className="font-medium">{formatCrypto(cryptoAmount, wallet)}</dd>
-                </div>
+                {canPay && (
+                  <div className="flex justify-between text-[11px] text-goldDeep">
+                    <dt>Soit en {wallet.symbol}</dt>
+                    <dd className="font-medium">{formatCrypto(cryptoAmount, wallet)}</dd>
+                  </div>
+                )}
                 <div className="flex justify-between rounded-lg bg-gold/15 px-2.5 py-1.5 text-[11px] font-medium text-goldDeep">
                   <dt>Économie totale</dt>
                   <dd>{euro(totalSaved)}</dd>
                 </div>
               </dl>
 
-              <button type="button" onClick={placeOrder} className="btn-gold mt-4 w-full">
+              <button
+                type="button"
+                onClick={placeOrder}
+                disabled={!canPay}
+                className="btn-gold mt-4 w-full disabled:cursor-not-allowed disabled:opacity-45"
+              >
                 <Icon name="coin" className="h-4 w-4" />
                 J’ai payé · valider
               </button>

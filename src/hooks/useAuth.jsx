@@ -1,4 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { CODE_TTL_MINUTES, SHOP } from '../config'
+import { sendLoginCode } from '../lib/mail'
 import {
   USER_KEY,
   detectIdentifier,
@@ -12,8 +14,12 @@ import {
 
 const AuthContext = createContext(null)
 
-/** Génère un code à 6 chiffres (simulation d'envoi e-mail / SMS). */
-const makeCode = () => String(Math.floor(100000 + Math.random() * 900000))
+/** Code à 6 chiffres, tiré au hasard de façon cryptographique. */
+const makeCode = () => {
+  const buffer = new Uint32Array(1)
+  crypto.getRandomValues(buffer)
+  return String(100000 + (buffer[0] % 900000))
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -26,6 +32,8 @@ export function AuthProvider({ children }) {
   const [channel, setChannel] = useState(null) // email | phone
   const [error, setError] = useState(null)
   const [sentCode, setSentCode] = useState(null)
+  const [sentAt, setSentAt] = useState(null)
+  const [sending, setSending] = useState(false)
   const [pendingUser, setPendingUser] = useState(null)
   const [notice, setNotice] = useState(null)
   const resolveAction = useRef(null)
@@ -63,47 +71,58 @@ export function AuthProvider({ children }) {
     resolveAction.current = null
   }, [])
 
-  /** Étape 1 : validation de l'e-mail ou du téléphone et envoi du code. */
-  const requestCode = useCallback((rawValue) => {
-    const value = rawValue ?? identifier
-    const trimmed = value.trim()
-    const type = detectIdentifier(trimmed)
+  /** Étape 1 : validation de l'identifiant et envoi du code. */
+  const requestCode = useCallback(
+    async (rawValue) => {
+      const value = rawValue ?? identifier
+      const trimmed = value.trim()
+      const type = detectIdentifier(trimmed)
 
-    if (!trimmed) {
-      setError('Indiquez votre e-mail ou votre numéro de téléphone.')
-      return false
-    }
-    if (type === 'email' && !isEmail(trimmed)) {
-      setError('Cette adresse e-mail semble incomplète.')
-      return false
-    }
-    if (type === 'phone' && !isPhone(trimmed)) {
-      setError('Ce numéro semble incorrect (10 chiffres, ou +33 / +41…).')
-      return false
-    }
-    if (!type) {
-      setError('Saisissez une adresse e-mail ou un numéro de téléphone valide.')
-      return false
-    }
+      if (!trimmed) {
+        setError('Indiquez votre adresse e-mail.')
+        return false
+      }
+      if (type !== 'email' || !isEmail(trimmed)) {
+        setError(
+          type === 'phone'
+            ? 'Le code de connexion part par e-mail : indiquez votre adresse e-mail. Votre téléphone reste demandé au moment de la commande, pour la livraison.'
+            : 'Cette adresse e-mail semble incomplète.',
+        )
+        return false
+      }
 
-    const normalized = type === 'phone' ? normalizePhone(trimmed) : trimmed.toLowerCase()
-    const code = makeCode()
-    setIdentifier(normalized)
-    setChannel(type)
-    setSentCode(code)
-    setError(null)
-    setStep('code')
-    setNotice(
-      type === 'email'
-        ? `Code envoyé à ${normalized} (simulation : ${code})`
-        : `Code envoyé par SMS au ${normalized} (simulation : ${code})`,
-    )
-    return true
-  }, [identifier])
+      const normalized = trimmed.toLowerCase()
+      const code = makeCode()
+      setIdentifier(normalized)
+      setChannel('email')
+      setError(null)
+      setSending(true)
+      try {
+        await sendLoginCode({ to: normalized, code, minutes: CODE_TTL_MINUTES })
+        setSentCode(code)
+        setSentAt(Date.now())
+        setStep('code')
+        setNotice(`Code envoyé à ${normalized}`)
+        return true
+      } catch {
+        setError(
+          "L'envoi de l'e-mail a échoué. Vérifiez votre adresse, puis réessayez dans un instant.",
+        )
+        return false
+      } finally {
+        setSending(false)
+      }
+    },
+    [identifier],
+  )
 
   /** Étape 2 : vérification du code. */
   const verifyCode = useCallback(
     (input) => {
+      if (sentAt && Date.now() - sentAt > CODE_TTL_MINUTES * 60000) {
+        setError('Ce code a expiré. Demandez-en un nouveau.')
+        return false
+      }
       if (input.trim() !== sentCode) {
         setError('Ce code ne correspond pas. Vérifiez les 6 chiffres.')
         return false
@@ -133,7 +152,7 @@ export function AuthProvider({ children }) {
       action?.()
       return true
     },
-    [sentCode, user, identifier, channel],
+    [sentCode, sentAt, user, identifier, channel],
   )
 
   /** Étape 3 : complément du profil (nouvelle cliente). */
@@ -185,6 +204,8 @@ export function AuthProvider({ children }) {
       notice,
       setNotice,
       sentCode,
+      sending,
+      shopEmail: SHOP.authEmail,
       openAuth,
       closeAuth,
       requestCode,
@@ -204,6 +225,7 @@ export function AuthProvider({ children }) {
       error,
       notice,
       sentCode,
+      sending,
       openAuth,
       closeAuth,
       requestCode,
