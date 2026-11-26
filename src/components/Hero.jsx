@@ -37,8 +37,9 @@ export default function Hero() {
 
           <p className="mt-7 max-w-md text-[15px] leading-relaxed text-inkSoft">
             Jeanne Piaubert, Stendhal, Laboratoires de Biarritz : les soins des grandes maisons
-            françaises, authentiques et tracés, jusqu'à <strong className="font-medium text-ink">−40 %</strong> du
-            prix constaté en magasin.
+            françaises, authentiques et tracés, jusqu'à{' '}
+            <strong className="font-medium text-ink">−{PRICE_STATS.worst} %</strong> du prix constaté
+            en magasin.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">

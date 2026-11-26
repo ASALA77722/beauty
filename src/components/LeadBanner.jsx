@@ -17,7 +17,8 @@ export default function LeadBanner() {
               Portes d'entrée
             </p>
             <h2 className="mt-1.5 font-serif text-2xl leading-tight text-ink">
-              Deux soins d'exception à moins de 16 €
+              Deux sérums d'exception
+              <span className="text-rose"> dès {euro(Math.min(...leads.map(finalPrice)))}</span>
             </h2>
             <p className="mt-1 text-[11px] leading-relaxed text-inkSoft">
               Prix d'appel, quantités limitées. Testez la maison avant d'investir.

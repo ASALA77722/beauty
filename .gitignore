@@ -8,3 +8,5 @@ dist-ssr
 .env.local
 image-search
 .ref
+apercu
+.chromelibs
