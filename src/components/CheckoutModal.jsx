@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CRYPTO_CONFIG, ACTIVE_WALLETS, cryptoById, formatCrypto, isWalletReady, toCryptoAmount } from '../config'
-import { searchPickupPoints } from '../data/pickup'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { useOrders } from '../hooks/useOrders'
@@ -46,8 +45,7 @@ export default function CheckoutModal({ open, onClose }) {
     notes: '',
   })
   const [deliveryMode, setDeliveryMode] = useState('pickup')
-  const [pickupQuery, setPickupQuery] = useState('')
-  const [pickup, setPickup] = useState(null)
+  const pickup = null
   const [manualPickup, setManualPickup] = useState({ name: '', address: '', zip: '', city: '', hours: '' })
   const [walletId, setWalletId] = useState(ACTIVE_WALLETS[0]?.id ?? 'usdt')
   const [txHash, setTxHash] = useState('')
@@ -58,7 +56,6 @@ export default function CheckoutModal({ open, onClose }) {
   const wallet = cryptoById(walletId)
   const canPay = isWalletReady(wallet)
   const cryptoAmount = toCryptoAmount(total, wallet)
-  const pickupResults = useMemo(() => searchPickupPoints(pickupQuery), [pickupQuery])
   const orderText = confirmed ? orderToText(confirmed) : ''
 
   useEffect(() => {
@@ -103,7 +100,7 @@ export default function CheckoutModal({ open, onClose }) {
       return false
     }
     if (!form.email.trim() && !form.phone.trim()) {
-      setError('Laissez au moins un e-mail ou un téléphone : c’est par là que nous vous écrivons.')
+      setError('Indiquez un e-mail ou un téléphone : c’est par là que nous vous joignons pour la livraison.')
       return false
     }
     if (!canPay) {
@@ -111,11 +108,9 @@ export default function CheckoutModal({ open, onClose }) {
       return false
     }
     if (deliveryMode === 'pickup') {
-      const chosen =
-        pickup ??
-        (manualPickup.name.trim() && manualPickup.address.trim() ? manualPickup : null)
+      const chosen = pickup ?? (manualPickup.city.trim() ? manualPickup : null)
       if (!chosen) {
-        setError('Choisissez un point relais dans la liste, ou saisissez-le manuellement.')
+        setError('Indiquez la ville où vous souhaitez retirer votre colis.')
         return false
       }
     } else if (!form.address.trim() || !/^\d{4,5}$/.test(form.zip.trim()) || !form.city.trim()) {
@@ -132,11 +127,11 @@ export default function CheckoutModal({ open, onClose }) {
       deliveryMode === 'pickup'
         ? pickup ?? {
             id: 'manual',
-            name: manualPickup.name,
-            address: manualPickup.address,
-            zip: manualPickup.zip,
-            city: manualPickup.city,
-            hours: manualPickup.hours || 'Horaires à confirmer',
+            name: manualPickup.name.trim() || 'Point relais à confirmer',
+            address: '',
+            zip: manualPickup.zip.trim(),
+            city: manualPickup.city.trim(),
+            hours: 'Nous vous communiquons le point relais exact par e-mail',
           }
         : null
 
@@ -173,7 +168,7 @@ export default function CheckoutModal({ open, onClose }) {
               {confirmed ? 'Commande enregistrée' : 'Commande sécurisée'}
             </p>
             <h2 className="font-serif text-[22px] sm:text-2xl">
-              {confirmed ? 'Merci, votre colis est réservé' : 'Finaliser ma commande'}
+              {confirmed ? 'Commande enregistrée' : 'Finaliser ma commande'}
             </h2>
           </div>
           <button
@@ -207,7 +202,7 @@ export default function CheckoutModal({ open, onClose }) {
                 </p>
               ) : (
                 <button type="button" onClick={() => openAuth()} className="btn-outline mt-2 w-full">
-                  Me connecter (e-mail ou téléphone)
+                  Me connecter par e-mail
                 </button>
               )}
 
@@ -323,106 +318,70 @@ export default function CheckoutModal({ open, onClose }) {
                 </div>
               ) : (
                 <div className="mt-3">
-                  <label htmlFor="co-pickup" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
-                    Code postal ou ville
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="co-pickup"
-                      value={pickupQuery}
-                      onChange={(event) => {
-                        setPickupQuery(event.target.value)
-                        setPickup(null)
-                      }}
-                      placeholder="75011, Lyon, Bordeaux…"
-                      className={`${inputClass} pl-9`}
-                    />
-                    <Icon name="search" className="absolute left-3 top-[1.15rem] h-4 w-4 text-inkSoft" />
-                  </div>
-
-                  {pickupResults.length > 0 && (
-                    <ul className="mt-2 space-y-1.5">
-                      {pickupResults.map((point) => (
-                        <li key={point.id}>
-                          <button
-                            type="button"
-                            onClick={() => setPickup(point)}
-                            className={`flex w-full items-start gap-2.5 rounded-lg border px-3 py-2 text-left transition-colors ${
-                              pickup?.id === point.id
-                                ? 'border-forest bg-forest/5'
-                                : 'border-ink/12 hover:border-gold/60'
-                            }`}
-                          >
-                            <Icon name="store" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-goldDeep" />
-                            <span className="min-w-0 flex-1">
-                              <span className="block text-[12px] font-medium text-ink">{point.name}</span>
-                              <span className="block text-[10.5px] text-inkSoft">
-                                {point.address} · {point.zip} {point.city}
-                              </span>
-                              <span className="block text-[10px] text-inkSoft/80">
-                                {point.hours} · à {point.distance}
-                              </span>
-                            </span>
-                            {pickup?.id === point.id && (
-                              <Icon name="check" className="mt-0.5 h-3.5 w-3.5 text-sage" />
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {pickupQuery.trim().length >= 2 && pickupResults.length === 0 && (
-                    <p className="mt-2 rounded-lg bg-cream/70 px-3 py-2 text-[11px] text-inkSoft">
-                      Aucun relais listé dans ce secteur. Saisissez ci-dessous celui que vous voulez,
-                      nous l’utiliserons tel quel.
-                    </p>
-                  )}
-
-                  {(pickupQuery.trim().length >= 2 || pickup) && (
-                    <details className="mt-2 rounded-lg border border-ink/12 px-3 py-2">
-                      <summary className="cursor-pointer text-[11px] font-medium uppercase tracking-[0.08em] text-inkSoft">
-                        Saisir un autre point relais
-                      </summary>
-                      <div className="mt-2 grid gap-2">
+                  <p className="text-[11px] leading-relaxed text-inkSoft">
+                    Indiquez la ville où vous souhaitez retirer votre colis. Nous vous communiquons
+                    le point relais exact par e-mail et dans le suivi de votre commande dès
+                    l’expédition.
+                  </p>
+                  <div className="mt-2 grid gap-3">
+                    <div>
+                      <label htmlFor="co-pickup-city" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
+                        Ville de retrait *
+                      </label>
+                      <input
+                        id="co-pickup-city"
+                        value={manualPickup.city}
+                        onChange={(event) =>
+                          setManualPickup({ ...manualPickup, city: event.target.value })
+                        }
+                        placeholder="Lyon"
+                        className={inputClass}
+                      />
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <label htmlFor="co-pickup-name" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
+                          Point relais souhaité (facultatif)
+                        </label>
                         <input
+                          id="co-pickup-name"
                           value={manualPickup.name}
-                          onChange={(event) => setManualPickup({ ...manualPickup, name: event.target.value })}
-                          placeholder="Nom du commerce (ex. Tabac de la Gare)"
-                          className="field"
+                          onChange={(event) =>
+                            setManualPickup({ ...manualPickup, name: event.target.value })
+                          }
+                          placeholder="Nom du commerce"
+                          className={inputClass}
                         />
-                        <input
-                          value={manualPickup.address}
-                          onChange={(event) => setManualPickup({ ...manualPickup, address: event.target.value })}
-                          placeholder="Adresse du relais"
-                          className="field"
-                        />
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            value={manualPickup.zip}
-                            onChange={(event) => setManualPickup({ ...manualPickup, zip: event.target.value })}
-                            placeholder="Code postal"
-                            className="field"
-                          />
-                          <input
-                            value={manualPickup.city}
-                            onChange={(event) => setManualPickup({ ...manualPickup, city: event.target.value })}
-                            placeholder="Ville"
-                            className="field"
-                          />
-                        </div>
                       </div>
-                    </details>
-                  )}
-
-                  {pickup && (
-                    <p className="mt-2 flex items-start gap-2 rounded-lg bg-sage/10 px-3 py-2 text-[11px] text-forest">
-                      <Icon name="check" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sage" />
-                      Colis livré chez <strong className="font-medium">{pickup.name}</strong>,{' '}
-                      {pickup.address}, {pickup.zip} {pickup.city}. Retrait sous 8 jours avec pièce
-                      d’identité.
-                    </p>
-                  )}
+                      <div>
+                        <label htmlFor="co-pickup-zip" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
+                          Code postal (facultatif)
+                        </label>
+                        <input
+                          id="co-pickup-zip"
+                          value={manualPickup.zip}
+                          onChange={(event) =>
+                            setManualPickup({ ...manualPickup, zip: event.target.value })
+                          }
+                          inputMode="numeric"
+                          placeholder="69003"
+                          className={inputClass}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="co-notes-pickup" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
+                        Préférences (facultatif)
+                      </label>
+                      <input
+                        id="co-notes-pickup"
+                        value={form.notes}
+                        onChange={update('notes')}
+                        placeholder="Près de chez moi, ouvert le samedi…"
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -631,7 +590,6 @@ export default function CheckoutModal({ open, onClose }) {
 
 /** Écran de confirmation : référence, récap, envoi au vendeur, suivi. */
 function Confirmation({ order, orderText, copied, copy, onClose }) {
-  const pickup = order.delivery.pickup
   return (
     <div className="p-5 sm:p-7">
       <div className="text-center">
@@ -705,12 +663,11 @@ function Confirmation({ order, orderText, copied, copy, onClose }) {
           <p className="mt-1 text-[11.5px] leading-relaxed text-inkSoft">
             {order.delivery.firstName} {order.delivery.lastName}
             <br />
-            {pickup ? pickup.name : order.delivery.address}
+            {order.delivery.pickup ? order.delivery.pickup.name : order.delivery.address}
             <br />
-            {pickup ? pickup.address : ''}
-            <br />
+            {order.delivery.pickup?.address ? `${order.delivery.pickup.address} · ` : ''}
             {order.delivery.zip} {order.delivery.city}, {order.delivery.country}
-            {pickup ? ` · ${pickup.hours}` : ''}
+            {order.delivery.pickup ? ` · ${order.delivery.pickup.hours}` : ''}
           </p>
           <p className="mt-2 text-[10.5px] text-inkSoft">
             {order.delivery.email || '—'} · {order.delivery.phone || '—'}

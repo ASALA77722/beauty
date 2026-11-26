@@ -82,9 +82,10 @@ export const SHOP = {
   /** Adresse de service : contact client ET envoi du code de connexion. */
   email: 'beaute.paris@proton.me',
   authEmail: 'beaute.paris@proton.me',
-  phone: '01 84 80 12 34',
-  address: '12 rue de la Paix, 75002 Paris',
-  hours: 'Lun–sam, 9 h–19 h',
+  /** Laisse vide ce que tu n'as pas : le site n'affiche rien plutôt qu'un faux numéro. */
+  phone: '',
+  address: '',
+  hours: 'Réponse par e-mail sous 24 h ouvrées',
 }
 
 /* 3 · ACCÈS VENDEUR ----------------------------------------- */

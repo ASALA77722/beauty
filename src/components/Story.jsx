@@ -38,23 +38,24 @@ export default function Story() {
 
           <div className="mt-5 space-y-3.5 text-[14px] leading-relaxed text-inkSoft">
             <p>
-              Une crème de nuit à 219 € en magasin, c'est un prix qui inclut le loyer d'une boutique
-              sur les Champs, les hôtesses et les échantillons distribués en vitrine. Nous vendons en
-              ligne, en direct, avec un stock limité et des marques que nous choisissons nous-mêmes.
+              Nous vendons en ligne, sans vitrine ni intermédiaire, un petit nombre de références que
+              nous choisissons nous-mêmes. Le prix « magasin » barré est celui que nous constatons en
+              parfumerie : il est affiché à côté de chaque produit, pour que la comparaison soit
+              toujours possible.
             </p>
             <p>
-              Résultat : le même flacon, la même formule, la même fraîcheur — jusqu'à 40 % moins
-              cher. Nous préférons vous le dire clairement plutôt que d'entretenir le mystère du
-              « prix de luxe ».
+              Résultat : le même flacon, la même formule, avec l'écart de prix affiché en clair —
+              jusqu'à {PRICE_STATS.worst} % de moins. Nous préférons vous montrer le calcul plutôt que
+              d'entretenir le mystère du « prix de luxe ».
             </p>
           </div>
 
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {[
               ['Prix magasin affiché', 'Transparence totale, toujours'],
-              ['Zéro contrefaçon', 'Lots tracés, factures fournies'],
-              ['Échantillons offerts', '2 par commande, choisis par vous'],
-              ['Retours 30 jours', 'Même produits ouverts'],
+              ['Produits authentiques', 'Achetés auprès de la maison ou de son distributeur'],
+              ['Expédition suivie', 'Numéro de suivi et point relais au choix'],
+              ['Retours 30 jours', 'Produits non ouverts intégralement remboursés'],
             ].map(([title, text]) => (
               <li key={title} className="flex items-start gap-2.5">
                 <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-goldDeep" />

@@ -23,9 +23,9 @@ export default function Brands() {
             </p>
             <ul className="mt-6 space-y-3">
               {[
-                ['shield', 'Authenticité garantie', 'Traçabilité des lots, facture fournie'],
-                ['sparkle', 'Formules expertes', 'Actifs brevetés, tests cliniques disponibles'],
-                ['truck', 'Stock réel', 'Expédition sous 24 h ouvrées'],
+                ['shield', 'Produits authentiques', 'Achetés auprès de la maison ou de son distributeur'],
+                ['sparkle', 'Formules expertes', 'Les actifs sont ceux annoncés par la marque'],
+                ['truck', 'Expédition rapide', 'Colis déposé sous 24 h ouvrées après paiement confirmé'],
               ].map(([icon, title, text]) => (
                 <li key={title} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cream text-goldDeep">

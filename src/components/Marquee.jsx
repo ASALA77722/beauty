@@ -2,12 +2,12 @@ import { PRICE_STATS } from '../data/shop'
 import { FREE_SHIPPING_THRESHOLD } from '../lib/format'
 
 const ITEMS = [
-  'Produits 100 % authentiques',
+  'Produits achetés en circuit court',
   `${PRICE_STATS.average} % moins cher qu’en magasin`,
   `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`,
   'Paiement crypto −5 % (USDT, BTC, ETH)',
-  'Échantillons offerts',
-  'Conseil beauté par téléphone',
+  'Paiement sécurisé en crypto',
+  'Conseil beauté par e-mail',
 ]
 
 function Track({ hidden = false }) {

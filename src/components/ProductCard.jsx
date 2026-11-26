@@ -49,7 +49,7 @@ export function PriceBlock({ product, size = 'card' }) {
 export default function ProductCard({ product, onOpen }) {
   const { addItem } = useCart()
   const brand = brandOf(product)
-  const { average, count } = productRating(product.id)
+  const { average, count, reliable } = productRating(product.id)
 
   return (
     <article className="group flex h-full flex-col border border-ink/8 bg-ivory transition-all duration-500 hover:border-gold/50 hover:shadow-card">
@@ -110,10 +110,18 @@ export default function ProductCard({ product, onOpen }) {
         </p>
 
         <div className="mt-1.5 flex items-center gap-2">
-          <Stars value={average} className="h-3 w-3" />
-          <span className="text-[10.5px] text-inkSoft">
-            {formatRating(average)} ({count.toLocaleString('fr-FR')} avis)
-          </span>
+          {reliable ? (
+            <>
+              <Stars value={average} className="h-3 w-3" />
+              <span className="text-[10.5px] text-inkSoft">
+                {formatRating(average)} · {count} avis
+              </span>
+            </>
+          ) : (
+            <span className="text-[10.5px] text-inkSoft">
+              {count === 0 ? 'Pas encore d’avis' : `${count} avis · moyenne dès 3 avis`}
+            </span>
+          )}
         </div>
 
         <PriceBlock product={product} />

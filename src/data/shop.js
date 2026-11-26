@@ -1,7 +1,7 @@
 import baumeImg from '../assets/img/baume.jpg'
-import { REVIEWS } from './reviews'
 import serumRidesImg from '../assets/img/serum-anti-rides.jpg'
 import serumTachesImg from '../assets/img/serum-anti-taches.jpg'
+import { reviewsForProduct } from './reviews'
 
 // ─────────────────────────────────────────────────────────────
 // Catalogue — prix « marché » (constatés en parfumerie) vs prix site.
@@ -29,7 +29,6 @@ export const PRODUCTS = [
     bestseller: true,
     isNew: false,
     stock: 6,
-    stockInitial: 40,
     description:
       "Le baume de nuit signature de la Méthode Jeanne Piaubert. Sa texture fondante au complexe Suprém'Advance Premium accompagne la peau pendant le sommeil : rides lissées, fermeté retrouvée, teint reposé au réveil.",
     benefits: [
@@ -58,7 +57,6 @@ export const PRODUCTS = [
     isNew: false,
     lead: true,
     stock: 9,
-    stockInitial: 60,
     description:
       "Un sérum concentré à l'extrait d'Algue Millennium, l'actif signature de Stendhal. Il cible les rides installées et prévient leur formation, pour une peau repulpée et un galbe redessiné.",
     benefits: [
@@ -87,7 +85,6 @@ export const PRODUCTS = [
     isNew: false,
     lead: true,
     stock: 12,
-    stockInitial: 90,
     description:
       "Un sérum 100 % d'origine naturelle qui cible les taches pigmentaires et prévient leur réapparition. Formulé à l'extrait de camomille et à la vitamine C d'origine naturelle, il unifie le teint sans photosensibiliser.",
     benefits: [
@@ -112,19 +109,14 @@ export const FLASH_OFFER = {
 }
 
 /** Note et volume d'avis d'un produit, calculés depuis les avis publiés. */
+/** Note moyenne réelle d'un produit (aucune valeur inventée). */
 export const productRating = (productId) => {
-  const list = REVIEWS.filter((review) => review.productId === productId)
-  if (!list.length) return { average: 0, count: 0 }
-  const average =
-    Math.round((list.reduce((sum, review) => sum + review.rating, 0) / list.length) * 10) / 10
-  // volume affiché = avis publiés + historique antérieur (les plus anciens ne sont pas tous affichés)
-  return { average, count: list.length + (HISTORIC_COUNTS[productId] ?? 0) }
-}
-
-const HISTORIC_COUNTS = {
-  'baume-integral-nuit': 264,
-  'serum-anti-rides': 157,
-  'serum-anti-taches': 312,
+  const list = reviewsForProduct(productId)
+  const count = list.length
+  const average = count
+    ? Math.round((list.reduce((sum, review) => sum + review.rating, 0) / count) * 10) / 10
+    : 0
+  return { average, count, reliable: count >= 3 }
 }
 
 export const brandOf = (product) => BRANDS.find((brand) => brand.id === product.brandId)
@@ -133,12 +125,11 @@ export const brandOf = (product) => BRANDS.find((brand) => brand.id === product.
 export const finalPrice = (product) =>
   Math.round(product.price * (1 - FLASH_OFFER.percent / 100) * 100) / 100
 
-/** Niveau d'urgence affiché selon le stock restant. */
-export const stockLevel = (product) => {
-  if (product.stock <= 5) return { tone: 'critique', label: `Plus que ${product.stock} en stock` }
-  if (product.stock <= 10) return { tone: 'faible', label: `Seulement ${product.stock} restants` }
-  return { tone: 'ok', label: 'En stock' }
-}
+/** Disponibilité réelle : en stock ou épuisé (aucun chiffre inventé). */
+export const availability = (product) =>
+  product.stock > 0
+    ? { tone: 'ok', label: 'En stock', detail: 'Expédié sous 24 h ouvrées' }
+    : { tone: 'critique', label: 'Épuisé', detail: 'Réapprovisionnement en cours' }
 
 export const LEAD_PRODUCTS = () => PRODUCTS.filter((product) => product.lead)
 
