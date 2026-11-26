@@ -80,7 +80,7 @@ export default function SellerPage({ onBack }) {
             </button>
           </form>
           <p className="mt-3 rounded-lg bg-cream px-3 py-2 text-[10.5px] leading-relaxed text-inkSoft">
-            Accès réservé à la boutique. En cas d’oubli, la clé se change dans le fichier
+            Accès réservé. En cas d’oubli, la clé se change dans le fichier
             <code className="mx-1 font-mono text-ink">src/config.js</code>.
           </p>
           <button type="button" onClick={onBack} className="mt-3 text-[11px] text-inkSoft hover:text-ink">

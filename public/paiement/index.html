@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Paiement — Beauté Paris</title>
+    <style>
+      :root { --ivory:#FBF8F3; --ink:#1E241F; --soft:#6B6F68; --gold:#B08A4A; --forest:#14402F; --cream:#F3EEE4; }
+      * { box-sizing: border-box; }
+      body { margin:0; background:var(--ivory); color:var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing:antialiased; }
+      .wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+      .card { width:100%; max-width:520px; background:#fff; border:1px solid rgba(30,36,31,.1);
+        border-radius:18px; padding:32px 28px; box-shadow:0 18px 50px -30px rgba(30,36,31,.35); }
+      .kicker { font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:600; }
+      h1 { font-family: Georgia, "Times New Roman", serif; font-weight:400; font-size:28px; line-height:1.2; margin:12px 0 0; }
+      p { font-size:13.5px; line-height:1.65; color:var(--soft); }
+      .steps { margin:20px 0 0; padding:0; list-style:none; display:grid; gap:10px; }
+      .steps li { display:flex; gap:10px; font-size:13px; line-height:1.55; color:var(--soft); }
+      .n { flex:0 0 20px; height:20px; border-radius:50%; background:var(--cream); color:var(--ink);
+        font-size:11px; font-weight:600; display:flex; align-items:center; justify-content:center; }
+      .btn { display:block; text-align:center; margin-top:22px; padding:14px 18px; border-radius:999px;
+        background:var(--forest); color:#fff; text-decoration:none; font-size:13px; font-weight:600; }
+      .btn:hover { background:#0f3325; }
+      .muted { font-size:11px; color:#8A8E87; margin-top:12px; text-align:center; }
+      .note { margin-top:20px; padding:12px 14px; border-radius:12px; background:var(--cream);
+        font-size:11.5px; line-height:1.6; color:var(--soft); }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <main class="card">
+        <p class="kicker">Beauté Paris · Paiement</p>
+        <h1>Merci, votre paiement est en cours de vérification</h1>
+        <p>
+          Cette page s’ouvre à la fin du paiement. Elle ne confirme rien à elle seule : le statut réel
+          vous est donné dans le suivi de votre commande.
+        </p>
+        <ul class="steps">
+          <li><span class="n">1</span><span>Revenez sur la boutique et indiquez la référence de paiement reçue, si vous en avez une.</span></li>
+          <li><span class="n">2</span><span>Votre commande passe en préparation dès que le règlement est constaté.</span></li>
+          <li><span class="n">3</span><span>Vous suivez chaque étape avec votre code de commande, dans l’espace de suivi.</span></li>
+        </ul>
+        <a class="btn" href="/beauty/">Revenir à la boutique</a>
+        <p class="muted">Suivi : <code>/#suivi</code> · Aide : <code>beaute.paris@proton.me</code></p>
+        <div class="note">
+          Un doute sur votre paiement ? Écrivez-nous en précisant la référence de votre commande
+          (<code>BP-…</code>). Nous ne demandons jamais de mot de passe ni de clé privée.
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
