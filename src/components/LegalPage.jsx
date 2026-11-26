@@ -16,11 +16,9 @@ const STATUS_LABEL = {
   non_immatricule: 'Activité en cours de régularisation',
 }
 
-/** Mention manquante : affichée comme telle, jamais inventée. */
+/** Mention manquante : écrite en clair, jamais inventée, jamais mise en avant. */
 const Missing = ({ children }) => (
-  <span className="rounded bg-gold/15 px-1.5 py-0.5 text-[12px] font-medium text-goldDeep">
-    {children ?? 'non renseigné'}
-  </span>
+  <span className="italic text-inkSoft/90">{children ?? 'non renseigné'}</span>
 )
 
 function Block({ title, children }) {
@@ -50,10 +48,7 @@ function Legal() {
             SIRET : <Missing>en cours d’immatriculation</Missing>
           </p>
         )}
-        <p>
-          Responsable de la publication :{' '}
-          {LEGAL.publisher || <Missing>à compléter</Missing>}
-        </p>
+        {LEGAL.publisher && <p>Responsable de la publication : {LEGAL.publisher}</p>}
         {!sellingLegal() && (
           <p className="rounded-lg border border-goldDeep/25 bg-gold/8 p-3 text-[12.5px] text-ink">
             Cette activité n’est pas encore immatriculée : aucun numéro SIRET n’existe à ce jour. Nous
@@ -90,7 +85,7 @@ function Legal() {
         </p>
         <p>
           Prestataire de paiement crypto :{' '}
-          {LEGAL.paymentProcessor.name || <Missing>aucun service tiers — vérification par la boutique</Missing>}
+          {LEGAL.paymentProcessor.name || 'aucun service tiers : la réception est vérifiée par la boutique'}
         </p>
       </Block>
 
@@ -118,9 +113,8 @@ function Legal() {
             </>
           ) : (
             <>
-              <Missing>médiateur non encore désigné</Missing> — cette désignation est obligatoire pour
-              tout professionnel vendant à des particuliers. D’ici là, écrivez-nous : nous cherchons une
-              solution amiable en priorité.
+              Nous n’avons pas encore désigné de médiateur de la consommation. D’ici là, écrivez-nous :
+              nous cherchons une solution amiable en priorité.
             </>
           )}
         </p>
@@ -226,7 +220,7 @@ function Cgv() {
             <>À défaut d’accord, le médiateur de la consommation compétent est {LEGAL.mediator.name}.</>
           ) : (
             <>
-              <Missing>médiateur non encore désigné</Missing>.
+              Aucun médiateur n’est encore désigné : écrivez-nous d’abord, nous trouvons une solution.
             </>
           )}
         </p>
@@ -244,7 +238,7 @@ function Privacy() {
           <a className="underline" href={`mailto:${SHOP.email}`}>
             {SHOP.email}
           </a>
-          . Responsable du traitement : {LEGAL.publisher || <Missing>à compléter</Missing>}.
+          .{LEGAL.publisher ? ` Responsable du traitement : ${LEGAL.publisher}.` : ''}
         </p>
       </Block>
 
