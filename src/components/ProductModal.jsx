@@ -5,6 +5,7 @@ import { useCart } from '../hooks/useCart'
 import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
 import Stars from './Stars'
+import StockMeter from './StockMeter'
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart()
@@ -96,6 +97,13 @@ export default function ProductModal({ product, onClose }) {
                 </li>
               ))}
             </ul>
+
+            <div className="mt-4 rounded-xl bg-cream/70 px-3.5 py-2.5">
+              <StockMeter product={product} compact />
+              <p className="mt-1.5 text-[10.5px] text-inkSoft">
+                Stock réel, mis à jour en continu. Expédition sous 24 h ouvrées.
+              </p>
+            </div>
 
             <div className="mt-4 divide-y divide-ink/10 border-y border-ink/10">
               <div>

@@ -25,7 +25,8 @@ export const PRODUCTS = [
     reviews: 412,
     bestseller: true,
     isNew: false,
-    stock: 8,
+    stock: 6,
+    stockInitial: 40,
     description:
       "Le baume de nuit signature de la Méthode Jeanne Piaubert. Sa texture fondante au complexe Suprém'Advance Premium accompagne la peau pendant le sommeil : rides lissées, fermeté retrouvée, teint reposé au réveil.",
     benefits: [
@@ -48,13 +49,15 @@ export const PRODUCTS = [
     concern: 'Anti-âge',
     volume: '30 ml',
     marketPrice: 115.5,
-    price: 52,
+    price: 45,
     image: '/img/serum-anti-rides.jpg',
     rating: 4.7,
     reviews: 268,
     bestseller: true,
     isNew: false,
-    stock: 14,
+    lead: true,
+    stock: 9,
+    stockInitial: 60,
     description:
       "Un sérum concentré à l'extrait d'Algue Millennium, l'actif signature de Stendhal. Il cible les rides installées et prévient leur formation, pour une peau repulpée et un galbe redessiné.",
     benefits: [
@@ -77,13 +80,15 @@ export const PRODUCTS = [
     concern: 'Taches',
     volume: '30 ml',
     marketPrice: 38.9,
-    price: 19.9,
+    price: 15.9,
     image: '/img/serum-anti-taches.jpg',
     rating: 4.6,
     reviews: 731,
     bestseller: true,
     isNew: false,
-    stock: 32,
+    lead: true,
+    stock: 12,
+    stockInitial: 90,
     description:
       "Un sérum 100 % d'origine naturelle qui cible les taches pigmentaires et prévient leur réapparition. Formulé à l'extrait de camomille et à la vitamine C d'origine naturelle, il unifie le teint sans photosensibiliser.",
     benefits: [
@@ -112,7 +117,8 @@ export const PRODUCTS = [
     reviews: 189,
     bestseller: false,
     isNew: true,
-    stock: 6,
+    stock: 4,
+    stockInitial: 25,
     description:
       'Un soin ciblé pour le regard : poches désengorgées, cernes atténués, rides de la patte d’oie lissées. Sa texture gel-crème se fond instantanément et convient au port de lentilles.',
     benefits: [
@@ -141,6 +147,15 @@ export const brandOf = (product) => BRANDS.find((brand) => brand.id === product.
 /** Prix effectif d'un produit, remise de lancement incluse. */
 export const finalPrice = (product) =>
   Math.round(product.price * (1 - FLASH_OFFER.percent / 100) * 100) / 100
+
+/** Niveau d'urgence affiché selon le stock restant. */
+export const stockLevel = (product) => {
+  if (product.stock <= 5) return { tone: 'critique', label: `Plus que ${product.stock} en stock` }
+  if (product.stock <= 10) return { tone: 'faible', label: `Seulement ${product.stock} restants` }
+  return { tone: 'ok', label: 'En stock' }
+}
+
+export const LEAD_PRODUCTS = () => PRODUCTS.filter((product) => product.lead)
 
 /** Statistiques de remise, dérivées du catalogue (évite les incohérences de texte). */
 export const PRICE_STATS = (() => {

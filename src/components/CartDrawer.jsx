@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { FREE_SHIPPING_THRESHOLD, euro } from '../lib/format'
 import Icon from './Icon'
+import ReserveTimer from './ReserveTimer'
 
 export default function CartDrawer({ onCheckout }) {
   const {
@@ -29,6 +30,7 @@ export default function CartDrawer({ onCheckout }) {
     appliedCode,
     applyPromo,
     removePromo,
+    reservedUntil,
   } = useCart()
   const { user, openAuth } = useAuth()
 
@@ -101,6 +103,9 @@ export default function CartDrawer({ onCheckout }) {
                   Ajoutez un 2ᵉ produit → −10 %, un 3ᵉ → −15 % sur le total.
                 </p>
               )}
+              <div className="mt-2.5">
+                <ReserveTimer until={reservedUntil} />
+              </div>
             </div>
 
             <ul className="flex-1 overflow-y-auto px-6">

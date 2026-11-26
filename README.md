@@ -23,12 +23,12 @@ npm run preview  # sert le build
 | Produit | Marque | Prix magasin | Prix site | Remise |
 | --- | --- | --- | --- | --- |
 | Baume Intégral Anti-Âge Nuit 50 ml | Jeanne Piaubert | 219,50 € | **95 €** | −57 % |
-| Sérum Anti-Rides Performance 30 ml | Stendhal | 115,50 € | **52 €** | −55 % |
-| Sérum Anti-Taches 30 ml | Biarritz | 38,90 € | **19,90 €** | −49 % |
+| Sérum Anti-Rides Performance 30 ml *appel* | Stendhal | 115,50 € | **45 €** | −61 % |
+| Sérum Anti-Taches 30 ml *appel* | Biarritz | 38,90 € | **15,90 €** | −59 % |
 | Contour des Yeux Anti-Âge 15 ml | Jeanne Piaubert | 111,50 € | **48 €** | −57 % |
 
 Le prix affiché en boutique inclut ensuite le **prix de lancement −5 %** (`FLASH_OFFER`),
-soit **−51 à −59 % par rapport au prix magasin**. Tous les montants se pilotent depuis
+soit **−59 à −63 % par rapport au prix magasin**. Tous les montants se pilotent depuis
 `src/data/shop.js` ; les pourcentages affichés dans les textes sont dérivés du catalogue
 (`PRICE_STATS`), donc jamais incohérents.
 
@@ -44,6 +44,15 @@ Coût d'achat des produits : 0 € — d'où la marge possible sur ces prix.
 - **Remise moyen de paiement** : −5 % par virement bancaire (`PAYMENT_OFFERS`).
 - **Livraison offerte dès 35 €** (`FREE_SHIPPING_THRESHOLD`), 3,90 € en dessous.
 - Chaque récapitulatif affiche l'économie réalisée (prix magasin + remises).
+
+## Urgence et produits d'appel
+
+- **Produits d'appel** (`lead: true`) : les deux sérums vendus sous le prix psychologique
+  (15,90 € et 45 €), mis en avant par un bandeau dédié (`LeadBanner`) juste sous le hero.
+- **Stocks limités visibles** : chaque fiche affiche une jauge `StockMeter` calculée sur
+  `stock` / `stockInitial`, avec 3 tons (`Plus que N`, `Seulement N restants`, `En stock`).
+- **Réservation de panier** : à chaque ajout, un compte à rebours de 15 min (`ReserveTimer`)
+  rappelle que prix et stocks sont bloqués, et passe en rouge dans les 2 dernières minutes.
 
 ## Compte client (e-mail **ou** téléphone)
 

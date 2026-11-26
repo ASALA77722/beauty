@@ -29,6 +29,7 @@ export function CartProvider({ children }) {
   const [promoInput, setPromoInput] = useState('')
   const [appliedCode, setAppliedCode] = useState(null)
   const [paymentId, setPaymentId] = useState('card')
+  const [reservedUntil, setReservedUntil] = useState(() => Date.now() + 15 * 60000)
 
   useEffect(() => {
     writeJson(CART_KEY, lines)
@@ -64,6 +65,7 @@ export function CartProvider({ children }) {
       }
       return [...current, { id: product.id, qty }]
     })
+    setReservedUntil(Date.now() + 15 * 60000)
     setToast({ name: product.name, qty })
   }, [])
 
@@ -120,6 +122,7 @@ export function CartProvider({ children }) {
       paymentId,
       setPaymentId,
       payment,
+      reservedUntil,
       toast,
       dismissToast: () => setToast(null),
     }),
@@ -137,6 +140,7 @@ export function CartProvider({ children }) {
       removePromo,
       paymentId,
       payment,
+      reservedUntil,
       toast,
     ],
   )

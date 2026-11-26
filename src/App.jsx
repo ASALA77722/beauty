@@ -6,6 +6,7 @@ import CheckoutModal from './components/CheckoutModal'
 import Faq from './components/Faq'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
+import LeadBanner from './components/LeadBanner'
 import Icon from './components/Icon'
 import Navbar from './components/Navbar'
 import Newsletter from './components/Newsletter'
@@ -81,6 +82,7 @@ export default function App() {
       <main>
         <Hero />
         <TrustBar />
+        <LeadBanner />
         <Shop onOpenProduct={setActiveProduct} />
         <Offers />
         <Brands />

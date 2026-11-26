@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { ORDERS_KEY, euro, readJson, writeJson } from '../lib/format'
 import Icon from './Icon'
+import ReserveTimer from './ReserveTimer'
 
 const inputClass = 'field mt-1.5'
 
@@ -27,6 +28,7 @@ export default function CheckoutModal({ open, onClose }) {
     clear,
     appliedCode,
     removePromo,
+    reservedUntil,
   } = useCart()
 
   const [form, setForm] = useState({
@@ -285,6 +287,9 @@ export default function CheckoutModal({ open, onClose }) {
               <h3 className="text-[11px] font-medium uppercase tracking-[0.16em] text-inkSoft">
                 Récapitulatif
               </h3>
+              <div className="mt-3">
+                <ReserveTimer until={reservedUntil} />
+              </div>
               <ul className="mt-3 space-y-3">
                 {items.map(({ product, qty }) => (
                   <li key={product.id} className="flex items-center gap-2.5">

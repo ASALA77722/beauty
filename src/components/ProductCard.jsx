@@ -3,6 +3,7 @@ import { useCart } from '../hooks/useCart'
 import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
 import Stars from './Stars'
+import StockMeter from './StockMeter'
 
 export default function ProductCard({ product, onOpen }) {
   const { addItem } = useCart()
@@ -10,7 +11,6 @@ export default function ProductCard({ product, onOpen }) {
   const price = finalPrice(product)
   const off = discountPercent(product.marketPrice, price)
   const launchSaving = Math.round((product.price - price) * 100) / 100
-  const lowStock = product.stock <= 8
 
   return (
     <article className="group flex flex-col">
@@ -38,6 +38,7 @@ export default function ProductCard({ product, onOpen }) {
           {off > 0 && <span className="badge bg-rose text-ivory">−{off} %</span>}
           {product.bestseller && <span className="badge bg-ivory/95 text-ink">Best-seller</span>}
           {product.isNew && <span className="badge bg-forest text-cream">Nouveau</span>}
+          {product.lead && <span className="badge bg-gold text-ink">Prix d'appel</span>}
         </div>
 
         <div className="absolute inset-x-3 bottom-3 translate-y-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 max-md:translate-y-0 max-md:opacity-100">
@@ -82,9 +83,10 @@ export default function ProductCard({ product, onOpen }) {
           </p>
         )}
 
-        <p className="mt-1.5 flex items-center gap-1.5 text-[10.5px] text-inkSoft">
+        <StockMeter product={product} compact />
+        <p className="mt-2 flex items-center gap-1.5 text-[10.5px] text-inkSoft">
           <Icon name="truck" className="h-3.5 w-3.5 text-gold" />
-          {lowStock ? `Plus que ${product.stock} en stock` : 'Expédié en 24 h'}
+          Expédié en 24 h · Retours 30 j
         </p>
       </div>
     </article>
