@@ -280,6 +280,17 @@ function SellerDashboard({ onBack, onLock }) {
             ? 'Les adresses de dépôt sont renseignées : les clientes peuvent payer.'
             : 'Aucune adresse de dépôt renseignée : le site refuse les paiements au lieu d’afficher une fausse adresse. Collez vos adresses dans src/config.js (USDT TRC20, BTC, ETH), puis republiez.'}
         </p>
+        <p className="mt-2 flex items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.1em] text-inkSoft">
+          <Icon name={splitActive() ? 'check' : 'shield'} className="h-3 w-3" />
+          {splitActive()
+            ? `Partage automatique actif — ${SPLIT.partnerShare} % vers ${SPLIT.partnerLabel}`
+            : 'Aucun partage automatique configuré'}
+        </p>
+        <p className="mt-1 text-[10.5px] leading-relaxed text-inkSoft">
+          {splitActive()
+            ? `La cliente ne voit qu’une adresse : la caisse. Le service (${SPLIT.provider}) reverse ensuite la part de ${SPLIT.partnerLabel}.`
+            : 'La cliente paie sur une seule adresse. Pour reverser automatiquement une part à un associé, il faut connecter un service de payout (NOWPayments ou Binance Pay) : voir SPLIT dans src/config.js.'}
+        </p>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
@@ -444,6 +455,66 @@ function SellerDashboard({ onBack, onLock }) {
                     className="field mt-1 font-mono text-[10px]"
                   />
                 </div>
+                {selected.payment.split ? (
+                  <div className="rounded-lg border border-goldDeep/25 bg-gold/8 p-2.5">
+                    <p className="text-[9.5px] uppercase tracking-[0.1em] text-goldDeep">
+                      Répartition à reverser
+                    </p>
+                    <div className="mt-1.5 space-y-1 text-[11.5px] text-ink">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-inkSoft">Caisse boutique</span>
+                        <span className="font-medium">{euro(selected.payment.split.shop)}</span>
+                      </div>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-inkSoft">{selected.payment.split.partnerLabel}</span>
+                        <span className="font-medium">{euro(selected.payment.split.partner)}</span>
+                      </div>
+                      {selected.payment.split.fee > 0 && (
+                        <div className="flex items-baseline justify-between gap-2 text-[10.5px] text-inkSoft">
+                          <span>Frais du service</span>
+                          <span>− {euro(selected.payment.split.fee)}</span>
+                        </div>
+                      )}
+                      <div className="flex items-baseline justify-between gap-2 border-t border-goldDeep/20 pt-1">
+                        <span className="text-inkSoft">Total encaissé</span>
+                        <span className="font-medium">{euro(selected.payment.split.total)}</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateOrder(selected.reference, {
+                          payment: {
+                            ...selected.payment,
+                            split: {
+                              ...selected.payment.split,
+                              status:
+                                selected.payment.split.status === 'done' ? 'to_transfer' : 'done',
+                              doneAt:
+                                selected.payment.split.status === 'done'
+                                  ? null
+                                  : new Date().toISOString(),
+                            },
+                          },
+                        })
+                      }
+                      className={`mt-2 w-full rounded-lg border px-2 py-1.5 text-[10.5px] font-medium transition-colors ${
+                        selected.payment.split.status === 'done'
+                          ? 'border-sage/35 bg-sage/10 text-sage'
+                          : 'border-ink/15 text-ink hover:bg-ivory'
+                      }`}
+                    >
+                      {selected.payment.split.status === 'done'
+                        ? 'Part de l’associé reversée ✓'
+                        : 'Marquer la part de l’associé comme reversée'}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-[10.5px] leading-relaxed text-inkSoft">
+                    Pas de partage configuré : la totalité de l’encaissement reste sur la caisse de
+                    la boutique.
+                  </p>
+                )}
               </div>
 
               <div className="mt-3">

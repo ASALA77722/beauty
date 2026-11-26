@@ -1,5 +1,14 @@
 import { readJson, writeJson } from './format'
-import { SELLER_KEY, cryptoById, formatCrypto, toCryptoAmount } from '../config'
+import {
+  SELLER_KEY,
+  cryptoById,
+  formatCrypto,
+  toCryptoAmount,
+  walletAddress,
+  splitActive,
+  splitBreakdown,
+  SPLIT,
+} from '../config'
 import { encodeOrderCode } from './code'
 
 export const ORDERS_V3_KEY = 'beaute-orders-v3'
@@ -121,8 +130,17 @@ export function buildOrder({ items, totals, form, deliveryMode, pickup, wallet, 
       asset: asset.symbol,
       assetName: asset.name,
       network: asset.network,
-      address: asset.address,
+      address: walletAddress(asset),
       amount: formatCrypto(amount, asset),
+      /** Répartition enregistrée à la vente : le vendeur sait quoi reverser. */
+      split: splitActive()
+        ? {
+            ...splitBreakdown(totals.total),
+            partnerLabel: SPLIT.partnerLabel,
+            provider: SPLIT.provider,
+            status: 'to_transfer',
+          }
+        : null,
       rawAmount: amount,
       eurAmount: totals.total,
       txHash: null,
