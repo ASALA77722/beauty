@@ -42,7 +42,7 @@ export default function Shop({ onOpenProduct }) {
               Les soins des grandes maisons
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-inkSoft">
-              Quatre références choisies pour leur efficacité, vendues à prix juste. Le prix barré
+              Trois références choisies pour leur efficacité, vendues à prix juste. Le prix barré
               est le prix constaté en magasin.
             </p>
           </div>

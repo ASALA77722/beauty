@@ -1,7 +1,6 @@
 import baumeImg from '../assets/img/baume.jpg'
 import serumRidesImg from '../assets/img/serum-anti-rides.jpg'
 import serumTachesImg from '../assets/img/serum-anti-taches.jpg'
-import contourImg from '../assets/img/contour-yeux.jpg'
 
 // ─────────────────────────────────────────────────────────────
 // Catalogue — prix « marché » (constatés en parfumerie) vs prix site.
@@ -106,36 +105,6 @@ export const PRODUCTS = [
       "Le matin et/ou le soir sur l'ensemble du visage, avant la crème hydratante. Toujours associer une protection solaire le jour.",
     inci:
       "Aqua, Aloe Barbadensis Leaf Juice*, Glycerin, Alcohol Denat.*, Chrysanthemum Parthenium Flower Extract*, Sodium Ascorbyl Phosphate, Niacinamide, Sodium Hyaluronate, Citric Acid, Sodium Benzoate. *Ingrédients issus de l'agriculture biologique.",
-  },
-  {
-    id: 'contour-des-yeux',
-    brandId: 'jeanne-piaubert',
-    name: 'Contour des Yeux Anti-Âge',
-    line: "Suprém'Advance Premium",
-    category: 'Soin visage',
-    concern: 'Anti-âge',
-    volume: '15 ml',
-    marketPrice: 111.5,
-    price: 48,
-    image: contourImg,
-    rating: 4.7,
-    reviews: 189,
-    bestseller: false,
-    isNew: true,
-    stock: 4,
-    stockInitial: 25,
-    description:
-      'Un soin ciblé pour le regard : poches désengorgées, cernes atténués, rides de la patte d’oie lissées. Sa texture gel-crème se fond instantanément et convient au port de lentilles.',
-    benefits: [
-      'Région du regard défatiguée',
-      'Rides de la patte d’oie lissées',
-      'Cernes et poches atténués',
-      'Texture gel-crème, sans parfum',
-    ],
-    usage:
-      "Matin et soir, tapoter une petite quantité du bout du doigt sur la région orbitale, du coin interne vers l'extérieur.",
-    inci:
-      "Aqua, Glycerin, Dimethicone, Squalane, Caffeine, Sodium Hyaluronate, Adenosine, Tocopherol, Acrylates/C10-30 Alkyl Acrylate Crosspolymer, Phenoxyethanol.",
   },
 ]
 

@@ -11,3 +11,4 @@ image-search
 /apercu
 .chromelibs
 # activer un domaine perso : créer public/CNAME avec le domaine
+*.mjs.bak
