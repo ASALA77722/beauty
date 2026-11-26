@@ -7,14 +7,19 @@ on:
         description: 'Identifiant du serveur Discord'
         required: false
       bot_token:
-        description: 'Jeton du bot (laisser vide si le secret existe)'
+        description: 'Jeton du bot (laisser vide si un secret existe)'
         required: false
+
+permissions:
+  contents: write
 
 jobs:
   creer:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -23,12 +28,11 @@ jobs:
           DISCORD_BOT_TOKEN: ${{ inputs.bot_token || secrets.DISCORD_BOT_TOKEN }}
           DISCORD_GUILD_ID: ${{ inputs.guild_id || secrets.DISCORD_GUILD_ID }}
         run: node scripts/creer-serveur.mjs > /tmp/sortie.txt 2>&1 || true
-      - name: Publier le journal dans le dépôt
+      - name: Publier le journal
         run: |
-          mkdir -p docs
-          { echo "# Journal du dernier passage ($(date -u +%FT%TZ))"; echo; echo '```'; cat /tmp/sortie.txt; echo '```'; } > docs/journal-serveur.md
+          { echo "# Journal du dernier passage"; echo; echo '```'; cat /tmp/sortie.txt; echo '```'; } > docs/journal-serveur.md
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add docs/journal-serveur.md
-          git commit -m "Journal de création du serveur" || true
-          git push || true
+          git commit -m "Journal de creation du serveur" || true
+          git push origin "HEAD:${{ github.ref_name }}" || true
