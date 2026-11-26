@@ -1,5 +1,6 @@
 import { readJson, writeJson } from './format'
 import { cryptoById, formatCrypto, toCryptoAmount } from '../data/crypto'
+import { encodeOrderCode } from './code'
 
 export const ORDERS_V3_KEY = 'beaute-orders-v3'
 export const SELLER_KEY_STORAGE = 'beaute-seller-v1'
@@ -90,12 +91,13 @@ export const makeReference = () => {
 }
 
 /** Construit l'objet commande complet à partir du panier et du formulaire. */
-export function buildOrder({ items, totals, form, deliveryMode, pickup, wallet, reference }) {
+export function buildOrder({ items, totals, form, deliveryMode, pickup, wallet, reference, clientNumber }) {
   const asset = cryptoById(wallet)
   const ref = reference ?? makeReference()
   const amount = toCryptoAmount(totals.total, asset)
   const order = {
     reference: ref,
+    clientNumber: clientNumber ?? null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     status: 'awaiting_payment',
@@ -218,6 +220,8 @@ export function orderToText(order, { includeAddress = true } = {}) {
   const d = order.delivery
   const lines = [
     `🛍️ NOUVELLE COMMANDE ${order.reference}`,
+    order.clientNumber ? `🔑 NUMÉRO CLIENTE : ${order.clientNumber}` : null,
+    order.clientNumber ? `🧾 CODE COMMANDE : ${encodeOrderCode(order)}` : null,
     `Statut : ${status.label}`,
     `Montant : ${order.amounts.total} € — payé en ${order.payment.amount} (${order.payment.network})`,
     '',
@@ -395,6 +399,7 @@ export function makeDemoOrders() {
     const amount = toCryptoAmount(total, asset)
     return {
       reference: `BP-${new Date(created).toISOString().slice(2, 10).replace(/-/g, '')}-90${index + 1}`,
+      clientNumber: ['482913', '715204', '306978', '924157'][index] ?? null,
       createdAt: created,
       updatedAt: created,
       demo: true,

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useOrders } from '../hooks/useOrders'
+import { decodeOrderCode, extractOrderCode, formatClientNumber, isOrderCode } from '../lib/code'
 import { euro } from '../lib/format'
 import {
   ORDER_STATUSES,
@@ -85,10 +86,14 @@ export default function SellerPage({ onBack }) {
 }
 
 function SellerDashboard({ onBack, onLock }) {
-  const { orders, stats, changeStatus, sendMessage, updateOrder, loadDemo, clearDemo } = useOrders()
+  const { orders, stats, changeStatus, sendMessage, updateOrder, loadDemo, clearDemo, findOrders, importOrder } =
+    useOrders()
   const [selectedRef, setSelectedRef] = useState(() => orders[0]?.reference ?? null)
   const [filter, setFilter] = useState('all')
   const [query, setQuery] = useState('')
+  const [lookup, setLookup] = useState('')
+  const [lookupResult, setLookupResult] = useState(null)
+  const [imported, setImported] = useState(null)
   const [draft, setDraft] = useState('')
   const [copied, setCopied] = useState(null)
 
@@ -114,13 +119,17 @@ function SellerDashboard({ onBack, onLock }) {
               : filter === 'shipped'
                 ? ['shipped', 'relay_arrived', 'delivered'].includes(order.status)
                 : true
+      if (filter === 'todo' && order.status === 'awaiting_payment') return false
       if (!statusOk) return false
       if (!q) return true
       return (
         order.reference.toLowerCase().includes(q) ||
+        String(order.clientNumber ?? '').includes(q.replace(/\D/g, '')) ||
         `${order.delivery.firstName} ${order.delivery.lastName}`.toLowerCase().includes(q) ||
-        order.delivery.email.toLowerCase().includes(q) ||
-        order.delivery.city.toLowerCase().includes(q)
+        (order.delivery.email ?? '').toLowerCase().includes(q) ||
+        (order.delivery.phone ?? '').replace(/\s/g, '').includes(q.replace(/\s/g, '')) ||
+        (order.delivery.city ?? '').toLowerCase().includes(q) ||
+        (order.delivery.zip ?? '').includes(q)
       )
     })
   }, [orders, filter, query])
@@ -167,7 +176,100 @@ function SellerDashboard({ onBack, onLock }) {
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+      <div className="mt-5 rounded-2xl border border-goldDeep/35 bg-gold/8 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-goldDeep">
+              Retrouver une commande
+            </p>
+            <p className="mt-0.5 text-[11.5px] leading-relaxed text-inkSoft">
+              Collez le numéro cliente à 6 chiffres reçu sur Discord / Telegram, ou le code
+              <code className="mx-1 font-mono text-[10.5px]">BP-482913-eyJ…</code> reçu de la cliente.
+            </p>
+          </div>
+          {imported && (
+            <span className="badge bg-sage/15 text-[9.5px] text-sage">
+              <Icon name="check" className="h-2.5 w-2.5" /> Commande {imported} importée
+            </span>
+          )}
+        </div>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault()
+            const value = lookup.trim()
+            setImported(null)
+            const code = extractOrderCode(value) ?? (isOrderCode(value) ? value : null)
+            if (code) {
+              const decoded = decodeOrderCode(code)
+              if (decoded) {
+                importOrder(decoded)
+                setSelectedRef(decoded.reference)
+                setImported(decoded.reference)
+                setLookupResult(null)
+                setFilter('all')
+                setQuery(decoded.clientNumber ?? decoded.reference)
+                return
+              }
+              setLookupResult({ error: 'Ce code est incomplet ou abîmé. Demandez-le à nouveau à la cliente.' })
+              return
+            }
+            const matches = findOrders(value)
+            if (matches.length === 0) {
+              setLookupResult({
+                error: `Aucune commande pour « ${value} ». Si la commande a été passée sur l’appareil de la cliente, demandez-lui son code BP-… (bouton « Copier mon code de commande » sur sa confirmation).`,
+              })
+              return
+            }
+            setLookupResult({ matches })
+            setSelectedRef(matches[0].reference)
+            setQuery(String(matches[0].clientNumber ?? value))
+            setFilter('all')
+          }}
+          className="mt-2 flex flex-col gap-2 sm:flex-row"
+        >
+          <div className="relative flex-1">
+            <input
+              value={lookup}
+              onChange={(event) => setLookup(event.target.value)}
+              placeholder="482913  ou  BP-482913-eyJ2Ijox…"
+              className="field pl-9 font-mono text-[12px]"
+              aria-label="Numéro cliente ou code de commande"
+            />
+            <Icon name="key" className="absolute left-3 top-2.5 h-4 w-4 text-inkSoft" />
+          </div>
+          <button type="submit" className="btn-gold text-[10.5px]">
+            <Icon name="search" className="h-3.5 w-3.5" />
+            Ouvrir la commande
+          </button>
+        </form>
+
+        {lookupResult?.error && (
+          <p className="mt-2 rounded-lg bg-rose/10 px-3 py-2 text-[11.5px] leading-relaxed text-rose">
+            {lookupResult.error}
+          </p>
+        )}
+        {lookupResult?.matches && lookupResult.matches.length > 1 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {lookupResult.matches.map((order) => (
+              <button
+                key={order.reference}
+                type="button"
+                onClick={() => setSelectedRef(order.reference)}
+                className={`rounded-full border px-2.5 py-1 text-[10px] ${
+                  selected?.reference === order.reference
+                    ? 'border-forest bg-forest text-cream'
+                    : 'border-ink/15 text-inkSoft hover:text-ink'
+                }`}
+              >
+                {formatClientNumber(order.clientNumber)} · {order.delivery.firstName} ·{' '}
+                {order.delivery.city}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
         {[
           { label: 'Commandes', value: stats.total, icon: 'bag' },
           { label: 'Chiffre payé', value: euro(stats.revenue), icon: 'coin' },
@@ -270,7 +372,14 @@ function SellerDashboard({ onBack, onLock }) {
             <div className="rounded-2xl border border-ink/10 bg-ivory p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className="font-mono text-[12px] text-inkSoft">{selected.reference}</p>
+                  <p className="flex flex-wrap items-center gap-2 font-mono text-[12px] text-inkSoft">
+                    {selected.reference}
+                    {selected.clientNumber && (
+                      <span className="rounded-full bg-gold/20 px-2 py-0.5 font-sans text-[10px] font-semibold tracking-[0.08em] text-goldDeep">
+                        N° {formatClientNumber(selected.clientNumber)}
+                      </span>
+                    )}
+                  </p>
                   <h2 className="font-serif text-[22px] leading-tight">
                     {selected.delivery.firstName} {selected.delivery.lastName}
                   </h2>

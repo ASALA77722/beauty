@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { normalizeClientNumber } from '../lib/code'
 import {
   appendMessage,
   loadOrders,
@@ -62,6 +63,42 @@ export function OrdersProvider({ children }) {
     [publish],
   )
 
+  /** Recherche par numéro cliente, référence, nom, ville, e-mail. */
+  const findOrders = useCallback(
+    (rawQuery) => {
+      const query = (rawQuery ?? '').trim().toLowerCase()
+      if (!query) return []
+      const digits = normalizeClientNumber(query)
+      return orders.filter((order) => {
+        if (digits.length >= 3 && String(order.clientNumber ?? '').includes(digits)) return true
+        const haystack = [
+          order.reference,
+          order.delivery.firstName,
+          order.delivery.lastName,
+          order.delivery.email,
+          order.delivery.phone,
+          order.delivery.city,
+          order.delivery.zip,
+        ]
+          .join(' ')
+          .toLowerCase()
+        return haystack.includes(query)
+      })
+    },
+    [orders],
+  )
+
+  /** Ajoute une commande reçue d'un autre appareil (code collée). */
+  const importOrder = useCallback(
+    (order) => {
+      const next = [order, ...loadOrders().filter((item) => item.reference !== order.reference)]
+      saveOrders(next)
+      publish(next)
+      return order
+    },
+    [publish],
+  )
+
   const loadDemo = useCallback(() => {
     const existing = loadOrders()
     const next = [...makeDemoOrders(), ...existing]
@@ -104,8 +141,10 @@ export function OrdersProvider({ children }) {
       markRead,
       clearDemo,
       loadDemo,
+      findOrders,
+      importOrder,
     }),
-    [orders, stats, refresh, createOrder, updateOrder, changeStatus, sendMessage, markRead, clearDemo, loadDemo],
+    [orders, stats, refresh, createOrder, updateOrder, changeStatus, sendMessage, markRead, clearDemo, loadDemo, findOrders, importOrder],
   )
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>

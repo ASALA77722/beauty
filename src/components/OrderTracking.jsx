@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useOrders } from '../hooks/useOrders'
 import { euro } from '../lib/format'
 import { ORDER_STATUSES, statusById } from '../lib/orders'
+import { encodeOrderCode, formatClientNumber } from '../lib/code'
 import Icon from './Icon'
 
 const TRACK = ['paid', 'preparing', 'shipped', 'relay_arrived', 'delivered']
@@ -9,6 +10,7 @@ const TRACK = ['paid', 'preparing', 'shipped', 'relay_arrived', 'delivered']
 export default function OrderTracking({ reference, onBack }) {
   const { orders, sendMessage, markRead } = useOrders()
   const [draft, setDraft] = useState('')
+  const [copiedCode, setCopiedCode] = useState(false)
   const order = useMemo(
     () => orders.find((item) => item.reference === reference) ?? null,
     [orders, reference],
@@ -87,6 +89,16 @@ export default function OrderTracking({ reference, onBack }) {
     )
   }
 
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(encodeOrderCode(order))
+    } catch {
+      /* presse-papiers indisponible */
+    }
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2200)
+  }
+
   const status = statusById(order.status)
   const stepIndex = TRACK.indexOf(order.status)
   const d = order.delivery
@@ -110,6 +122,12 @@ export default function OrderTracking({ reference, onBack }) {
           <h1 className="mt-1.5 font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] leading-tight">
             {order.reference}
           </h1>
+          {order.clientNumber && (
+            <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-gold/15 px-2.5 py-1 text-[11px] font-medium text-goldDeep">
+              <Icon name="key" className="h-3 w-3" />
+              Numéro cliente {formatClientNumber(order.clientNumber)}
+            </p>
+          )}
           <p className="mt-1 text-[12px] text-inkSoft">
             Passée le{' '}
             {new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long', timeStyle: 'short' }).format(
@@ -162,7 +180,23 @@ export default function OrderTracking({ reference, onBack }) {
         </ol>
       )}
 
-      <div className="mt-7 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="mt-4 rounded-xl border border-ink/12 bg-cream/40 p-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="max-w-md text-[11.5px] leading-relaxed text-inkSoft">
+            Pour joindre la boutique sur Discord ou Telegram, donnez votre numéro{' '}
+            <strong className="text-ink">{formatClientNumber(order.clientNumber)}</strong> — ou collez
+            ce code si la commande a été passée sur un autre appareil.
+          </p>
+          <div className="flex gap-2">
+            <button type="button" onClick={() => copyCode()} className="btn-outline text-[10px]">
+              <Icon name={copiedCode ? 'check' : 'copy'} className="h-3.5 w-3.5" />
+              {copiedCode ? 'Code copié' : 'Copier le code'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="space-y-4">
           <div className="rounded-2xl border border-ink/10 bg-cream/40 p-5">
             <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-inkSoft">
