@@ -32,7 +32,7 @@ export default function Navbar() {
             −{PRICE_STATS.average} % vs prix magasin
           </span>
           <span className="hidden text-gold sm:inline">✦</span>
-          <span className="hidden md:inline">Paiement en 3× sans frais</span>
+          <span className="hidden md:inline">Paiement crypto · USDT, BTC, ETH</span>
         </div>
       </div>
 

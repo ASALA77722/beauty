@@ -117,13 +117,13 @@ export default function Offers() {
           <Reveal delay={240}>
             <div className="flex h-full flex-col border border-cream/15 bg-forestSoft/40 p-6">
               <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 text-gold">
-                <Icon name="card" className="h-5 w-5" />
+                <Icon name="coin" className="h-5 w-5" />
               </span>
               <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-gold">Au paiement</p>
-              <h3 className="mt-1 font-serif text-2xl text-cream">−5 % par virement</h3>
+              <h3 className="mt-1 font-serif text-2xl text-cream">−5 % en crypto</h3>
               <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-cream/85">
-                Réglez par virement bancaire et bénéficiez de 5 % de remise immédiate,
-                automatiquement déduits dans le récapitulatif.
+                Payez en USDT, BTC ou ETH et bénéficiez de 5 % de remise immédiate, automatiquement
+                déduits dans le récapitulatif. L’adresse de dépôt est affichée au moment du paiement.
               </p>
               <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-cream/70">
                 Sans minimum d'achat

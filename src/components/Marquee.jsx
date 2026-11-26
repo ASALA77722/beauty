@@ -5,7 +5,7 @@ const ITEMS = [
   'Produits 100 % authentiques',
   `${PRICE_STATS.average} % moins cher qu’en magasin`,
   `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`,
-  'Paiement en 3× sans frais',
+  'Paiement crypto −5 % (USDT, BTC, ETH)',
   'Échantillons offerts',
   'Conseil beauté par téléphone',
 ]

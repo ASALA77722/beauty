@@ -4,7 +4,7 @@ import { FREE_SHIPPING_THRESHOLD } from '../lib/format'
 const ITEMS = [
   { icon: 'shield', title: 'Authenticité garantie', text: 'Sourcé chez les maisons' },
   { icon: 'truck', title: `Livraison offerte dès ${FREE_SHIPPING_THRESHOLD} €`, text: 'Expédié en 24 h' },
-  { icon: 'card', title: 'Paiement en 3× sans frais', text: 'CB, TWINT, virement −5 %' },
+  { icon: 'coin', title: 'Paiement crypto −5 %', text: 'USDT, BTC ou ETH' },
   { icon: 'phone', title: 'Conseil au 01 84 80 12 34', text: 'Lun–sam, 9 h–19 h' },
 ]
 
