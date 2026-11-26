@@ -14,7 +14,7 @@ import Offers from './components/Offers'
 import ProductModal from './components/ProductModal'
 import Shop from './components/Shop'
 import Story from './components/Story'
-import Testimonials from './components/Testimonials'
+import Reviews from './components/Reviews'
 import TrustBar from './components/TrustBar'
 import { useAuth } from './hooks/useAuth'
 import { useCart } from './hooks/useCart'
@@ -87,7 +87,7 @@ export default function App() {
         <Offers />
         <Brands />
         <Story />
-        <Testimonials />
+        <Reviews />
         <Faq />
         <Newsletter />
       </main>

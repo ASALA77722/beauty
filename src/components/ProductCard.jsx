@@ -1,8 +1,8 @@
-import { FLASH_OFFER, brandOf, finalPrice } from '../data/shop'
+import { FLASH_OFFER, brandOf, finalPrice, productRating } from '../data/shop'
 import { useCart } from '../hooks/useCart'
 import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
-import Stars from './Stars'
+import Stars, { formatRating } from './Stars'
 import StockMeter from './StockMeter'
 
 /** Bloc prix : le prix payé domine, l'économie est chiffrée en gros. */
@@ -49,6 +49,7 @@ export function PriceBlock({ product, size = 'card' }) {
 export default function ProductCard({ product, onOpen }) {
   const { addItem } = useCart()
   const brand = brandOf(product)
+  const { average, count } = productRating(product.id)
 
   return (
     <article className="group flex h-full flex-col border border-ink/8 bg-ivory transition-all duration-500 hover:border-gold/50 hover:shadow-card">
@@ -109,9 +110,9 @@ export default function ProductCard({ product, onOpen }) {
         </p>
 
         <div className="mt-1.5 flex items-center gap-2">
-          <Stars value={product.rating} className="h-3 w-3" />
+          <Stars value={average} className="h-3 w-3" />
           <span className="text-[10.5px] text-inkSoft">
-            {product.rating} ({product.reviews})
+            {formatRating(average)} ({count.toLocaleString('fr-FR')} avis)
           </span>
         </div>
 
