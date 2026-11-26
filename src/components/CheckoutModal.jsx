@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react'
-import { CRYPTO_CONFIG, ACTIVE_WALLETS, cryptoById, formatCrypto, isWalletReady, toCryptoAmount } from '../config'
+import {
+  CRYPTO_CONFIG,
+  ACTIVE_WALLETS,
+  cryptoById,
+  formatCrypto,
+  isWalletReady,
+  toCryptoAmount,
+  walletAddress,
+  splitActive,
+  SPLIT,
+} from '../config'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { useOrders } from '../hooks/useOrders'
@@ -56,6 +66,7 @@ export default function CheckoutModal({ open, onClose }) {
   const wallet = cryptoById(walletId)
   const canPay = isWalletReady(wallet)
   const cryptoAmount = toCryptoAmount(total, wallet)
+  const address = walletAddress(wallet)
   const orderText = confirmed ? orderToText(confirmed) : ''
 
   useEffect(() => {
@@ -452,11 +463,11 @@ export default function CheckoutModal({ open, onClose }) {
                 </p>
                 <div className="mt-1 flex items-start gap-2">
                   <code className="min-w-0 flex-1 break-all rounded-lg bg-ivory px-2.5 py-2 font-mono text-[10.5px] leading-relaxed text-ink">
-                    {wallet.address}
+                    {address}
                   </code>
                   <button
                     type="button"
-                    onClick={() => copy(wallet.address, 'addr')}
+                    onClick={() => copy(address, 'addr')}
                     className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink/15 text-ink transition-colors hover:bg-ivory"
                     aria-label="Copier l’adresse"
                   >
@@ -467,6 +478,12 @@ export default function CheckoutModal({ open, onClose }) {
                   Envoyez en une seule transaction, sur le réseau indiqué (une erreur de réseau =
                   fonds perdus). Confirmation en {CRYPTO_CONFIG.confirmations}.
                 </p>
+                {splitActive() && (
+                  <p className="mt-2 rounded-lg border border-sage/25 bg-sage/8 px-2.5 py-2 text-[10.5px] leading-relaxed text-inkSoft">
+                    Un seul virement suffit : nous répartissons les {SPLIT.partnerShare} % revenant
+                    à notre partenaire, sans frais supplémentaires pour vous.
+                  </p>
+                )}
               </div>
               )}
 
