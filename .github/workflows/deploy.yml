@@ -32,13 +32,11 @@ jobs:
 
       - name: Construire le site
         env:
-          PAGES_BASE: /Beaut-/
+          # le nom du dépôt peut changer : le build s'adapte tout seul
+          PAGES_BASE: /${{ github.event.repository.name }}/
         run: npm run build
 
       - uses: actions/configure-pages@v5
-        with:
-          # active GitHub Pages automatiquement si ce n'est pas déjà fait
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:

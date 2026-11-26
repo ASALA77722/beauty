@@ -9,6 +9,12 @@ persistés dans le `localStorage`).
 
 ![aperçu](public/img/hero-luxe.jpg)
 
+## Site en ligne
+
+**https://asala77722.github.io/beauty/**
+
+Chaque `push` reconstruit et republie le site (workflow `.github/workflows/deploy.yml`).
+
 ## Démarrer
 
 ```bash
