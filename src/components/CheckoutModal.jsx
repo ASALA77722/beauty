@@ -420,14 +420,37 @@ export default function CheckoutModal({ open, onClose }) {
                       Paiement en cours d’activation
                     </p>
                     <p className="mt-1 text-[11.5px] leading-relaxed text-inkSoft">
-                      Nous n’affichons aucune adresse de paiement sur le site : vous réglez via le lien
-                      sécurisé de notre prestataire. Il est en cours de mise en place — écrivez-nous à{' '}
+                      Nous n’affichons aucune coordonnée de paiement sur le site. Écrivez-nous à{' '}
                       <a href={`mailto:${SHOP.email}`} className="underline">
                         {SHOP.email}
                       </a>{' '}
-                      et nous vous transmettons le lien personnel de votre commande.
+                      : nous vous transmettons le lien personnel de votre commande.
                     </p>
                   </div>
+                )}
+
+                {link && (
+                  <>
+                    <div className="mt-3 flex gap-2">
+                      <input
+                        readOnly
+                        value={SHOP.email}
+                        aria-label="Adresse e-mail de la boutique"
+                        className="min-w-0 flex-1 rounded-lg border border-ink/15 bg-ivory px-2.5 py-2 text-[11.5px] text-ink"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => copy(SHOP.email, 'mail')}
+                        className="shrink-0 rounded-lg border border-ink/15 px-2.5 py-2 text-[10.5px] font-medium uppercase tracking-[0.08em] text-ink transition-colors hover:bg-ivory"
+                      >
+                        {copied === 'mail' ? 'Copié' : 'Copier'}
+                      </button>
+                    </div>
+                    <p className="mt-1.5 text-[10px] leading-relaxed text-inkSoft">
+                      Gardez cette adresse : en cas de souci de paiement, jointe à votre référence de
+                      commande, elle permet de retrouver votre règlement en un message.
+                    </p>
+                  </>
                 )}
 
                 <div className="mt-3">
@@ -445,7 +468,7 @@ export default function CheckoutModal({ open, onClose }) {
                     className={`${inputClass} font-mono text-[11px]`}
                   />
                   <p className="mt-1 text-[10px] leading-relaxed text-inkSoft">
-                    Si votre prestataire vous a donné une référence, collez-la : elle accélère la
+                    Si vous avez reçu une référence de paiement, collez-la : elle accélère la
                     vérification et la préparation du colis.
                   </p>
                 </div>
