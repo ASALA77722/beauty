@@ -33,6 +33,12 @@ export const SPLIT = {
   partnerShare: 0, // ex. 50 → l'associé reçoit 50 % net
   partnerLabel: 'Associé',
   /**
+   * Adresse de ton associé : sert UNIQUEMENT à préparer le virement côté
+   * vendeur (bouton « copier » dans l'espace de gestion). Elle n'est jamais
+   * affichée à la cliente ni incluse dans le site public.
+   */
+  partnerAddress: '',
+  /**
    * Service qui fait le partage à ta place. Aucun ne se configure depuis le
    * navigateur : la clé API reste côté serveur, jamais dans ce fichier.
    *  - 'none'        : virement manuel depuis ton portefeuille
@@ -116,6 +122,24 @@ export const toCryptoAmount = (euros, wallet) => {
 /** Le partage automatique est-il réellement opérationnel ? */
 export const splitActive = () =>
   SPLIT.enabled && SPLIT.partnerShare > 0 && SPLIT.provider !== 'none' && SPLIT.providerConnected
+
+/**
+ * Lien qui prépare le virement de la part de l'associé depuis un portefeuille.
+ * Rien n'est envoyé automatiquement : le vendeur clique, vérifie, signe.
+ * 0 partie automatique n'est possible sans service de payout connecté.
+ */
+export const partnerPayout = (amount, wallet) => {
+  if (!wallet || !SPLIT.partnerAddress || !(amount > 0)) return null
+  const value = Number(amount).toFixed(wallet.decimals)
+  if (wallet.id === 'eth') {
+    return `ethereum:${SPLIT.partnerAddress}?value=${Math.round(amount * 1e18)}`
+  }
+  if (wallet.id === 'btc') {
+    return `bitcoin:${SPLIT.partnerAddress}?amount=${value}`
+  }
+  // Tron : ouverture du portefeuille sur l'adresse de destination
+  return `https://tronscan.org/#/address/${SPLIT.partnerAddress}`
+}
 
 /** Détail de la répartition d'un encaissement (affiché au vendeur uniquement). */
 export const splitBreakdown = (euros) => {
