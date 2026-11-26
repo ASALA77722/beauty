@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
 import { useOrders } from '../hooks/useOrders'
 import { euro } from '../lib/format'
+import { encodeOrderCode, formatClientNumber, makeClientNumber } from '../lib/code'
 import { buildOrder, mailtoShare, orderToText, telegramShare, whatsappShare } from '../lib/orders'
 import Icon from './Icon'
 import ReserveTimer from './ReserveTimer'
@@ -15,7 +16,7 @@ const panel = 'rounded-xl border border-ink/12 bg-ivory p-3.5'
 
 export default function CheckoutModal({ open, onClose }) {
   const { user, openAuth } = useAuth()
-  const { createOrder } = useOrders()
+  const { createOrder, orders } = useOrders()
   const {
     items,
     subtotal,
@@ -135,6 +136,7 @@ export default function CheckoutModal({ open, onClose }) {
         : null
 
     const order = buildOrder({
+      clientNumber: makeClientNumber(orders),
       items,
       totals: { subtotal, marketTotal, totalDiscount, autoOffer, shipping, total, totalSaved },
       form,
@@ -620,6 +622,37 @@ function Confirmation({ order, orderText, copied, copy, onClose }) {
           étape : envoyez {order.payment.amount} sur le réseau {order.payment.network}, puis
           transmettez le récapitulatif ci-dessous au vendeur.
         </p>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-goldDeep/40 bg-gold/10 p-4 text-center">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-goldDeep">
+          Votre numéro cliente
+        </p>
+        <p className="mt-1 font-serif text-[38px] leading-none tracking-[0.08em] text-ink">
+          {formatClientNumber(order.clientNumber)}
+        </p>
+        <p className="mx-auto mt-1.5 max-w-sm text-[11px] leading-relaxed text-inkSoft">
+          Gardez-le : c’est lui que vous donnez à la boutique sur Discord ou Telegram. Avec le code
+          ci-dessous, elle ouvre votre commande même sans avoir votre appareil.
+        </p>
+        <div className="mt-2.5 flex flex-col gap-2 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => copy(order.clientNumber, 'num')}
+            className="btn-outline flex-1 text-[10px]"
+          >
+            <Icon name={copied === 'num' ? 'check' : 'copy'} className="h-3.5 w-3.5" />
+            {copied === 'num' ? 'Numéro copié' : 'Copier mon numéro'}
+          </button>
+          <button
+            type="button"
+            onClick={() => copy(encodeOrderCode(order), 'code')}
+            className="btn-dark flex-1 text-[10px]"
+          >
+            <Icon name={copied === 'code' ? 'check' : 'copy'} className="h-3.5 w-3.5" />
+            {copied === 'code' ? 'Code copié' : 'Copier mon code de commande'}
+          </button>
+        </div>
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
