@@ -6,6 +6,7 @@ import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
 import Stars from './Stars'
 import StockMeter from './StockMeter'
+import { PriceBlock } from './ProductCard'
 
 export default function ProductModal({ product, onClose }) {
   const { addItem } = useCart()
@@ -37,7 +38,6 @@ export default function ProductModal({ product, onClose }) {
   const brand = brandOf(product)
   const price = finalPrice(product)
   const off = discountPercent(product.marketPrice, price)
-  const saving = Math.round((product.marketPrice - price) * 100) / 100
 
   return (
     <div className="fixed inset-0 z-[80] flex items-end justify-center sm:items-center sm:p-6">
@@ -77,12 +77,8 @@ export default function ProductModal({ product, onClose }) {
               <Stars value={product.rating} showValue count={product.reviews} />
             </div>
 
-            <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="font-serif text-4xl text-ink">{euro(price)}</span>
-              <span className="market-price text-[13px]">{euro(product.marketPrice)}</span>
-              <span className="badge bg-sage/15 text-sage">Économisez {euro(saving)}</span>
-            </div>
-            <p className="mt-1 text-[11px] text-inkSoft">
+            <PriceBlock product={product} size="modal" />
+            <p className="mt-1.5 text-[11px] text-inkSoft">
               Prix magasin {euro(product.marketPrice)} · {FLASH_OFFER.label} −{FLASH_OFFER.percent} % inclus
               · Paiement en 3× = {euro(Math.round((price / 3) * 100) / 100)}/mois
             </p>

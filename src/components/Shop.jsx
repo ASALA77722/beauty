@@ -88,7 +88,10 @@ export default function Shop({ onOpenProduct }) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="mr-1 rounded-full bg-cream px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.1em] text-inkSoft">
+                {products.length} produit{products.length > 1 ? 's' : ''}
+              </span>
               <label htmlFor="brand-select" className="text-[10px] uppercase tracking-[0.16em] text-inkSoft">
                 Marque
               </label>
@@ -124,10 +127,6 @@ export default function Shop({ onOpenProduct }) {
             </div>
           </div>
         </div>
-
-        <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-inkSoft">
-          {products.length} produit{products.length > 1 ? 's' : ''}
-        </p>
 
         {products.length === 0 ? (
           <p className="mt-10 border border-ink/10 bg-cream/60 p-10 text-center text-sm text-inkSoft">

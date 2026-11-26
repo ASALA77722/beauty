@@ -239,9 +239,11 @@ export default function CartDrawer({ onCheckout }) {
                   <dt>Total</dt>
                   <dd>{euro(total)}</dd>
                 </div>
-                <div className="flex justify-between rounded-lg bg-gold/10 px-3 py-1.5 text-[11.5px] font-medium text-goldDeep">
-                  <dt>Vous économisez</dt>
-                  <dd>{euro(totalSaved)}</dd>
+                <div className="flex items-baseline justify-between rounded-lg bg-rose/10 px-3 py-2">
+                  <dt className="text-[11.5px] font-medium uppercase tracking-[0.08em] text-rose">
+                    Vous économisez
+                  </dt>
+                  <dd className="text-[15px] font-semibold text-rose">{euro(totalSaved)}</dd>
                 </div>
               </dl>
 
