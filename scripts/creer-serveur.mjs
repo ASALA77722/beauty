@@ -176,8 +176,13 @@ const CHARTE = [
 ].join('\n')
 
 const main = async () => {
+  console.log(`Cible : serveur ${GUILD} · jeton de ${TOKEN.length} caractères`)
   const roles = await call('GET', `/guilds/${GUILD}/roles`)
-  if (!roles) process.exit(1)
+  if (!roles) {
+    console.error('Impossible de lire les rôles : jeton invalide, bot non invité, ou identifiant de serveur faux.')
+    process.exit(1)
+  }
+  console.log(`Rôles existants : ${roles.map((role) => role.name).join(', ') || '(aucun)'}`)
 
   // 1 · rôles
   const roleIds = {}
