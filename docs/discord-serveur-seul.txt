@@ -1,0 +1,49 @@
+# Message unique pour AiGuild — création du serveur, sans mention du projet
+
+Aucun prix, aucune boutique, aucune association. Limite Discord 2000 caractères.
+
+## Version A — sans aucun salon boutique (1454)
+```
+nom serveur Beaute Paris
+theme beaute parfumerie francaise ton sobre elegant vouvoiement noms de salons simples sans emoji
+renomme demarrer-avec-aiguild en bienvenue
+supprime vocal General si vide
+cree salons
+accueil bienvenue annonces charte presentations
+communaute general conseils-beaute avis-clientes photos-et-rituels
+support ouvrir-un-ticket tickets-journal
+staff prive staff-general logistique
+journaux prive logs-arrivees logs-messages logs-moderation
+roles ordre Direction B08A4A admin Associe C9A66B Moderateur 14402F Support F3EEE4 Cliente verifiee E8DCC8 Membre gris Invite gris fonce
+arrivee Invite bouton charte dans bienvenue donne Membre
+tickets 3 Ma demande Ma question Signaler un probleme champ texte obligatoire
+numerotation ticket-0001 archivage 48h transcription si possible sinon dis ce qui manque
+bienvenue Bienvenue chez Beaute Paris un espace dedie aux soins et a la beaute lisez la charte passez la verification ouvrez un ticket pour toute demande
+charte respect aucune discrimination pas de pub ni demarchage pas de vente entre membres pas de donnee perso jamais de mot de passe ni code ni phrase de recuperation ni cle privee signaler toute arnaque pas de conseil medical pas de contenu sexuel violent politique religieux staff tranche sanctions avertissement timeout bannissement reponse sous 24h ouvrees ticket seul canal
+n invente aucun chiffre ni partenariat ni association sinon A COMPLETER
+une seule carte a confirmer
+```
+
+## Version B — avec salons boutique et solidarité (1742)
+```
+nom serveur Beaute Paris
+theme beaute parfumerie francaise ton sobre elegant vouvoiement noms de salons simples sans emoji
+renomme demarrer-avec-aiguild en bienvenue
+supprime vocal General si vide
+cree salons
+accueil bienvenue annonces charte presentations
+boutique nouveautes offres comment-commander
+communaute general conseils-beaute avis-clientes
+solidarite projet-solidaire dons
+support ouvrir-un-ticket tickets-journal
+staff prive staff-general logistique commandes paiements
+journaux prive logs-arrivees logs-messages logs-moderation logs-tickets
+roles ordre Direction B08A4A admin Associe C9A66B Moderateur 14402F Support F3EEE4 Cliente verifiee E8DCC8 Membre gris Invite gris fonce
+arrivee Invite bouton charte dans bienvenue donne Membre
+tickets 3 Ma commande Mon paiement Livraison et retour champ obligatoire reference BP ou numero client 6 chiffres
+numerotation ticket-0001 archivage 48h transcription si possible sinon dis ce qui manque
+bienvenue Bienvenue chez Beaute Paris un espace dedie aux soins et a la beaute lisez la charte passez la verification ouvrez un ticket pour toute demande
+charte respect aucune discrimination pas de pub ni demarchage pas de vente entre membres pas de donnee perso jamais de mot de passe ni code ni phrase de recuperation ni cle privee signaler toute arnaque pas de conseil medical pas de contenu sexuel violent politique religieux staff tranche sanctions avertissement timeout bannissement reponse sous 24h ouvrees ticket seul canal
+n invente aucun chiffre ni partenariat ni association sinon A COMPLETER
+une seule carte a confirmer
+```
