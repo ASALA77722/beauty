@@ -32,9 +32,19 @@ jobs:
 
       - name: Construire le site
         env:
-          # le nom du dépôt peut changer : le build s'adapte tout seul
-          PAGES_BASE: /${{ github.event.repository.name }}/
-        run: npm run build
+          # Si un domaine personnalisé est défini (public/CNAME), le site est servi
+          # à la racine du domaine. Sinon on utilise le chemin /<nom-du-dépôt>/.
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          if [ -f public/CNAME ]; then
+            echo "Domaine personnalisé détecté : $(cat public/CNAME)"
+            PAGES_BASE=/ npm run build
+          else
+            echo "Pas de domaine personnalisé → /$REPO_NAME/"
+            PAGES_BASE=/$REPO_NAME/ npm run build
+          fi
+          # copie le CNAME dans le build (GitHub Pages l'exige)
+          if [ -f public/CNAME ]; then cp public/CNAME dist/CNAME; fi
 
       - uses: actions/configure-pages@v5
 
