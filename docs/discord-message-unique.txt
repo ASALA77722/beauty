@@ -1,0 +1,53 @@
+# Message unique pour AiGuild (format ordre, sans ponctuation)
+
+Deux versions : complète (1803 caractères) et courte (1347). Limite Discord : 2000.
+
+## Version complète
+```
+verifie et compare
+renomme demarrer-avec-aiguild en bienvenue
+supprime vocal General si vide
+cree cat Accueil bienvenue annonces charte presentations
+cat Boutique nouveautes offres-et-codes comment-commander suivi-de-commande
+cat Communaute general conseils-beaute avis-clientes photos-et-rituels
+cat Solidarite projet-solidaire dons-et-transparence
+cat Support ouvrir-un-ticket tickets-journal
+cat Staff prive commandes-a-traiter paiements-recus logistique staff-general vocal reunion-staff
+cat Journaux prive logs-arrivees logs-messages logs-moderation logs-tickets
+roles ordre Direction B08A4A admin Associe C9A66B Moderateur 14402F sanctions Support F3EEE4 tickets Cliente verifiee E8DCC8 avis Programme solidaire D8A7A0 Membre gris ecriture Invite gris fonce lecture
+arrivee Invite bouton J accepte la charte dans bienvenue donne Membre
+tickets 3 Ma commande Mon paiement Livraison et retour
+chaque ticket champ obligatoire reference BP ou numero client 6 chiffres
+numerotation ticket-0001 archivage 48h transcription si possible sinon dis ce qui manque
+bienvenue Bienvenue chez Beaute Paris soins et serums des maisons francaises au juste prix achat circuit court lire la charte passer la verification ticket seul canal de reclamation nous ne publions aucun temoignage a la place de nos clientes contact beaute paris@proton me
+charte respect pas pub ni demarchage pas vente entre membres pas donnee perso pas faux avis seuls vrais avec accord nom abrege negatifs inclus jamais mot de passe ni code carte ni 12 mots ni cle privee adresse paiement postee egale arnaque signaler pas conseil medical pas sexuel violent politique religieux staff tranche sanctions reponse 24h ouvrees ticket seul canal
+n invente aucun chiffre ni partenariat ni association sinon A COMPLETER
+une seule carte a confirmer
+```
+
+## Version courte
+```
+cree salons
+accueil bienvenue annonces charte presentations
+boutique nouveautes offres-et-codes comment-commander suivi-de-commande
+communaute general conseils-beaute avis-clientes photos-et-rituels
+solidarite projet-solidaire dons-et-transparence
+support ouvrir-un-ticket tickets-journal
+staff prive commandes-a-traiter paiements-recus logistique staff-general
+journaux prive logs-arrivees logs-messages logs-moderation
+renomme demarrer-avec-aiguild en bienvenue et supprime vocal General
+roles Direction B08A4A admin Associe C9A66B Moderateur 14402F Support F3EEE4 Cliente verifiee E8DCC8 Programme solidaire D8A7A0 Membre Invite
+arrivee Invite bouton charte donne Membre
+tickets 3 Ma commande Mon paiement Livraison et retour champ obligatoire reference BP ou numero 6 chiffres
+bienvenue Bienvenue chez Beaute Paris soins des maisons francaises au juste prix lire la charte passer verification ticket seul canal reclamation aucun temoignage ecrit a la place des clientes contact beaute paris@proton me
+charte respect pas pub pas vente entre membres pas donnee perso pas faux avis seuls vrais avec accord jamais mot de passe ni code carte ni 12 mots ni cle privee adresse paiement postee egale arnaque pas conseil medical staff tranche reponse 24h ticket seul canal
+n invente aucun chiffre ni partenariat sinon A COMPLETER
+une carte a confirmer
+```
+
+## 2e vague de tickets — à envoyer après la 1re carte
+```
+ajoute 3 motifs tickets Question produit Retour ou remboursement Signaler un probleme priorite visible pour le support
+demande reference BP date de reception et motif
+sinon dis la limite et garde les 3 premiers
+```
