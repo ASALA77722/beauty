@@ -235,7 +235,7 @@ export const FAQ = [
   },
   {
     q: 'Comment payer en crypto ?',
-    a: "Choisissez votre devise au moment de la commande : USDT (réseau TRC20 / Tron, le plus économique), Bitcoin ou Ethereum. Le montant exact à envoyer est calculé et affiché à l’euro près, avec l’adresse de dépôt à copier. Envoyez la somme en une seule transaction sur le réseau indiqué, puis collez le hash de transaction dans le champ prévu : votre commande est vérifiée et préparée immédiatement après confirmation (2 à 10 minutes). Le paiement crypto donne droit à 5 % de remise automatique.",
+    a: "Vous réglez sur la page sécurisée de notre prestataire de paiement, ouverte depuis le récapitulatif de commande : choisissez votre moyen de paiement, validez, puis revenez sur le site pour confirmer. Aucune coordonnée de paiement n’est affichée sur ce site, et nous ne voyons jamais vos identifiants bancaires. La commande est préparée dès réception du paiement, et le règlement en cryptoactifs donne droit à 5 % de remise automatique.",
   },
   {
     q: 'Point relais ou livraison à domicile ?',

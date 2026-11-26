@@ -130,7 +130,7 @@ export function buildOrder({ items, totals, form, deliveryMode, pickup, wallet, 
       asset: asset.symbol,
       assetName: asset.name,
       network: asset.network,
-      address: walletAddress(asset),
+      address: null,
       amount: formatCrypto(amount, asset),
       /** Répartition enregistrée à la vente : le vendeur sait quoi reverser. */
       split: splitActive()

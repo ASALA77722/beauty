@@ -4,6 +4,7 @@ import {
   SPLIT,
   cryptoById,
   partnerPayout,
+  PAYOUT,
   splitActive,
   walletsReady,
 } from '../config'
@@ -283,9 +284,9 @@ function SellerDashboard({ onBack, onLock }) {
             : 'Paiement crypto inactif'}
         </p>
         <p className="mt-1 text-[11px] leading-relaxed text-inkSoft">
-          {walletsReady
-            ? 'Les adresses de dépôt sont renseignées : les clientes peuvent payer.'
-            : 'Aucune adresse de dépôt renseignée : le site refuse les paiements au lieu d’afficher une fausse adresse. Collez vos adresses dans src/config.js (USDT TRC20, BTC, ETH), puis republiez.'}
+          {PAYOUT.link
+            ? `Lien de paiement ${PAYOUT.provider} actif : la cliente règle sur la page du prestataire, aucune adresse n’est affichée sur le site.`
+            : 'Aucun lien de paiement renseigné. Les clientes voient « paiement en cours d’activation » et sont invitées à écrire : le site n’affiche jamais d’adresse crypto.'}
         </p>
         <p className="mt-2 flex items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.1em] text-inkSoft">
           <Icon name={splitActive() ? 'check' : 'shield'} className="h-3 w-3" />

@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
 import {
-  CRYPTO_CONFIG,
-  ACTIVE_WALLETS,
-  cryptoById,
-  formatCrypto,
-  isWalletReady,
-  toCryptoAmount,
-  walletAddress,
-  splitActive,
-  SPLIT,
+  CRYPTO_WALLETS,
+  PAYOUT,
+  payoutLink,
+  SHOP,
 } from '../config'
 import { useAuth } from '../hooks/useAuth'
 import { useCart } from '../hooks/useCart'
@@ -57,16 +52,13 @@ export default function CheckoutModal({ open, onClose }) {
   const [deliveryMode, setDeliveryMode] = useState('pickup')
   const pickup = null
   const [manualPickup, setManualPickup] = useState({ name: '', address: '', zip: '', city: '', hours: '' })
-  const [walletId, setWalletId] = useState(ACTIVE_WALLETS[0]?.id ?? 'usdt')
   const [txHash, setTxHash] = useState('')
   const [confirmed, setConfirmed] = useState(null)
   const [error, setError] = useState(null)
   const [copied, setCopied] = useState(null)
 
-  const wallet = cryptoById(walletId)
-  const canPay = isWalletReady(wallet)
-  const cryptoAmount = toCryptoAmount(total, wallet)
-  const address = walletAddress(wallet)
+  const wallet = CRYPTO_WALLETS[0]
+  const link = payoutLink(total)
   const orderText = confirmed ? orderToText(confirmed) : ''
 
   useEffect(() => {
@@ -114,10 +106,6 @@ export default function CheckoutModal({ open, onClose }) {
       setError('Indiquez votre adresse e-mail : c’est par là que nous vous envoyons le suivi de commande.')
       return false
     }
-    if (!canPay) {
-      setError('Le paiement crypto n’est pas encore activé par la boutique. Aucune adresse de dépôt n’est renseignée : contactez-nous avant de commander.')
-      return false
-    }
     if (deliveryMode === 'pickup') {
       const chosen = pickup ?? (manualPickup.city.trim() ? manualPickup : null)
       if (!chosen) {
@@ -153,7 +141,7 @@ export default function CheckoutModal({ open, onClose }) {
       form,
       deliveryMode,
       pickup: activePickup,
-      wallet: walletId,
+      wallet: wallet?.id ?? 'usdt',
     })
     if (txHash.trim()) {
       order.payment.txHash = txHash.trim()
@@ -397,114 +385,69 @@ export default function CheckoutModal({ open, onClose }) {
               )}
 
               <h3 className="mt-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-inkSoft">
-                3 · Paiement crypto
+                3 · Paiement
                 <span className="badge bg-forest/10 text-[9px] text-forest">−5 % automatique</span>
               </h3>
-              <div className="mt-2 space-y-2">
-                {!canPay && (
-                  <div className="rounded-xl border border-rose/30 bg-rose/8 p-3.5">
-                    <p className="flex items-center gap-2 text-[12px] font-medium text-rose">
-                      <Icon name="shield" className="h-4 w-4" />
-                      Paiement crypto non activé
+
+              <div className={`mt-2 ${panel} bg-cream/50`}>
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-goldDeep">
+                    À régler
+                  </p>
+                  <p className="font-serif text-[26px] leading-none text-ink">{euro(total)}</p>
+                </div>
+                <p className="mt-2 text-[11.5px] leading-relaxed text-inkSoft">
+                  Le règlement se fait sur la page sécurisée de notre prestataire de paiement, au nom
+                  de <span className="font-medium text-ink">{SHOP.name}</span>. Vous choisissez votre
+                  moyen de paiement, puis vous revenez ici valider votre commande.
+                </p>
+
+                {link ? (
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="btn-gold mt-3 w-full justify-center"
+                  >
+                    <Icon name="lock" className="h-4 w-4" /> {PAYOUT.label} · {euro(total)}
+                  </a>
+                ) : (
+                  <div className="mt-3 rounded-xl border border-ink/15 bg-ivory p-3">
+                    <p className="flex items-center gap-2 text-[12px] font-medium text-ink">
+                      <Icon name="mail" className="h-4 w-4 text-goldDeep" />
+                      Paiement en cours d’activation
                     </p>
                     <p className="mt-1 text-[11.5px] leading-relaxed text-inkSoft">
-                      La boutique n’a pas encore renseigné d’adresse de dépôt. Par sécurité, aucun
-                      paiement n’est proposé : écrivez-nous et nous vous envoyons l’adresse par
-                      message, ou commandez via la messagerie du site.
+                      Nous n’affichons aucune adresse de paiement sur le site : vous réglez via le lien
+                      sécurisé de notre prestataire. Il est en cours de mise en place — écrivez-nous à{' '}
+                      <a href={`mailto:${SHOP.email}`} className="underline">
+                        {SHOP.email}
+                      </a>{' '}
+                      et nous vous transmettons le lien personnel de votre commande.
                     </p>
                   </div>
                 )}
-                {ACTIVE_WALLETS.map((option) => {
-                  const amount = toCryptoAmount(total, option)
-                  return (
-                    <button
-                      key={option.id}
-                      type="button"
-                      onClick={() => setWalletId(option.id)}
-                      aria-pressed={walletId === option.id}
-                      className={`flex w-full items-center gap-3 rounded-xl border px-3.5 py-2.5 text-left transition-colors ${
-                        walletId === option.id ? 'border-goldDeep bg-gold/10' : 'border-ink/15 hover:bg-cream/60'
-                      }`}
-                    >
-                      <span
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-ivory"
-                        style={{ backgroundColor: option.color }}
-                      >
-                        {option.symbol === 'USDT' ? '₮' : option.symbol === 'BTC' ? '₿' : 'Ξ'}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-[12.5px] font-medium text-ink">
-                          {option.name} · {option.network}
-                        </span>
-                        <span className="block text-[10.5px] text-inkSoft">{option.networkHint}</span>
-                      </span>
-                      <span className="shrink-0 text-right text-[11.5px] font-medium text-ink">
-                        {formatCrypto(amount, option)}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
 
-              {canPay && (
-              <div className={`mt-3 ${panel} bg-cream/50`}>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-goldDeep">
-                  Envoyez exactement
-                </p>
-                <p className="mt-1 font-serif text-[26px] leading-none text-ink">
-                  {formatCrypto(cryptoAmount, wallet)}
-                </p>
-                <p className="mt-1 text-[11px] text-inkSoft">
-                  ≈ {euro(total)} · réseau {wallet.network}
-                </p>
-
-                <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-goldDeep">
-                  Adresse de dépôt {wallet.symbol}
-                </p>
-                <div className="mt-1 flex items-start gap-2">
-                  <code className="min-w-0 flex-1 break-all rounded-lg bg-ivory px-2.5 py-2 font-mono text-[10.5px] leading-relaxed text-ink">
-                    {address}
-                  </code>
-                  <button
-                    type="button"
-                    onClick={() => copy(address, 'addr')}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-ink/15 text-ink transition-colors hover:bg-ivory"
-                    aria-label="Copier l’adresse"
+                <div className="mt-3">
+                  <label
+                    htmlFor="co-tx"
+                    className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft"
                   >
-                    <Icon name={copied === 'addr' ? 'check' : 'copy'} className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-                <p className="mt-2 text-[10.5px] leading-relaxed text-inkSoft">
-                  Envoyez en une seule transaction, sur le réseau indiqué (une erreur de réseau =
-                  fonds perdus). Confirmation en {CRYPTO_CONFIG.confirmations}.
-                </p>
-                {splitActive() && (
-                  <p className="mt-2 rounded-lg border border-sage/25 bg-sage/8 px-2.5 py-2 text-[10.5px] leading-relaxed text-inkSoft">
-                    Un seul virement suffit : nous répartissons les {SPLIT.partnerShare} % revenant
-                    à notre partenaire, sans frais supplémentaires pour vous.
+                    Référence du paiement (facultatif)
+                  </label>
+                  <input
+                    id="co-tx"
+                    value={txHash}
+                    onChange={(event) => setTxHash(event.target.value)}
+                    placeholder="Référence ou numéro de transaction"
+                    className={`${inputClass} font-mono text-[11px]`}
+                  />
+                  <p className="mt-1 text-[10px] leading-relaxed text-inkSoft">
+                    Si votre prestataire vous a donné une référence, collez-la : elle accélère la
+                    vérification et la préparation du colis.
                   </p>
-                )}
+                </div>
               </div>
-              )}
-
-              {canPay && (
-              <div className="mt-3">
-                <label htmlFor="co-tx" className="text-[10.5px] uppercase tracking-[0.12em] text-inkSoft">
-                  Hash de transaction (optionnel mais recommandé)
-                </label>
-                <input
-                  id="co-tx"
-                  value={txHash}
-                  onChange={(event) => setTxHash(event.target.value)}
-                  placeholder="0x… ou hash BTC"
-                  className={`${inputClass} font-mono text-[11px]`}
-                />
-                <p className="mt-1 text-[10px] leading-relaxed text-inkSoft">
-                  Collez le hash après l’envoi : il prouve votre paiement et accélère la préparation
-                  du colis.
-                </p>
-              </div>
-              )}
 
               {error && (
                 <p className="mt-3 rounded-lg bg-rose/10 px-3 py-2 text-[12px] text-rose" role="alert">
@@ -572,12 +515,6 @@ export default function CheckoutModal({ open, onClose }) {
                   <dt>Total à payer</dt>
                   <dd>{euro(total)}</dd>
                 </div>
-                {canPay && (
-                  <div className="flex justify-between text-[11px] text-goldDeep">
-                    <dt>Soit en {wallet.symbol}</dt>
-                    <dd className="font-medium">{formatCrypto(cryptoAmount, wallet)}</dd>
-                  </div>
-                )}
                 <div className="flex justify-between rounded-lg bg-gold/15 px-2.5 py-1.5 text-[11px] font-medium text-goldDeep">
                   <dt>Économie totale</dt>
                   <dd>{euro(totalSaved)}</dd>
@@ -587,15 +524,14 @@ export default function CheckoutModal({ open, onClose }) {
               <button
                 type="button"
                 onClick={placeOrder}
-                disabled={!canPay}
-                className="btn-gold mt-4 w-full disabled:cursor-not-allowed disabled:opacity-45"
+                className="btn-gold mt-4 w-full"
               >
                 <Icon name="coin" className="h-4 w-4" />
                 J’ai payé · valider
               </button>
               <p className="mt-2 text-center text-[10px] leading-relaxed text-inkSoft">
-                Vous validez la commande et l’adresse de livraison. Le vendeur vérifie le paiement
-                crypto puis prépare le colis.
+                Vous validez votre commande et l’adresse de livraison. Nous vérifions la réception du
+                paiement puis nous préparons le colis.
               </p>
             </aside>
           </div>
