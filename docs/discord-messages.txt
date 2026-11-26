@@ -1,0 +1,108 @@
+# Messages à coller dans Discord (bot AiGuild)
+
+Trois messages, chacun sous la limite de 2 000 caractères. Un seul bloc par envoi.
+
+---
+
+## Message 1
+
+```
+Bonjour, voici ma demande précise, à exécuter dans cet ordre.
+
+1) VÉRIFIE la structure actuelle du serveur et affiche un tableau : salons existants vs attendus, rôles existants vs attendus.
+
+2) CRÉE ensuite, en une seule carte à confirmer : les salons et les rôles que je te donne dans le message suivant (texte mot pour mot, ne rien inventer, ne rien ajouter).
+
+3) TICKETS : installe 3 motifs maintenant, c'est la limite par installation : « Ma commande », « Mon paiement », « Livraison & retour ». Chaque ticket doit demander la référence BP-… ou le numéro client à 6 chiffres. Numérotation ticket-0001, ticket-0002…, archivage après 48 h sans message, transcription. Je ferai une 2e installation pour les 3 motifs restants.
+
+4) BIENVENUE + RÈGLEMENT : utilise le texte exact que je te donne ensuite.
+
+Contexte : le serveur s'appelle Beauté Paris, c'est une boutique française de soins et sérums de parfumerie. Les membres sont des clientes et des curieuses. Ton : vouvoiement, sobre, élégant, un seul emoji quand il apporte du sens.
+
+Règle absolue : n'invente aucun chiffre (nombre de membres, de ventes, d'avis), aucun partenariat, aucune association. Si une information manque, laisse [À COMPLÉTER].
+```
+
+## Message 2
+
+```
+Bloc 1/2 — SALONS ET RÔLES (à créer tel quel)
+
+CATÉGORIE « ACCUEIL »
+- #bienvenue (lecture seule) : message d'accueil + bouton de vérification
+- #annonces (lecture seule) : staff uniquement
+- #charte (lecture seule) : règlement complet
+- #présentations : les membres se présentent, facultatif
+
+CATÉGORIE « LA BOUTIQUE »
+- #nouveautés (lecture seule)
+- #offres-et-codes (lecture seule)
+- #comment-commander (lecture seule)
+- #suivi-de-commande : la cliente demande son suivi, le staff répond en fil
+
+CATÉGORIE « LA COMMUNAUTÉ »
+- #général (mode lent 10 s)
+- #conseils-beauté
+- #avis-clientes : uniquement de vrais avis, avec accord écrit
+- #photos-et-rituels
+
+CATÉGORIE « SOLIDARITÉ »
+- #projet-solidaire (lecture seule)
+- #dons-et-transparence (lecture seule)
+
+CATÉGORIE « SUPPORT »
+- #ouvrir-un-ticket (lecture seule) : panneau de tickets
+- #tickets-journal (staff)
+
+CATÉGORIE « STAFF » (privée)
+- #commandes-à-traiter, #paiements-reçus, #logistique, #staff-général, vocal « Réunion staff »
+
+CATÉGORIE « JOURNAUX » (privée)
+- #logs-arrivées, #logs-messages, #logs-modération, #logs-tickets
+
+RÔLES, dans cet ordre hiérarchique
+1. ✦ Direction — #B08A4A — administrateur
+2. Associé — #C9A66B — salons staff, tickets, commandes
+3. Modérateur — #14402F — sanctions, suppression de messages
+4. Support — #F3EEE4 — répondre aux tickets uniquement
+5. Cliente vérifiée — #E8DCC8 — écrit dans #avis-clientes
+6. Programme solidaire — #D8A7A0 — rôle cosmétique
+7. Membre — gris — accès en écriture aux salons publics
+8. Invité — gris foncé — lecture seule jusqu'à la vérification
+
+Vérification : à l'arrivée, rôle Invité. Le bouton « J'accepte la charte » dans #bienvenue donne Membre et retire Invité.
+```
+
+## Message 3
+
+```
+Bloc 2/2 — BIENVENUE ET RÈGLEMENT (texte à utiliser mot pour mot)
+
+MESSAGE DE #bienvenue
+
+Bienvenue chez Beauté Paris
+Ici, les soins et les sérums des maisons françaises se trouvent au juste prix : nous achetons en circuit court et nous le répercutons.
+Trois choses avant de commencer :
+- lisez la charte dans #charte ;
+- passez la vérification ci-dessous pour pouvoir écrire ;
+- pour une commande ou un paiement, ouvrez un ticket, c'est le seul canal de réclamation.
+Nous ne publions aucun témoignage à la place de nos clientes : les avis affichés ont été déposés par elles, avec leur accord.
+Une question par e-mail : beaute.paris@proton.me
+Bouton : J'accepte la charte
+
+RÈGLEMENT DE #charte
+
+1. Respect entre membres, aucune discrimination.
+2. Pas de publicité, pas d'invitation d'autres serveurs, pas de démarchage.
+3. Pas de vente entre membres : la boutique est le seul canal d'achat.
+4. Aucune donnée personnelle publiée : adresse, téléphone, e-mail, capture de commande avec un nom.
+5. Aucun avis inventé. Seuls de vrais avis, avec preuve d'achat et accord écrit, nom abrégé (« Claire M. »). Les avis négatifs sont publiés aussi.
+6. Ne jamais envoyer d'argent à un membre. Nous ne demandons jamais de mot de passe, de code de carte, de phrase de récupération (12 mots) ni de clé privée. Une adresse de paiement postée ici est une arnaque : signalez-la.
+7. Pas de conseils médicaux : nous ne sommes pas dermatologues. En cas de problème de peau, consultez un médecin.
+8. Pas de contenu sexuel, violent, politique ou religieux.
+9. Le staff tranche en cas de doute. Sanctions : avertissement, timeout, bannissement.
+10. Réponse sous 24 h ouvrées. Les tickets sont le seul canal de réclamation.
+```
+
+---
+
+Après la création : demander « installe les 3 autres motifs de tickets » (Question produit, Retour ou remboursement, Signaler un problème).
