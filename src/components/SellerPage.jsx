@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ACTIVE_WALLETS, walletsReady } from '../config'
+import {
+  ACTIVE_WALLETS,
+  SPLIT,
+  cryptoById,
+  partnerPayout,
+  splitActive,
+  walletsReady,
+} from '../config'
 import { useOrders } from '../hooks/useOrders'
 import { decodeOrderCode, extractOrderCode, formatClientNumber, isOrderCode } from '../lib/code'
 import { euro } from '../lib/format'
@@ -480,6 +487,36 @@ function SellerDashboard({ onBack, onLock }) {
                         <span className="font-medium">{euro(selected.payment.split.total)}</span>
                       </div>
                     </div>
+                    <div className="mt-2 flex items-center gap-1.5">
+                      <code className="min-w-0 flex-1 break-all rounded bg-ivory px-2 py-1 font-mono text-[9.5px] text-inkSoft">
+                        {SPLIT.partnerAddress || 'adresse de l’associé non renseignée'}
+                      </code>
+                      <button
+                        type="button"
+                        disabled={!SPLIT.partnerAddress}
+                        onClick={() => navigator.clipboard?.writeText(SPLIT.partnerAddress)}
+                        className="shrink-0 rounded border border-ink/15 px-1.5 py-1 text-[9.5px] uppercase tracking-[0.08em] text-inkSoft disabled:opacity-40"
+                      >
+                        Copier
+                      </button>
+                    </div>
+                    {(() => {
+                      const link = partnerPayout(
+                        selected.payment.split.partner,
+                        cryptoById(String(selected.payment.asset ?? '').toLowerCase()),
+                      )
+                      if (!link) return null
+                      return (
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="mt-1.5 block w-full rounded-lg bg-forest px-2 py-1.5 text-center text-[10.5px] font-medium text-cream hover:bg-forestSoft"
+                        >
+                          Préparer le virement de {euro(selected.payment.split.partner)}
+                        </a>
+                      )
+                    })()}
                     <button
                       type="button"
                       onClick={() =>
