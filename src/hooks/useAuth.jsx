@@ -1,5 +1,14 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { USER_KEY, detectIdentifier, isEmail, isPhone, normalizePhone, readJson, writeJson } from '../lib/format'
+import {
+  USER_KEY,
+  detectIdentifier,
+  isEmail,
+  isPhone,
+  normalizePhone,
+  readJson,
+  removeStored,
+  writeJson,
+} from '../lib/format'
 
 const AuthContext = createContext(null)
 
@@ -23,7 +32,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (user) writeJson(USER_KEY, user)
-    else localStorage.removeItem(USER_KEY)
+    else removeStored(USER_KEY)
   }, [user])
 
   useEffect(() => {

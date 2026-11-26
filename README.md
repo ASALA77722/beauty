@@ -13,10 +13,20 @@ persistés dans le `localStorage`).
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # build de production dans dist/
-npm run preview  # sert le build
+npm run dev         # http://localhost:5173
+npm run build       # build de production dans dist/
+npm run build:file  # fichier HTML unique autonome dans dist-file/
+npm run preview      # sert le build
 ```
+
+### Version autonome (aucun serveur, aucun réseau)
+
+`Beauté-Paris.html` à la racine est le site complet dans **un seul fichier** :
+
+- CSS, JavaScript, **images** (data URI) et **polices** (sous-ensemble latin) intégrés ;
+- zéro requête externe — vérifié : aucune URL `http(s)` ni `url()` non-`data:` ;
+- s'ouvre par double-clic, fonctionne hors connexion, se partage par e-mail ou clé USB ;
+- généré par `npm run build:file` (plugin `vite-plugin-singlefile`).
 
 ## Catalogue et positionnement prix
 

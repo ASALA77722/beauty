@@ -1,3 +1,8 @@
+import baumeImg from '../assets/img/baume.jpg'
+import serumRidesImg from '../assets/img/serum-anti-rides.jpg'
+import serumTachesImg from '../assets/img/serum-anti-taches.jpg'
+import contourImg from '../assets/img/contour-yeux.jpg'
+
 // ─────────────────────────────────────────────────────────────
 // Catalogue — prix « marché » (constatés en parfumerie) vs prix site.
 // Les montants sont en euros, TTC.
@@ -20,7 +25,7 @@ export const PRODUCTS = [
     volume: '50 ml',
     marketPrice: 219.5,
     price: 95,
-    image: '/img/baume.jpg',
+    image: baumeImg,
     rating: 4.8,
     reviews: 412,
     bestseller: true,
@@ -50,7 +55,7 @@ export const PRODUCTS = [
     volume: '30 ml',
     marketPrice: 115.5,
     price: 45,
-    image: '/img/serum-anti-rides.jpg',
+    image: serumRidesImg,
     rating: 4.7,
     reviews: 268,
     bestseller: true,
@@ -81,7 +86,7 @@ export const PRODUCTS = [
     volume: '30 ml',
     marketPrice: 38.9,
     price: 15.9,
-    image: '/img/serum-anti-taches.jpg',
+    image: serumTachesImg,
     rating: 4.6,
     reviews: 731,
     bestseller: true,
@@ -112,7 +117,7 @@ export const PRODUCTS = [
     volume: '15 ml',
     marketPrice: 111.5,
     price: 48,
-    image: '/img/contour-yeux.jpg',
+    image: contourImg,
     rating: 4.7,
     reviews: 189,
     bestseller: false,

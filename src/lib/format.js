@@ -39,9 +39,36 @@ export const detectIdentifier = (value) => {
   return null
 }
 
+/** Accès sûr au stockage (file:// peut le bloquer). */
+const store = {
+  get(key) {
+    try {
+      return window.localStorage.getItem(key)
+    } catch {
+      return null
+    }
+  },
+  set(key, value) {
+    try {
+      window.localStorage.setItem(key, value)
+    } catch {
+      /* stockage indisponible */
+    }
+  },
+  remove(key) {
+    try {
+      window.localStorage.removeItem(key)
+    } catch {
+      /* stockage indisponible */
+    }
+  },
+}
+
+export const removeStored = (key) => store.remove(key)
+
 export function readJson(key, fallback) {
   try {
-    const raw = localStorage.getItem(key)
+    const raw = store.get(key)
     if (!raw) return fallback
     return JSON.parse(raw)
   } catch {
@@ -50,11 +77,7 @@ export function readJson(key, fallback) {
 }
 
 export function writeJson(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value))
-  } catch {
-    /* stockage indisponible */
-  }
+  store.set(key, JSON.stringify(value))
 }
 
 export function readCart() {

@@ -1,17 +1,28 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { viteSingleFile } from 'vite-plugin-singlefile'
 
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    host: '0.0.0.0',
-    port: 5173,
-    strictPort: true,
-    allowedHosts: true,
-  },
-  preview: {
-    host: '0.0.0.0',
-    port: 4173,
-    allowedHosts: true,
-  },
+// Deux modes :
+//  - `npm run build`      → build classique servie par un serveur
+//  - `npm run build:file` → fichier HTML unique (offline) à ouvrir directement
+export default defineConfig(() => {
+  const singleFile = process.env.SINGLE_FILE === '1'
+  return {
+    plugins: [react(), ...(singleFile ? [viteSingleFile()] : [])],
+    base: './',
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+      strictPort: true,
+      allowedHosts: true,
+    },
+    preview: {
+      host: '0.0.0.0',
+      port: 4173,
+      allowedHosts: true,
+    },
+    build: singleFile
+      ? { outDir: 'dist-file', cssCodeSplit: false, assetsInlineLimit: 100000000 }
+      : { outDir: 'dist' },
+  }
 })

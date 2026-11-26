@@ -2,6 +2,7 @@ import { PRICE_STATS } from '../data/shop'
 import { euro } from '../lib/format'
 import Icon from './Icon'
 import { Reveal } from './Reveal'
+import storyImg from '../assets/img/story.jpg'
 
 export default function Story() {
   return (
@@ -10,7 +11,7 @@ export default function Story() {
         <Reveal>
           <div className="relative">
             <img
-              src="/img/story.jpg"
+              src={storyImg}
               alt="Rituel de soin, application d'une crème sur l'avant-bras"
               loading="lazy"
               className="aspect-[4/5] w-full object-cover shadow-card"

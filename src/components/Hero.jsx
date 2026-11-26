@@ -2,6 +2,7 @@ import { FLASH_OFFER, PRICE_STATS, PRODUCTS } from '../data/shop'
 import { discountPercent, euro } from '../lib/format'
 import Icon from './Icon'
 import Marquee from './Marquee'
+import heroImg from '../assets/img/hero-luxe.jpg'
 
 const FEATURED = PRODUCTS[0]
 
@@ -69,7 +70,7 @@ export default function Hero() {
         <div className="relative">
           <div className="group relative overflow-hidden bg-cream shadow-card">
             <img
-              src="/img/hero-luxe.jpg"
+              src={heroImg}
               alt="Le baume Jeanne Piaubert, le sérum Stendhal et le sérum anti-taches Biarritz"
               className="aspect-[4/5] w-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.03]"
               width="900"
