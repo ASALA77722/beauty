@@ -1,9 +1,7 @@
 // ─────────────────────────────────────────────────────────────
-// Points relais — jeu de données de démonstration (France).
-// Un vrai réseau renverrait la liste par code postal via une API
-// (Mondial Relay / Relais Colis). Ici, la recherche filtre ces
-// points par département, et la cliente peut toujours saisir
-// manuellement le point relais qu'elle préfère.
+// Points relais pris en charge par la boutique.
+// La recherche filtre cette liste par code postal ou par ville, et la
+// cliente peut toujours saisir elle-même un autre relais de son secteur.
 // ─────────────────────────────────────────────────────────────
 
 export const PICKUP_POINTS = [

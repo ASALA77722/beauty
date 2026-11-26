@@ -73,9 +73,3 @@ export function getAllReviewsStats() {
     ),
   }
 }
-
-export const reviewsForProduct = (productId) =>
-  REVIEWS.filter((review) => review.productId === productId).map((review) => ({
-    ...review,
-    customer: getCustomer(review.customerId),
-  }))

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { ACTIVE_WALLETS, walletsReady } from '../config'
 import { useOrders } from '../hooks/useOrders'
 import { decodeOrderCode, extractOrderCode, formatClientNumber, isOrderCode } from '../lib/code'
 import { euro } from '../lib/format'
@@ -62,7 +63,7 @@ export default function SellerPage({ onBack }) {
               type="password"
               value={key}
               onChange={(event) => setKey(event.target.value)}
-              placeholder="BP-ADMIN-…"
+              placeholder="Votre clé d’accès"
               className="field mt-1.5"
             />
             {error && <p className="mt-2 text-[11.5px] text-rose">{error}</p>}
@@ -71,8 +72,8 @@ export default function SellerPage({ onBack }) {
             </button>
           </form>
           <p className="mt-3 rounded-lg bg-cream px-3 py-2 text-[10.5px] leading-relaxed text-inkSoft">
-            Clé de démonstration : <code className="font-mono text-ink">BP-ADMIN-2026</code> — à
-            changer dans <code>src/lib/orders.js</code>.
+            Accès réservé à la boutique. En cas d’oubli, la clé se change dans le fichier
+            <code className="mx-1 font-mono text-ink">src/config.js</code>.
           </p>
           <button type="button" onClick={onBack} className="mt-3 text-[11px] text-inkSoft hover:text-ink">
             ← Retour à la boutique
@@ -86,7 +87,7 @@ export default function SellerPage({ onBack }) {
 }
 
 function SellerDashboard({ onBack, onLock }) {
-  const { orders, stats, changeStatus, sendMessage, updateOrder, loadDemo, clearDemo, findOrders, importOrder } =
+  const { orders, stats, changeStatus, sendMessage, updateOrder, findOrders, importOrder } =
     useOrders()
   const [selectedRef, setSelectedRef] = useState(() => orders[0]?.reference ?? null)
   const [filter, setFilter] = useState('all')
@@ -156,16 +157,6 @@ function SellerDashboard({ onBack, onLock }) {
           </h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {orders.length === 0 ? (
-            <button type="button" onClick={loadDemo} className="btn-gold text-[10.5px]">
-              <Icon name="sparkle" className="h-3.5 w-3.5" />
-              Charger 4 commandes d’exemple
-            </button>
-          ) : (
-            <button type="button" onClick={clearDemo} className="text-[10px] uppercase tracking-[0.1em] text-inkSoft hover:text-ink">
-              Retirer les exemples
-            </button>
-          )}
           <button type="button" onClick={onBack} className="btn-outline text-[10.5px]">
             Voir la boutique
           </button>
@@ -267,6 +258,28 @@ function SellerDashboard({ onBack, onLock }) {
             ))}
           </div>
         )}
+      </div>
+
+      <div
+        className={`mt-4 rounded-xl border p-3 ${
+          walletsReady ? 'border-sage/30 bg-sage/8' : 'border-rose/35 bg-rose/8'
+        }`}
+      >
+        <p
+          className={`flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.1em] ${
+            walletsReady ? 'text-sage' : 'text-rose'
+          }`}
+        >
+          <Icon name={walletsReady ? 'check' : 'shield'} className="h-3.5 w-3.5" />
+          {walletsReady
+            ? `Paiement crypto actif — ${ACTIVE_WALLETS.map((wallet) => wallet.symbol).join(' · ')}`
+            : 'Paiement crypto inactif'}
+        </p>
+        <p className="mt-1 text-[11px] leading-relaxed text-inkSoft">
+          {walletsReady
+            ? 'Les adresses de dépôt sont renseignées : les clientes peuvent payer.'
+            : 'Aucune adresse de dépôt renseignée : le site refuse les paiements au lieu d’afficher une fausse adresse. Collez vos adresses dans src/config.js (USDT TRC20, BTC, ETH), puis republiez.'}
+        </p>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">

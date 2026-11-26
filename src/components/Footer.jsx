@@ -86,7 +86,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-cream/15 py-5 text-[10.5px] uppercase tracking-[0.1em] text-cream/50 md:flex-row">
-          <p>© {new Date().getFullYear()} Beauté Paris · Site de démonstration</p>
+          <p>© {new Date().getFullYear()} Beauté Paris · Tous droits réservés</p>
           <a
             href="#vendeur"
             className="text-[10px] uppercase tracking-[0.14em] text-gold/70 transition-colors hover:text-gold"
